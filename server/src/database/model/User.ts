@@ -82,5 +82,5 @@ const userSchema = new Schema({
 
 const User = model("User", userSchema);
 
-export type User = typeof User extends Model<infer D, any, any> ? D : never;
+export type UserType = typeof User extends Model<infer D, any, any> ? D : never;
 export default User;
