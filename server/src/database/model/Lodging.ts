@@ -1,6 +1,10 @@
-import { Model, model, Schema } from "mongoose";
+import { Model, model, Schema, Types } from "mongoose";
 
 const lodgingSchema = new Schema({
+  id: {
+    type: Schema.Types.ObjectId,
+    default: new Types.ObjectId(),
+  },
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -12,7 +16,7 @@ const lodgingSchema = new Schema({
 
   type: {
     type: String,
-    enum: ["BOARDING_HOUSE", "BED_SPACER", "APARTMENT", "PAD"],
+    enum: ["BOARDING_HOUSE", "BED_SPACER", "APARTMENT", "PAD", null],
     default: "",
   },
   description: {
@@ -72,7 +76,7 @@ lodgingSchema.index({ location: "2dsphere" });
 
 const Lodging = model("Lodging", lodgingSchema);
 
-export type Lodging = typeof Lodging extends Model<infer D, any, any>
+export type LodgingType = typeof Lodging extends Model<infer D, any, any>
   ? D
   : never;
 

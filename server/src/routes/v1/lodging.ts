@@ -1,5 +1,7 @@
-import { Lodging, Photo } from "@prisma/client";
 import { Router } from "express";
+import { Types } from "mongoose";
+import { LodgingType } from "src/database/model/Lodging";
+import { Photo } from "src/database/model/Photo";
 import JSONResponse from "src/lib/json-response";
 import checkLocation from "src/lib/middleware/checklocation";
 import { GooglePlacesAPINearbyResponse } from "src/lib/types/google-places-api-types";
@@ -26,31 +28,29 @@ router
       const places_api_response_json =
         (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
 
-      const google_nearby_place: (Lodging & { photos: Photo[] })[] = [];
+      const google_nearby_place = [];
 
       for (const place of places_api_response_json.results) {
         google_nearby_place.push({
-          id: place.place_id,
+          id: new Types.ObjectId(place.place_id),
           owner_id: "",
           name: place.name,
           description: "",
           photos: place.photos.map((photo) => ({
+            type: "LODGING_PIC",
             id: "",
             url: photo.photo_reference,
             height: photo.height,
             width: photo.width,
-            date_created: null,
             lodging_id: null,
-            room_id: null,
-            user_id: null,
+            date_created: new Date(),
+            last_updated: new Date(),
           })),
           offers: [],
           type: null,
-          date_created: null,
+          date_created: new Date(),
         });
       }
-
-      
     } catch (error) {
       console.error(error);
       return response.status(500).json(JSONResponse("INTERNAL_SERVER_ERROR"));
