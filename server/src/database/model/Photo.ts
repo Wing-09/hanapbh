@@ -16,6 +16,7 @@ const photoSchema = new Schema({
   last_updated: { type: Date, default: Date.now },
 });
 
+                  },
 const Photo = model("Photo", photoSchema);
 
 export type Photo = typeof Photo extends Model<infer D, any, any> ? D : never;
