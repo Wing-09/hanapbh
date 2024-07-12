@@ -1,29 +1,29 @@
 export type User = {
-  id: string;
+  id?: string;
   first_name: string;
-  middle_name: string;
+  middle_name?: string;
   last_name: string;
   email: string;
   password: string;
   birthday?: Date;
   gender: {
-    type: "MALE" | "FEMALE" | "OTHER";
+    type: "MALE" | "FEMALE" | "OTHER" | "";
     other: string;
   };
-  lodgings: Lodging[];
+  lodgings?: Lodging[];
 
-  rated: Rating[];
+  rated?: Rating[];
 
-  contact: {
+  contact?: {
     phone_number: string = "";
     facebook: string = "";
     instagram: string = "";
     twitter_x: string = "";
   };
   photo: Photo;
-  favorites: Favorite[];
-  date_created: Date;
-  last_updated: Date;
+  favorites?: Favorite[];
+  date_created?: Date;
+  last_updated?: Date;
 };
 
 export type Photo = {
@@ -34,6 +34,6 @@ export type Photo = {
   user?: User;
   lodging?: Lodging;
   room?: Room;
-  date_created: Date;
-  last_updated: Date;
+  date_created?: Date;
+  last_updated?: Date;
 };
