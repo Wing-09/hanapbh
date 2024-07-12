@@ -40,8 +40,8 @@ export default function Login() {
         <DialogFooter className="w-full flex justify-center">
           <Button className="mx-auto" variant="ghost">
             <Link
-              href={exit ? `/sig-nup?exit=${exit}` : "/"}
-              as={exit ? `/sign-up?exit=${exit}` : "/"}
+              href={"/sig-nup?exit=" + exit}
+              as={"/sign-up?exit=" + exit}
               prefetch
               className="font-bold"
             >
