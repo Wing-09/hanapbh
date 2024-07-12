@@ -1,10 +1,6 @@
 import { Model, model, Schema, Types } from "mongoose";
 
 const lodgingSchema = new Schema({
-  id: {
-    type: Schema.Types.ObjectId,
-    default: new Types.ObjectId(),
-  },
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",

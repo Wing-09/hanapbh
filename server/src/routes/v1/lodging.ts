@@ -28,12 +28,17 @@ router
       const places_api_response_json =
         (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
 
-      const google_nearby_place = [];
+      const google_nearby_place: (Omit<LodgingType, "photos" | "location"> & {
+        id: string;
+        photos: Photo[];
+        location: {
+          coordinate: [number];
+        };
+      })[] = [];
 
       for (const place of places_api_response_json.results) {
         google_nearby_place.push({
-          id: new Types.ObjectId(place.place_id),
-          owner_id: "",
+          id: place.place_id,
           name: place.name,
           description: "",
           photos: place.photos.map((photo) => ({
@@ -48,7 +53,15 @@ router
           })),
           offers: [],
           type: null,
+          favored: [],
+          ratings: [],
+          rooms: [],
+          location: {
+            type: "Point",
+            coordinate: [place.geometry.location.lng],
+          },
           date_created: new Date(),
+          last_updated: new Date(),
         });
       }
     } catch (error) {
