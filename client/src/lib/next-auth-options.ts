@@ -1,8 +1,9 @@
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthOptions } from "next-auth";
+import { AuthOptions, Awaitable } from "next-auth";
 import { ServerResponse } from "./types/server-response";
 import { User } from "./types/data-type";
+import { error } from "console";
 
 const google_client_id = process.env.GOOGLE_CLIENT_ID;
 if (!google_client_id)
@@ -37,24 +38,23 @@ const auth_options: AuthOptions = {
         },
       },
       async authorize(credentials) {
-        try {
-          const response = await fetch(server_url + "/v1/user/authenticate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: credentials?.email,
-              password: credentials?.password,
-            }),
-          });
+        const response = await fetch(server_url + "/v1/user/authenticate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: credentials?.email,
+            password: credentials?.password,
+          }),
+        });
 
-          const response_json = (await response.json()) as ServerResponse;
+        const response_json = (await response.json()) as ServerResponse;
 
-          return response_json.data as User;
-        } catch (e) {
-          throw e;
-        }
+        if (response_json.status !== "OK")
+          throw new Error(response_json.message);
+
+        return (await response_json.data) as User;
       },
     }),
     GoogleProvider({
@@ -80,7 +80,6 @@ const auth_options: AuthOptions = {
       try {
         if (profile) {
           const { email } = user;
-
           const response = await fetch(server_url + "/v1/user/email/" + email);
 
           const response_json = (await response.json()) as ServerResponse;

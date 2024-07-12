@@ -5,6 +5,7 @@
     "dsphere",
     "Hanap",
     "heroicons",
-    "NEXTAUTH"
+    "NEXTAUTH",
+    "tailwindcss"
   ]
 }

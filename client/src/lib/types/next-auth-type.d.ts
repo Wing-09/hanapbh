@@ -1,20 +1,18 @@
 import NextAuth, { Session } from "next-auth";
-import { User } from "./client-types";
+import { User as UserType } from "./data-type";
 
 declare module "next-auth" {
   interface Session {
-    user: User;
+    user: UserType;
   }
-}
-
-declare module "next-auth" {
   interface Profile {
     given_name: string;
     family_name: string;
     picture: string;
   }
+  interface User extends UserType {}
 }
 
 declare module "next-auth/jwt" {
-  interface JWT extends User {}
+  interface JWT extends UserType {}
 }
