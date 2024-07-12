@@ -18,6 +18,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      
       validate: {
         validator: (v: string) => {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);

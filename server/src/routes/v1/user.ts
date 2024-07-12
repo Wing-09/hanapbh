@@ -1,4 +1,4 @@
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import { Router } from "express";
 import exclude from "../../lib/exclude";
 import JSONResponse from "../../lib/json-response";
@@ -34,12 +34,64 @@ router
       const new_user_json = new_user.toJSON();
 
       return response
+        .status(201)
+        .json(
+          JSONResponse(
+            "CREATED",
+            " new user created",
+            exclude({ id: new_user_json._id, ...new_user_json }, [
+              "password",
+              "_id",
+            ])
+          )
+        );
+    } catch (error) {
+      console.error(error);
+      return response
+        .status(500)
+        .json(
+          JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
+        );
+    }
+  })
+  .post("/authentication", async (request, response) => {
+    try {
+      const { email, password }: Record<string, string> = request.body;
+
+      const found_user = await User.findOne({
+        email: {
+          $regex: "^" + email.toLowerCase(),
+        },
+      });
+
+      if (!found_user)
+        return response
+          .status(404)
+          .json(JSONResponse("NOT_FOUND", "user does not exist"));
+
+      if (!found_user.password)
+        return response
+          .status(403)
+          .json(
+            JSONResponse(
+              "FORBIDDEN",
+              "you can only login in with the account using google authentication"
+            )
+          );
+
+      if (!(await compare(password, found_user.password!)))
+        return response
+          .status(401)
+          .json(JSONResponse("UNAUTHORIZED", "incorrect password"));
+
+      const found_user_json = found_user.toJSON();
+      return response
         .status(200)
         .json(
           JSONResponse(
             "OK",
-            " new user created",
-            exclude({ id: new_user_json._id, ...new_user_json }, [
+            "user authenticated",
+            exclude({ ...found_user_json, id: found_user_json._id }, [
               "password",
               "_id",
             ])

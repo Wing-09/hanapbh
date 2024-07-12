@@ -5,7 +5,8 @@ type ResponseStatus =
   | "INTERNAL_SERVER_ERROR"
   | "CONFLICT"
   | "FORBIDDEN"
-  | "BAD_REQUEST";
+  | "BAD_REQUEST"
+  | "CREATED";
 
 export default function JSONResponse<T>(
   status: ResponseStatus,
