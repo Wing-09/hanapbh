@@ -38,23 +38,27 @@ const auth_options: AuthOptions = {
         },
       },
       async authorize(credentials) {
-        const response = await fetch(server_url + "/v1/user/authenticate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-        });
+        try {
+          const response = await fetch(server_url + "/v1/user/authenticate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          });
 
-        const response_json = (await response.json()) as ServerResponse;
+          const response_json = (await response.json()) as ServerResponse;
 
-        if (response_json.status !== "OK")
-          throw new Error(response_json.message);
+          if (response_json.status !== "OK")
+            throw new Error(response_json.message);
 
-        return (await response_json.data) as User;
+          return (await response_json.data) as User;
+        } catch (error) {
+          throw error;
+        }
       },
     }),
     GoogleProvider({
