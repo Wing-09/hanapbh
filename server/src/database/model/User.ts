@@ -18,7 +18,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      
+
       validate: {
         validator: (v: string) => {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -68,8 +68,9 @@ const userSchema = new Schema(
       },
     },
     photo: {
-      type: Schema.Types.ObjectId,
-      ref: "Photo",
+      url: { type: String, required: true },
+      width: { type: Number, required: true },
+      height: { type: Number, required: true },
     },
     favorites: [
       {
