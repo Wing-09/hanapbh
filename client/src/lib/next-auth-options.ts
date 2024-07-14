@@ -1,9 +1,8 @@
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthOptions, Awaitable } from "next-auth";
+import { AuthOptions } from "next-auth";
 import { ServerResponse } from "./types/server-response";
 import { User } from "./types/data-type";
-import { error } from "console";
 
 const google_client_id = process.env.GOOGLE_CLIENT_ID;
 if (!google_client_id)
@@ -98,6 +97,8 @@ const auth_options: AuthOptions = {
                 first_name: profile.given_name,
                 last_name: profile.family_name,
                 photo: {
+                  height: 500,
+                  width: 500,
                   url: profile.picture,
                 },
               } as User),

@@ -4,9 +4,9 @@ export type User = {
   middle_name?: string;
   last_name: string;
   email: string;
-  password: string;
+  password?: string;
   birthday?: Date;
-  gender: {
+  gender?: {
     type: "MALE" | "FEMALE" | "OTHER" | "";
     other: string;
   };
@@ -20,20 +20,12 @@ export type User = {
     instagram: string = "";
     twitter_x: string = "";
   };
-  photo: Photo;
+  photo: {
+    url: string;
+    width: number;
+    height: number;
+  };
   favorites?: Favorite[];
-  date_created?: Date;
-  last_updated?: Date;
-};
-
-export type Photo = {
-  url: string;
-  type: "PROFILE_PIC" | "LODGING_PIC" | "ROOM_PIC";
-  width: number;
-  height: number;
-  user?: User;
-  lodging?: Lodging;
-  room?: Room;
   date_created?: Date;
   last_updated?: Date;
 };

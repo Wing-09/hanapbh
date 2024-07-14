@@ -27,7 +27,7 @@ export default function Login() {
       }
     >
       <DialogContent className=" w-[clamp(25rem,_25rem,_95vw)]">
-        <div className="space-y-5 relative">
+        <div className="space-y-5 relative flex flex-col">
           <DialogClose className="absolute -top-4 -right-3" asChild>
             <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">
               <XMarkIcon className="h-5" />

@@ -54,7 +54,7 @@ router
         );
     }
   })
-  .post("/authentication", async (request, response) => {
+  .post("/authenticate", async (request, response) => {
     try {
       const { email, password }: Record<string, string> = request.body;
 

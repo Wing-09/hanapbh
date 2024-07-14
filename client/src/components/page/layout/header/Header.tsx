@@ -1,4 +1,4 @@
-import HanapBHLogo from "@/components/HanapBHLogo";
+import HanapBHLogo from "@/svg/HanapBHLogo";
 import Link from "next/link";
 import React from "react";
 import AddPlace from "./AddPlace";

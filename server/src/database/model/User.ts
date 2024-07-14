@@ -29,7 +29,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      default: null,
     },
     birthday: {
       type: Date,
@@ -39,7 +39,6 @@ const userSchema = new Schema(
       type: {
         type: String,
         enum: ["MALE", "FEMALE", "OTHER"],
-        required: true,
       },
       other: { type: String },
     },
