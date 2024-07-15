@@ -146,7 +146,7 @@ export default function SignUpOTP({
       {creating_otp ? (
         <DialogContent className="grid place-items-center">
           <p className="font-bold text-xl">Sending OTP</p>{" "}
-          <LoadingSvg className="h-20" />
+          <LoadingSvg className="h-20 fill-primary" />
         </DialogContent>
       ) : (
         <DialogContent>

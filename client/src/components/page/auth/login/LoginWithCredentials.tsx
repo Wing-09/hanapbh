@@ -1,17 +1,45 @@
+import LoadingSvg from "@/components/svg/LoadingSvg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import React, { FormEvent, useState } from "react";
 
 export default function LoginWithCredentials() {
   const [email, setEmail] = useState("");
   const [see_password, setSeePassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { toast } = useToast();
+  const exit = useSearchParams().get("exit");
+  async function submitForm(e: FormEvent<HTMLFormElement>) {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: true,
+        callbackUrl: !exit ? "/" : exit === "null" ? "/" : exit,
+      });
+
+      if (response?.error) {
+        toast({ description: response.error });
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
+  }
+
   return (
-    <form className="space-y-5">
+    <form className="space-y-5" onSubmit={submitForm}>
       <Input
         placeholder="Email"
-        type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -38,7 +66,7 @@ export default function LoginWithCredentials() {
         </Button>
       </div>
       <Button type="submit" className="w-full">
-        Login
+        {loading ? <LoadingSvg className="h-5" /> : "Login"}
       </Button>
     </form>
   );
