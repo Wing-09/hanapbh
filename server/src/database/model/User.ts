@@ -18,6 +18,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+
       validate: {
         validator: (v: string) => {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -28,7 +29,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      default: null,
     },
     birthday: {
       type: Date,
@@ -38,7 +39,6 @@ const userSchema = new Schema(
       type: {
         type: String,
         enum: ["MALE", "FEMALE", "OTHER"],
-        required: true,
       },
       other: { type: String },
     },
@@ -67,8 +67,9 @@ const userSchema = new Schema(
       },
     },
     photo: {
-      type: Schema.Types.ObjectId,
-      ref: "Photo",
+      url: { type: String },
+      width: { type: Number },
+      height: { type: Number },
     },
     favorites: [
       {

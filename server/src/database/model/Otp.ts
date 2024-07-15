@@ -18,5 +18,5 @@ const otpSchema = new Schema({
 
 const OTP = model("OTP", otpSchema);
 
-export type OTP = typeof OTP extends Model<infer D, any, any> ? D : never;
+export type OTPType = typeof OTP extends Model<infer D, any, any> ? D : never;
 export default OTP;
