@@ -8,6 +8,7 @@ import SignUpPassword from "./SignUpPassword";
 import Link from "next/link";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -19,6 +20,8 @@ import SignUpBirthday from "./SignUpBirthDay";
 import SignUPGender from "./SignUpGender";
 import SignUpOTP from "./SignUpOtp";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function SignUp() {
   const [form_data, setFormData] = useState<Omit<User, "id">>({
@@ -30,12 +33,6 @@ export default function SignUp() {
       other: "",
     },
     password: "",
-
-    photo: {
-      height: 0,
-      width: 0,
-      url: "",
-    },
   });
 
   const router = useRouter();
@@ -50,32 +47,44 @@ export default function SignUp() {
     >
       <DialogTrigger></DialogTrigger>
       <DialogContent className="w-[clamp(25rem, 25rem, 95vw)] p-0">
-        <ScrollArea className="h-[90dvh]">
-          <div className="p-6 space-y-5">
-            <DialogHeader>
-              <DialogTitle className="text-xl text-center">Sign up</DialogTitle>
-            </DialogHeader>
-            <form className="space-y-5 p-1">
-              <SignUpName form_data={form_data} setFormData={setFormData} />
-              <SignUpEmail form_data={form_data} setFormData={setFormData} />
-              <SignUpBirthday setFormData={setFormData} />
-              <SignUPGender form_data={form_data} setFormData={setFormData} />
-              <SignUpPassword form_data={form_data} setFormData={setFormData} />
-              <SignUpOTP form_data={form_data} setFormData={setFormData} />
-            </form>
-            <DialogFooter className="text-center mx-auto">
-              <p>Already have an account ?</p>
-              <Link
-                href={"/login?exit=" + exit}
-                as={"/login?exit=" + exit}
-                prefetch
-                className="font-bold"
-              >
-                Login
-              </Link>
-            </DialogFooter>
-          </div>
-        </ScrollArea>
+        <div className="relative">
+          <DialogClose className="absolute top-2 right-3 z-10" asChild>
+            <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">
+              <XMarkIcon className="h-5" />
+            </Button>
+          </DialogClose>
+          <ScrollArea className="h-[90dvh]">
+            <div className="p-6 space-y-5 flex flex-col">
+              <DialogHeader>
+                <DialogTitle className="text-xl text-center">
+                  Sign up
+                </DialogTitle>
+              </DialogHeader>
+              <form className="space-y-5 p-1">
+                <SignUpName form_data={form_data} setFormData={setFormData} />
+                <SignUpEmail form_data={form_data} setFormData={setFormData} />
+                <SignUpBirthday setFormData={setFormData} />
+                <SignUPGender form_data={form_data} setFormData={setFormData} />
+                <SignUpPassword
+                  form_data={form_data}
+                  setFormData={setFormData}
+                />
+                <SignUpOTP form_data={form_data} setFormData={setFormData} />
+              </form>
+              <DialogFooter className="text-center mx-auto">
+                <p>Already have an account ?</p>
+                <Link
+                  href={"/login?exit=" + exit}
+                  as={"/login?exit=" + exit}
+                  prefetch
+                  className="font-bold"
+                >
+                  Login
+                </Link>
+              </DialogFooter>
+            </div>
+          </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );

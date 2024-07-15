@@ -9,8 +9,8 @@ export default function loading() {
         initial={{ width: 0 }}
         animate={{ width: "90vw" }}
         exit={{ width: 100 }}
-        transition={{duration: .3}}
-        className="h-1 bg-primary fixed top-0 left-0 rounded-full"
+        transition={{ duration: 0.3 }}
+        className="h-px bg-primary fixed top-0 left-0 rounded-full"
       ></motion.div>
     </AnimatePresence>
   );

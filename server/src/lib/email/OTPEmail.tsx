@@ -26,28 +26,42 @@ export default function OTPEmail({
       <Head />
       <Tailwind>
         <Body className="bg-white">
-          <Container className="p-5 border border-gray-200 border-solid rounded shadow-md w-full">
-            <Section className="mt-10 ">
+          <Container
+            className="border border-gray-200 border-solid rounded shadow-md w-full font-sans font-medium "
+            style={{ padding: "clamp(0.5rem,1rem,1.25rem)" }}
+          >
+            <Heading>
               <Img
-                src="https://res.cloudinary.com/dowphddjf/image/upload/v1705607251/logo/hanap-bh_iwo1sr.png"
-                alt="hanap-bh"
-                className=" h-auto aspect-square w-[15vh] my-0 mx-auto"
+                src="https://utfs.io/f/81acffe3-7837-49ce-b95e-abb2614ca533-6esb0u.png"
+                alt="hanapbh"
+                className="h-auto aspect-square w-[15vh] my-0 mx-auto"
               />
-            </Section>
-            <Heading className="text-center text-gray-900">
-              <strong className="italic text-4xl">Hanap BH</strong>
+              <Text
+                className="text-center font-sans font-medium"
+                style={{ fontSize: "clamp(1rem,1.75rem,2.25rem)" }}
+              >
+                Welcome to{" "}
+                <span className="italic text-center text-gray-900 font-sans font-medium">
+                  Hanap BH
+                </span>
+              </Text>
             </Heading>
             <Section>
-              <Text className="text-3xl font-bold text-gray-900">
-                {user_name.charAt(0).toUpperCase() + user_name.slice(1)},
+              <Text
+                style={{
+                  fontSize: "clamp(1rem, 1.5rem, 1.75)",
+                  lineHeight: "clamp(1.5rem, 1.6rem, 1.75",
+                }}
+              >
+                Hi <strong>{user_name}</strong>
               </Text>
-              <Text className="text-base text-gray-900">
-                Welcome to <strong className="italic">Hanap BH</strong>! , Use
-                the verification code below to proceed your sign up process.
+              <Text>
+                Welcome to <strong className="italic">Hanap BH !</strong> , Use
+                the verification code below to proceed your sign up process:
               </Text>
             </Section>
-            <Section className="bg-gray-700 rounded my-[10vh] text-center space-x-10 tracking-[2rem]">
-              <Text className="font-bold text-white uppercase text-5xl">
+            <Section className="my-[10dvh] text-center">
+              <Text className="font-bold text-5xl text-blue-gray-700 uppercase text-center space-x-10 tracking-[2rem]">
                 {code}
               </Text>
             </Section>
@@ -55,8 +69,8 @@ export default function OTPEmail({
             <Section>
               <Text className="text-xs text-gray-700 text-justify">
                 This email is was sent to you from{" "}
-                <Link href="https://hanap-bh.vercel.app/">
-                  {"(https://hanap-bh.vercel.app/)"}
+                <Link href="https://hanapbh.vercel.app/">
+                  {"(https://hanapbh.vercel.app/)"}
                 </Link>
                 . if you did not expect an email from us reset your password and
                 further secure your email address here{" "}

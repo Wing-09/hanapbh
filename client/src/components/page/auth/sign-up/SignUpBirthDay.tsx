@@ -76,7 +76,7 @@ export default function SignUpBirthday({
   }, []);
 
   useEffect(() => {
-    if (!date?.month) return;
+    if (!date?.month && !date?.year) return;
     if (date?.month === "February") {
       if (date.year % 4 === 0) setDays(29);
       else setDays(28);
@@ -88,7 +88,7 @@ export default function SignUpBirthday({
     )
       setDays(30);
     else setDays(31);
-  }, [date?.month]);
+  }, [date?.month, date?.year]);
   return (
     <div className="space-y-3">
       <p className="text-center font-semibold">Birthday</p>

@@ -20,7 +20,7 @@ export type User = {
     instagram: string = "";
     twitter_x: string = "";
   };
-  photo: {
+  photo?: {
     url: string;
     width: number;
     height: number;

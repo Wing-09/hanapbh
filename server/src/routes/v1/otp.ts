@@ -1,10 +1,10 @@
 import { Router } from "express";
-import JSONResponse from "src/lib/json-response";
+import JSONResponse from "../../lib/json-response";
 import "dotenv/config";
 import { createTransport } from "nodemailer";
-import OTP from "src/database/model/Otp";
+import OTP from "../../database/model/Otp";
 import { render } from "@react-email/components";
-import OTPEmail from "src/lib/email/OTPEmail";
+import OTPEmail from "../../lib/email/OTPEmail";
 
 const router = Router();
 const gmail_password = process.env.GMAIL_2F_AUTH_APP_PASS;
@@ -50,7 +50,7 @@ router
       const chars = "abcdefghijklmnopqrstuvwxyz1234567890";
       let random_string = "";
 
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 6; i++) {
         random_string += chars[Math.floor(Math.random() * chars.length)];
       }
 
@@ -110,6 +110,7 @@ router
           .status(401)
           .json(JSONResponse("UNAUTHORIZED", "otp is incorrect"));
 
+      await OTP.deleteMany({ email });
       return response.status(200).json(JSONResponse("OK", "otp verified"));
     } catch (error) {
       console.error(error);
@@ -121,3 +122,7 @@ router
 
 // update router
 // delete router
+
+const otp_v1_router = router;
+
+export default otp_v1_router;

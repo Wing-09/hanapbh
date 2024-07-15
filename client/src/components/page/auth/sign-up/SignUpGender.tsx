@@ -25,6 +25,7 @@ export default function SignUPGender({
         {items.map((item) => (
           <Button
             key={item.name}
+            type="button"
             variant={
               form_data.gender?.type === item.value ? "default" : "secondary"
             }

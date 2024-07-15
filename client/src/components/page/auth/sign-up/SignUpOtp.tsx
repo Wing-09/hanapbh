@@ -50,24 +50,12 @@ export default function SignUpOTP({
   const { toast } = useToast();
   const exit = useSearchParams().get("exit");
 
-  let form_complete = false;
-  for (const item in form_data) {
-    if (
-      (item as keyof Omit<User, "id">) === "gender" ||
-      (item as keyof Omit<User, "id">) === "photo"
-    )
-      continue;
-    if (!form_data[item as keyof Omit<User, "id">]) form_complete = false;
-    else form_complete = true;
-    console.log(item + ":", form_complete);
-  }
-
   async function handleResend() {
     const id = setInterval(() => {
       setResend((prev) => ({ ...prev, time: prev.time - 1 }));
     }, 1000);
     setResend((prev) => ({ ...prev, open: false, interval_id: id }));
-
+    await createOTP();
     setResend((prev) => ({ ...prev, interval_id: id }));
   }
 
@@ -82,23 +70,32 @@ export default function SignUpOTP({
     }
   }
 
-  async function submitForm(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function submitForm() {
     setSubmit(true);
     try {
       const { status: otp_status } = await http_request.POST(
         "/v1/otp/authenticate",
         {
           otp: code,
+          email: form_data.email,
         }
       );
 
-      if (otp_status !== "OK") return;
+      if (otp_status !== "OK") {
+        setSubmit(false);
 
-      const { data: new_user, status: new_user_status } =
-        await http_request.POST("/v1/user", form_data);
+        return;
+      }
 
-      if (new_user_status !== "CREATED") return;
+      const { status: new_user_status } = await http_request.POST(
+        "/v1/user",
+        form_data
+      );
+
+      if (new_user_status !== "CREATED") {
+        setSubmit(false);
+        return;
+      }
 
       const sign_in = await signIn("credentials", {
         email: form_data.email,
@@ -132,7 +129,15 @@ export default function SignUpOTP({
           ref={submit_btn_ref}
           className="w-full"
           type="button"
-          disabled={!form_complete}
+          disabled={
+            !form_data.first_name ||
+            !form_data.last_name ||
+            !form_data.email ||
+            !form_data.birthday ||
+            !form_data.gender?.type ||
+            !form_data.password ||
+            (form_data.gender.type === "OTHER" && !form_data.gender.other)
+          }
           onClick={createOTP}
         >
           Sign up
@@ -200,7 +205,12 @@ export default function SignUpOTP({
           >
             resend {!resend.open && "(" + resend.time + ")"}
           </Button>
-          <Button className="w-full" type="submit" disabled={!code}>
+          <Button
+            className="w-full"
+            type="submit"
+            disabled={!code}
+            onClick={submitForm}
+          >
             {submit ? <LoadingSvg className="h-8" /> : "Verify"}
           </Button>
         </DialogContent>
