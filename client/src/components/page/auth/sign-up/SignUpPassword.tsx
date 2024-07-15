@@ -3,14 +3,14 @@ import { Input } from "@/components/ui/input";
 import { User } from "@/lib/types/data-type";
 import { cn } from "@/lib/utils";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function SignUpPassword({
   form_data,
   setFormData,
 }: {
-  form_data: User;
-  setFormData: Dispatch<SetStateAction<User>>;
+  form_data: Omit<User, "id">;
+  setFormData: Dispatch<SetStateAction<Omit<User, "id">>>;
 }) {
   const [see_password, setSeePassword] = useState([false, false]);
   const [password, setPassword] = useState("");
@@ -26,9 +26,7 @@ export default function SignUpPassword({
             className="h-10 text-base md:w-full"
             type={see_password[0] ? "text" : "password"}
             value={password}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, password: e.target.value }))
-            }
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button
             type="button"
@@ -62,12 +60,11 @@ export default function SignUpPassword({
           )}
           type={see_password[1] ? "text" : "password"}
           value={confirm_password}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              confirm_password: e.target.value,
-            }))
-          }
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            if (e.target.value === password)
+              setFormData((prev) => ({ ...prev, password }));
+          }}
         />
         <Button
           variant="ghost"

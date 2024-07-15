@@ -1,21 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { User } from "@/lib/types/data-type";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
-type Gender = User["gender"];
+type Gender = NonNullable<User["gender"]>;
+
 export default function SignUPGender({
   form_data,
   setFormData,
 }: {
-  form_data: User;
-  setFormData: Dispatch<SetStateAction<User>>;
+  form_data: Omit<User, "id">;
+  setFormData: Dispatch<SetStateAction<Omit<User, "id">>>;
 }) {
-  const [selected, setSelected] = useState<Gender["type"]>("");
-  const [other, setOther] = useState("");
-
   const items = [
     { name: "Male", value: "MALE" },
     { name: "Female", value: "FEMALE" },
@@ -29,20 +25,32 @@ export default function SignUPGender({
         {items.map((item) => (
           <Button
             key={item.name}
-            variant={selected === item.value ? "default" : "secondary"}
+            variant={
+              form_data.gender?.type === item.value ? "default" : "secondary"
+            }
             className="grow"
-            onClick={() => setSelected(item.value)}
+            onClick={() =>
+              setFormData((prev) => ({
+                ...prev!,
+                gender: { ...prev.gender!, type: item.value },
+              }))
+            }
           >
             {item.name}
           </Button>
         ))}
       </div>
-      {selected === "OTHER" && (
+      {form_data.gender!.type === "OTHER" && (
         <Input
           placeholder="Specify gender"
           className="text-base h-10"
-          value={other}
-          onChange={(e) => setOther(e.target.value)}
+          value={form_data.gender?.other}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              gender: { ...prev.gender!, other: e.target.value.toUpperCase() },
+            }))
+          }
         />
       )}
     </div>

@@ -30,11 +30,9 @@ type DateType = {
   day: number;
 };
 export default function SignUpBirthday({
-  form_data,
   setFormData,
 }: {
-  form_data: User;
-  setFormData: Dispatch<SetStateAction<User>>;
+  setFormData: Dispatch<SetStateAction<Omit<User, "id">>>;
 }) {
   const [date, setDate] = useState<DateType>();
   const [year_list, setYearList] = useState<number[]>([]);
@@ -55,11 +53,17 @@ export default function SignUpBirthday({
     "December",
   ] as DateType["month"][];
 
-  //   const bd = new Date(
-  //     `${date?.month} ${date?.day}, ${date?.year}`
-  //   );
-  //   const date_now = new Date();
-  //   const age = (date_now.getTime() - bd.getTime()) / (1000 * 60 * 60 * 24 * 365);
+  useEffect(() => {
+    if (!date?.day) return;
+
+    const bd = new Date(`${date?.month} ${date?.day}, ${date?.year}`);
+    // const date_now = new Date();
+    // const age =
+    //   (date_now.getTime() - bd.getTime()) / (1000 * 60 * 60 * 24 * 365);
+
+    // if(age < 18)
+    setFormData((prev) => ({ ...prev!, birthday: bd }));
+  }, [date?.day]);
 
   useEffect(() => {
     const y = [] as number[];

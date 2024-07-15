@@ -2,10 +2,10 @@ import { ServerResponse } from "@/lib/types/server-response";
 import { useToast } from "../ui/use-toast";
 
 export default function useHTTPRequest() {
-  const server_url = process.env.NEXT_PUBLIC_DEVELOPMENT_SERVER!;
+  const server_url = process.env.NEXT_PUBLIC_SERVER!;
   if (!server_url)
     throw new Error(
-      "NEXT_PUBLIC_DEVELOPMENT_SERVER is missing from your .env.local file"
+      "NEXT_PUBLIC_SERVER is missing from your .env.local file"
     );
 
   const { toast } = useToast();
@@ -18,14 +18,13 @@ export default function useHTTPRequest() {
     try {
       const response_json = (await response.json()) as ServerResponse;
 
-      if (response_json.status !== "OK") {
+      if (response_json.status !== "OK" && response_json.status !== "CREATED") {
         toast({
-          title: "Oops! something went wrong",
           description: response_json.message,
         });
       }
 
-      return response_json.data;
+      return response_json;
     } catch (error) {
       throw error;
     }

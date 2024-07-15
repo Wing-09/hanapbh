@@ -111,7 +111,9 @@ const auth_options: AuthOptions = {
         return false;
       }
     },
-    async jwt({ token, profile, user }) {
+    async jwt({ token, profile, user, trigger, session }) {
+      if (trigger == "update") return { ...token, ...session };
+
       delete token.sub;
       delete token.name;
       delete token.sub;

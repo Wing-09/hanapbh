@@ -13,17 +13,18 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { ThemeToggler } from "./ThemeToggler";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 export default function HeaderDropdownMenu() {
+  <DropdownMenuSeparator />;
   const { status, data } = useSession();
   const pathname = usePathname();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full">
         <Avatar>
-          <AvatarImage src="" />
+          <AvatarImage src={data?.user.photo.url} />
           <AvatarFallback className="p-2">
             <UserIcon className="h-full stroke-primary" />
           </AvatarFallback>
@@ -102,7 +103,10 @@ export default function HeaderDropdownMenu() {
           <DropdownMenuSeparator />
           {/* logout button */}
           {status === "authenticated" && (
-            <DropdownMenuItem className="py-2 cursor-pointer font-bold space-x-3 justify-center">
+            <DropdownMenuItem
+              className="py-2 cursor-pointer font-bold space-x-3 justify-center"
+              onClick={() => signOut({ redirect: true, callbackUrl: pathname })}
+            >
               <p>Logout</p> <ArrowRightEndOnRectangleIcon className="h-5" />
             </DropdownMenuItem>
           )}

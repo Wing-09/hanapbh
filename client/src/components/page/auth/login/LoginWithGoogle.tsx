@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import GoogleSvg from "@/svg/GoogleSvg";
+import GoogleSvg from "@/components/svg/GoogleSvg";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";

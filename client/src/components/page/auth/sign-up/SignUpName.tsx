@@ -6,8 +6,8 @@ export default function SignUpName({
   form_data,
   setFormData,
 }: {
-  form_data: User;
-  setFormData: Dispatch<SetStateAction<User>>;
+  form_data: Omit<User, "id">;
+  setFormData: Dispatch<SetStateAction<Omit<User, "id">>>;
 }) {
   return (
     <div className="flex items-center space-x-2">
