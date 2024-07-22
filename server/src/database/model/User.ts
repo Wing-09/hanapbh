@@ -1,6 +1,40 @@
-import { Model, model, Schema, ValidatorProps } from "mongoose";
+import { Document, Model, model, Schema, ValidatorProps } from "mongoose";
+import { L } from "./Lodging";
+import { F } from "./Favorite";
+import { P, PhotoType } from "./Photo";
+import { RA } from "./Rating";
 
-const userSchema = new Schema(
+export interface U extends Document {
+  first_name: string;
+  middle_name?: string;
+  last_name: string;
+  email: string;
+  password?: string;
+  birthday: Date;
+  gender: {
+    type: "MALE" | "FEMALE" | "OTHER";
+    other: string;
+  };
+  photo_id: P["_id"];
+  lodging_ids: L["_id"][];
+  rated_ids: RA["_id"][];
+  favored_ids: F["_id"];
+  contact: {
+    phone_number: string;
+    facebook: string;
+    instagram: string;
+    twitter: string;
+  };
+  date_created: Date;
+  last_updated: Date;
+}
+
+export interface UserType extends Omit<U, keyof Document> {
+  id: string;
+  photo: PhotoType;
+}
+
+const userSchema = new Schema<U>(
   {
     first_name: {
       type: String,
@@ -42,14 +76,6 @@ const userSchema = new Schema(
       },
       other: { type: String },
     },
-    lodgings: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Lodging",
-      },
-    ],
-
-    rated: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
 
     contact: {
       phone_number: { type: String, default: "" },
@@ -66,12 +92,20 @@ const userSchema = new Schema(
         default: "",
       },
     },
-    photo: {
-      url: { type: String },
-      width: { type: Number },
-      height: { type: Number },
+    lodging_ids: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Lodging",
+      },
+    ],
+    rated_ids: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
+
+    photo_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Favorite",
+      required: true,
     },
-    favorites: [
+    favored_ids: [
       {
         type: Schema.Types.ObjectId,
         ref: "Favorite",
@@ -81,12 +115,11 @@ const userSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    last_updated: { type: Date, default: Date.now() },
+    last_updated: { type: Date, required: true },
   },
   { versionKey: false }
 );
 
 const User = model("User", userSchema);
 
-export type UserType = typeof User extends Model<infer D, any, any> ? D : never;
 export default User;
