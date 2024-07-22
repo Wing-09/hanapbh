@@ -1,35 +1,35 @@
-import { Document, Model, model, Schema, ValidatorProps } from "mongoose";
+import { Document, Model, model, Schema, Types, ValidatorProps } from "mongoose";
 import { L } from "./Lodging";
 import { F } from "./Favorite";
 import { P, PhotoType } from "./Photo";
 import { RA } from "./Rating";
 
-export interface U extends Document {
+export interface U {
   first_name: string;
   middle_name?: string;
   last_name: string;
   email: string;
-  password?: string;
-  birthday: Date;
-  gender: {
+  password: string | null;
+  birthday?: Date;
+  gender?: {
     type: "MALE" | "FEMALE" | "OTHER";
     other: string;
   };
-  photo_id: P["_id"];
-  lodging_ids: L["_id"][];
-  rated_ids: RA["_id"][];
-  favored_ids: F["_id"];
-  contact: {
+  photo_id?: Types.ObjectId;
+  lodging_ids?: Types.ObjectId[];
+  rated_ids?: Types.ObjectId[];
+  favored_ids?: Types.ObjectId[];
+  contact?: {
     phone_number: string;
     facebook: string;
     instagram: string;
     twitter: string;
   };
-  date_created: Date;
+  date_created?: Date;
   last_updated: Date;
 }
 
-export interface UserType extends Omit<U, keyof Document> {
+export interface UserType extends U {
   id: string;
   photo: PhotoType;
 }
