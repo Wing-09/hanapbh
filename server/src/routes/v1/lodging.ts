@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { Types } from "mongoose";
 import Lodging, { LodgingType } from "src/database/model/Lodging";
-import { Photo } from "src/database/model/Photo";
+import { Photo, PhotoType } from "src/database/model/Photo";
 import JSONResponse from "src/lib/json-response";
 import checkLocation from "src/lib/middleware/checklocation";
 import { GooglePlacesAPINearbyResponse } from "src/lib/types/google-places-api-types";
@@ -35,7 +34,7 @@ router
       if (!Number(page) || !Number(max_distance))
         return response
           .status(400)
-          .json(  
+          .json(
             JSONResponse(
               "BAD_REQUEST",
               "page and max_distance value must be a number"
@@ -44,29 +43,11 @@ router
 
       const skip = 20 * Number(page);
 
-      const database_lodgings = await Lodging.aggregate<LodgingType>([
-        {
-          $geoNear: {
-            near: {
-              type: "Point",
-              coordinates: [Number(longitude), Number(latitude)],
-            },
-            distanceField: "distance",
-            maxDistance: Number(max_distance),
-            spherical: true,
-          },
-        },
-        {
-          $skip: skip,
-        },
-        {
-          $limit: 20,
-        },
-      ]);
+      
 
       const database_lodgings_json: (Omit<LodgingType, "photos"> & {
         id: string;
-        photos: Photo[];
+        photos: PhotoType[];
         distance: number;
       })[] = [];
 

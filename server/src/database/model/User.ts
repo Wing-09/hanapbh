@@ -1,10 +1,6 @@
-import { Document, Model, model, Schema, Types, ValidatorProps } from "mongoose";
-import { L } from "./Lodging";
-import { F } from "./Favorite";
-import { P, PhotoType } from "./Photo";
-import { RA } from "./Rating";
+import { model, Schema, Types, ValidatorProps } from "mongoose";
 
-export interface U {
+export type UserType = {
   first_name: string;
   middle_name?: string;
   last_name: string;
@@ -15,10 +11,10 @@ export interface U {
     type: "MALE" | "FEMALE" | "OTHER";
     other: string;
   };
-  photo_id?: Types.ObjectId;
-  lodging_ids?: Types.ObjectId[];
-  rated_ids?: Types.ObjectId[];
-  favored_ids?: Types.ObjectId[];
+  photo?: Types.ObjectId;
+  lodgings?: Types.ObjectId[];
+  rated?: Types.ObjectId[];
+  favorites?: Types.ObjectId[];
   contact?: {
     phone_number: string;
     facebook: string;
@@ -27,14 +23,9 @@ export interface U {
   };
   date_created?: Date;
   last_updated: Date;
-}
+};
 
-export interface UserType extends U {
-  id: string;
-  photo: PhotoType;
-}
-
-const userSchema = new Schema<U>(
+const userSchema = new Schema<UserType>(
   {
     first_name: {
       type: String,
@@ -92,20 +83,20 @@ const userSchema = new Schema<U>(
         default: "",
       },
     },
-    lodging_ids: [
+    lodgings: [
       {
         type: Schema.Types.ObjectId,
         ref: "Lodging",
       },
     ],
-    rated_ids: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
+    rated: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
 
-    photo_id: {
+    photo: {
       type: Schema.Types.ObjectId,
-      ref: "Favorite",
+      ref: "Photo",
       required: true,
     },
-    favored_ids: [
+    favorites: [
       {
         type: Schema.Types.ObjectId,
         ref: "Favorite",
@@ -119,6 +110,15 @@ const userSchema = new Schema<U>(
   },
   { versionKey: false }
 );
+
+userSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+  },
+});
 
 const User = model("User", userSchema);
 

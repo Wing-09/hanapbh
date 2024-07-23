@@ -1,23 +1,18 @@
-import { Document, model, Schema, Types } from "mongoose";
-import { L } from "./Lodging";
-import { R } from "./Room";
+import { model, Schema, Types } from "mongoose";
 
-export interface P {
+export type PhotoType = {
   url: string;
   type?: "PROFILE" | "LODGING" | "ROOM";
   width: number;
   height: number;
-  user_id?: Types.ObjectId;
-  lodging_id?: L["_id"];
-  room_id?: R["_id"];
+  user?: Types.ObjectId;
+  lodging?: Types.ObjectId;
+  room?: Types.ObjectId;
   date_created?: Date;
   last_updated: Date;
-}
-export interface PhotoType extends Omit<P, keyof Document> {
-  id: string;
-}
+};
 
-const photoSchema = new Schema<P>({
+const photoSchema = new Schema<PhotoType>({
   url: { type: String, required: true },
   type: {
     type: String,
@@ -25,11 +20,20 @@ const photoSchema = new Schema<P>({
   },
   width: { type: Number, required: true },
   height: { type: Number, required: true },
-  user_id: { type: Schema.Types.ObjectId, ref: "User" },
-  lodging_id: { type: Schema.Types.ObjectId, ref: "Lodging" },
-  room_id: { type: Schema.Types.ObjectId, ref: "Room" },
+  user: { type: Schema.Types.ObjectId, ref: "User" },
+  lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
+  room: { type: Schema.Types.ObjectId, ref: "Room" },
   date_created: { type: Date, default: Date.now },
   last_updated: { type: Date, required: true },
+});
+
+photoSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+  },
 });
 
 const Photo = model("Photo", photoSchema);

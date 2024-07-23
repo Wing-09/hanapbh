@@ -1,9 +1,9 @@
 import { Document, Model, model, Schema } from "mongoose";
-import { L } from "./Lodging";
-import { P, PhotoType } from "./Photo";
+import { LodgingType } from "./Lodging";
+import { Types } from "mongoose";
 
-export interface R extends Document {
-  lodging_id: L["_id"];
+export type RoomType = {
+  lodging: Types.ObjectId;
   description: string;
   bed_count: number;
   occupant_count: number;
@@ -16,18 +16,13 @@ export interface R extends Document {
       | "PER_MONTH";
     amount: number;
   };
-  photo_ids: P["_id"][];
+  photos: Types.ObjectId[];
   date_created: Date;
   last_updated: Date;
-}
+};
 
-export interface RoomType extends Omit<R, keyof Document> {
-  id: string;
-  photos: PhotoType[];
-}
-
-const roomSchema = new Schema<R>({
-  lodging_id: { type: Schema.Types.ObjectId, ref: "Lodging" },
+const roomSchema = new Schema<RoomType>({
+  lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
   description: { type: String, default: "" },
   bed_count: { type: Number, default: null },
   price: {
@@ -51,7 +46,7 @@ const roomSchema = new Schema<R>({
     type: Number,
     default: null,
   },
-  photo_ids: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
+  photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
   date_created: {
     type: Date,
     default: Date.now,
@@ -59,6 +54,15 @@ const roomSchema = new Schema<R>({
   last_updated: {
     type: Date,
     default: Date.now,
+  },
+});
+
+roomSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
   },
 });
 

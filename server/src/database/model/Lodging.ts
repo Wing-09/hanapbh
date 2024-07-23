@@ -1,13 +1,7 @@
-import { Document, model, Schema } from "mongoose";
-import { U } from "./User";
-import { P, PhotoType } from "./Photo";
-import { R, RoomType } from "./Room";
-import { F, FavoriteType } from "./Favorite";
-import { RA, RatingType } from "./Rating";
+import { model, Schema, Types } from "mongoose";
 
-export interface L extends Document {
-  owner_id?: U["_id"];
-  id: string;
+export type LodgingType = {
+  owner?: Types.ObjectId;
   name: string;
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
   description: string;
@@ -28,22 +22,17 @@ export interface L extends Document {
     municipality_city: string;
     barangay: string;
   };
-  photo_id: P["_id"];
-  favored_by_ids: F["_id"];
-  rated_by_ids: RA["_id"];
-  room_ids: R["_id"];
+  photos: Types.ObjectId[];
+  favored_by: Types.ObjectId[];
+  rated_by: Types.ObjectId[];
+  rooms: Types.ObjectId[];
   date_created: Date;
   last_updated: Date;
-}
+};
 
-export interface LodgingType extends Omit<L, keyof Document> {
-  id: string;
-  photos: PhotoType[];
-}
-
-const lodgingSchema = new Schema<L>(
+const lodgingSchema = new Schema<LodgingType>(
   {
-    owner_id: {
+    owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
@@ -98,10 +87,10 @@ const lodgingSchema = new Schema<L>(
         default: "",
       },
     },
-    room_ids: [{ type: Schema.Types.ObjectId, ref: "Room" }],
-    photo_id: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
-    favored_by_ids: [{ type: Schema.Types.ObjectId, ref: "Favorite" }],
-    rated_by_ids: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
+    rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
+    photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
+    favored_by: [{ type: Schema.Types.ObjectId, ref: "Favorite" }],
+    rated_by: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
     date_created: {
       type: Date,
       default: Date.now,
@@ -115,6 +104,14 @@ const lodgingSchema = new Schema<L>(
 );
 
 lodgingSchema.index({ location: "2dsphere" });
+lodgingSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+  },
+});
 
 const Lodging = model("Lodging", lodgingSchema);
 

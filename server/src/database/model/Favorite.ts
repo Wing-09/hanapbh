@@ -1,27 +1,30 @@
-import { Document } from "mongoose";
-import { Model, model, Schema } from "mongoose";
-import { U } from "./User";
-import { L } from "./Lodging";
+import { model, Schema } from "mongoose";
+import { Types } from "mongoose";
 
-export interface F extends Document {
-  user_id: U["_id"];
-  lodging_id: L["_id"];
+export type FavoriteType = {
+  user: Types.ObjectId;
+  lodging: Types.ObjectId;
   date_created: Date;
-}
+};
 
-export interface FavoriteType extends Omit<F, keyof Document> {
-  id: string;
-}
-
-const favoriteSchema = new Schema<F>({
-  user_id: {
+const favoriteSchema = new Schema<FavoriteType>({
+  user: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  lodging_id: { type: Schema.Types.ObjectId, ref: "Lodging" },
+  lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
   date_created: {
     type: Date,
     default: Date.now,
+  },
+});
+
+favoriteSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
   },
 });
 
