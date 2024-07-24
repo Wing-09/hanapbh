@@ -1,8 +1,10 @@
-import { compare, hash } from "bcrypt";
-import { Router } from "express";
+import Photo, { PhotoType } from "../../database/model/Photo";
+import User, { UserType } from "../../database/model/User";
 import exclude from "../../lib/exclude";
 import JSONResponse from "../../lib/json-response";
-import User, { UserType } from "../../database/model/User";
+import { compare, hash } from "bcrypt";
+import { Router } from "express";
+import { startSession } from "mongoose";
 
 const router = Router();
 
@@ -10,7 +12,10 @@ router
   //create route
   .post("/", async (request, response) => {
     try {
-      const user: UserType = request.body;
+      const session = await startSession();
+      await session.startTransaction();
+
+      const user: UserType & { photo: PhotoType } = request.body;
 
       const found_email = await User.findOne({ email: user.email });
 
@@ -25,13 +30,35 @@ router
         password = await hash(user.password, 14);
       }
 
-      const new_user = new User({
-        ...user,
+      const new_user = new User<UserType>({
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
         password: password ? password : null,
+        birthday: user.birthday ? user.birthday : undefined,
+        gender: user.gender
+          ? { type: user.gender.type, other: user.gender.other }
+          : undefined,
+        last_updated: new Date(),
       });
 
-      await new_user.save();
-      const new_user_json = new_user.toJSON();
+      await new_user.save({ session });
+
+      const new_photo = new Photo<PhotoType>({
+        user: new_user._id!,
+        url: user.photo.url,
+        height: user.photo.height,
+        width: user.photo.width,
+        last_updated: new Date(),
+        type: "PROFILE",
+      });
+
+      await new_photo.save({ session });
+      new_user.photo = new_photo._id;
+      await new_user.save({ session });
+
+      await session.commitTransaction();
+      await session.endSession();
 
       return response
         .status(201)
@@ -39,10 +66,7 @@ router
           JSONResponse(
             "CREATED",
             " new user created",
-            exclude({ id: new_user_json._id, ...new_user_json }, [
-              "password",
-              "_id",
-            ])
+            exclude(new_user.toJSON(), ["password"])
           )
         );
     } catch (error) {
@@ -62,7 +86,7 @@ router
         email: {
           $regex: "^" + email.toLowerCase(),
         },
-      });
+      }).populate("photo");
 
       if (!found_user)
         return response
@@ -84,17 +108,13 @@ router
           .status(401)
           .json(JSONResponse("UNAUTHORIZED", "incorrect password"));
 
-      const found_user_json = found_user.toJSON();
       return response
         .status(200)
         .json(
           JSONResponse(
             "OK",
             "user authenticated",
-            exclude({ ...found_user_json, id: found_user_json._id }, [
-              "password",
-              "_id",
-            ])
+            exclude(found_user.toJSON(), ["password"])
           )
         );
     } catch (error) {
@@ -111,23 +131,22 @@ router
     try {
       const user_id = request.params.id;
 
-      const found_user = await User.findOne({ _id: user_id }).select(
-        "-password"
-      );
+      const found_user = await User.findOne({ _id: user_id })
+        .select("-password")
+        .populate("photo");
 
       if (!found_user)
         return response
           .status(404)
           .json(JSONResponse("NOT_FOUND", "user does not exist"));
 
-      const found_user_json = found_user.toJSON();
       return response
         .status(200)
         .json(
           JSONResponse(
             "OK",
             "request successful",
-            exclude({ id: found_user_json._id, ...found_user_json }, ["_id"])
+            exclude(found_user.toJSON(), ["password"])
           )
         );
     } catch (error) {
@@ -145,27 +164,24 @@ router
 
       const found_user = await User.findOne({
         email: user_email.toLowerCase(),
-      }).select("-password");
+      })
+        .select("-password")
+        .populate("photo");
 
       if (!found_user)
         return response
           .status(404)
           .json(JSONResponse("NOT_FOUND", "user not found"));
 
-      const found_user_json = found_user.toJSON();
-      return response.status(200).json(
-        JSONResponse(
-          "OK",
-          "request successful",
-          exclude(
-            {
-              ...found_user_json,
-              id: found_user_json._id,
-            },
-            ["_id"]
+      return response
+        .status(200)
+        .json(
+          JSONResponse(
+            "OK",
+            "request successful",
+            exclude(found_user.toJSON(), ["password"])
           )
-        )
-      );
+        );
     } catch (error) {
       console.error(error);
       return response

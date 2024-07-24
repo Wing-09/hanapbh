@@ -1,9 +1,9 @@
 import { Router } from "express";
-import JSONResponse from "../../lib/json-response";
 import "dotenv/config";
 import { createTransport } from "nodemailer";
-import OTP from "../../database/model/Otp";
 import { render } from "@react-email/components";
+import JSONResponse from "../../lib/json-response";
+import OTP from "../../database/model/Otp";
 import OTPEmail from "../../lib/email/OTPEmail";
 
 const router = Router();

@@ -1,6 +1,13 @@
-import { Model, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
+import { Types } from "mongoose";
 
-const favoriteSchema = new Schema({
+export type FavoriteType = {
+  user: Types.ObjectId;
+  lodging: Types.ObjectId;
+  date_created: Date;
+};
+
+const favoriteSchema = new Schema<FavoriteType>({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -10,11 +17,17 @@ const favoriteSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+}, {versionKey: false});
+
+favoriteSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+  },
 });
 
 const Favorite = model("Favorite", favoriteSchema);
 
-export type Favorite = typeof Favorite extends Model<infer D, any, any>
-  ? D
-  : never;
 export default Favorite;

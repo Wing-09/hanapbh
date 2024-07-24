@@ -1,6 +1,27 @@
-import { Model, model, Schema } from "mongoose";
+import { Document, Model, model, Schema } from "mongoose";
+import { LodgingType } from "./Lodging";
+import { Types } from "mongoose";
 
-const roomSchema = new Schema({
+export type RoomType = {
+  lodging: Types.ObjectId;
+  description: string;
+  bed_count: number;
+  occupant_count: number;
+  price?: {
+    type:
+      | "PER_HOUR"
+      | "PER_SIX_HOUR"
+      | "PER_TWELVE_HOUR"
+      | "PER_NIGHT"
+      | "PER_MONTH";
+    amount: number;
+  };
+  photos: Types.ObjectId[];
+  date_created: Date;
+  last_updated: Date;
+};
+
+const roomSchema = new Schema<RoomType>({
   lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
   description: { type: String, default: "" },
   bed_count: { type: Number, default: null },
@@ -34,10 +55,17 @@ const roomSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+}, {versionKey: false});
+
+roomSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+  },
 });
 
 const Room = model("Room", roomSchema);
-
-export type Room = typeof Room extends Model<infer D, any, any> ? D : never;
 
 export default Room;

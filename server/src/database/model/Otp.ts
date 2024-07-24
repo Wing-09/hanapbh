@@ -14,7 +14,7 @@ const otpSchema = new Schema({
 
     default: Date.now,
   },
-});
+}, {versionKey: false});
 
 const OTP = model("OTP", otpSchema);
 

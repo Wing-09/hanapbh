@@ -24,4 +24,6 @@ mongoDBConnection()
       console.log(`server running in ${process.env.NODE_ENV} mode ...`)
     )
   )
-  .catch((error) => console.error(error));
+  .catch((error) => {
+    throw error;
+  });
