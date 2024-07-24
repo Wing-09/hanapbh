@@ -94,7 +94,6 @@ const userSchema = new Schema<UserType>(
     photo: {
       type: Schema.Types.ObjectId,
       ref: "Photo",
-      required: true,
     },
     favorites: [
       {

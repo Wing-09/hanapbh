@@ -1,6 +1,6 @@
 import { Document, Types } from "mongoose";
-import Lodging, { LodgingType } from "src/database/model/Lodging";
-import getDistance from "src/lib/distance";
+import Lodging, { LodgingType } from "../../../database/model/Lodging";
+import getDistance from "../../../lib/distance";
 
 export default async function databaseNearbyLodgings({
   longitude,

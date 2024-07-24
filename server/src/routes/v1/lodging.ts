@@ -75,7 +75,7 @@ router
         );
       } else {
         places_api_response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&rankby=distance`
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&radius=${max_distance}`
         );
       }
 

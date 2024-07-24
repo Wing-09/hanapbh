@@ -17,7 +17,7 @@ const favoriteSchema = new Schema<FavoriteType>({
     type: Date,
     default: Date.now,
   },
-});
+}, {versionKey: false});
 
 favoriteSchema.set("toJSON", {
   virtuals: true,

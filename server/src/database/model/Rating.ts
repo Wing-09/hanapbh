@@ -16,7 +16,7 @@ const ratingSchema = new Schema<RatingType>({
   lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
   date_created: { type: Date, default: Date.now },
   last_updated: { type: Date, default: Date.now },
-});
+}, {versionKey: false});
 
 ratingSchema.set("toJSON", {
   virtuals: true,

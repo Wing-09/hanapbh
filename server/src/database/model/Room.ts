@@ -55,7 +55,7 @@ const roomSchema = new Schema<RoomType>({
     type: Date,
     default: Date.now,
   },
-});
+}, {versionKey: false});
 
 roomSchema.set("toJSON", {
   virtuals: true,

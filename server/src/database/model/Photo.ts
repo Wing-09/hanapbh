@@ -12,20 +12,23 @@ export type PhotoType = {
   last_updated: Date;
 };
 
-const photoSchema = new Schema<PhotoType>({
-  url: { type: String, required: true },
-  type: {
-    type: String,
-    enum: ["PROFILE", "LODGING", "ROOM"],
+const photoSchema = new Schema<PhotoType>(
+  {
+    url: { type: String, required: true },
+    type: {
+      type: String,
+      enum: ["PROFILE", "LODGING", "ROOM"],
+    },
+    width: { type: Number, required: true },
+    height: { type: Number, required: true },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
+    room: { type: Schema.Types.ObjectId, ref: "Room" },
+    date_created: { type: Date, default: Date.now },
+    last_updated: { type: Date, required: true },
   },
-  width: { type: Number, required: true },
-  height: { type: Number, required: true },
-  user: { type: Schema.Types.ObjectId, ref: "User" },
-  lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
-  room: { type: Schema.Types.ObjectId, ref: "Room" },
-  date_created: { type: Date, default: Date.now },
-  last_updated: { type: Date, required: true },
-});
+  { versionKey: false }
+);
 
 photoSchema.set("toJSON", {
   virtuals: true,

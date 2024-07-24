@@ -13,6 +13,8 @@ router
   .post("/", async (request, response) => {
     try {
       const session = await startSession();
+      await session.startTransaction();
+
       const user: UserType & { photo: PhotoType } = request.body;
 
       const found_email = await User.findOne({ email: user.email });
@@ -43,22 +45,20 @@ router
       await new_user.save({ session });
 
       const new_photo = new Photo<PhotoType>({
+        user: new_user._id!,
         url: user.photo.url,
         height: user.photo.height,
         width: user.photo.width,
         last_updated: new Date(),
         type: "PROFILE",
-        user: new_user._id!,
       });
 
       await new_photo.save({ session });
-
       new_user.photo = new_photo._id;
-
       await new_user.save({ session });
 
       await session.commitTransaction();
-      session.endSession();
+      await session.endSession();
 
       return response
         .status(201)
