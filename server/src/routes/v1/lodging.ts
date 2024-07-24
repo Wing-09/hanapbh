@@ -1,10 +1,11 @@
 import { Router } from "express";
-import Lodging, { LodgingType } from "src/database/model/Lodging";
-import { Photo, PhotoType } from "src/database/model/Photo";
-import JSONResponse from "src/lib/json-response";
-import checkLocation from "src/lib/middleware/checklocation";
-import { GooglePlacesAPINearbyResponse } from "src/lib/types/google-places-api-types";
-import { isNumberObject } from "util/types";
+import getDistance from "../../lib/distance";
+import { PhotoType } from "../../database/model/Photo";
+import { LodgingType } from "../../database/model/Lodging";
+import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
+import checkLocation from "../../lib/middleware/checklocation";
+import JSONResponse from "../../lib/json-response";
+import databaseNearbyLodgings from "./lodging/database-nearby-lodging-query";
 
 const router = Router();
 const places_api_key = process.env.GOOGLE_PLACES_API_KEY;
@@ -19,7 +20,7 @@ router
   .get("/nearby", checkLocation, async (request, response) => {
     try {
       const { latitude, longitude } = request.query;
-      const { page, google_next_page, max_distance } = request.query;
+      const { page, google_next_page_token, max_distance } = request.query;
 
       if (!page || !max_distance)
         return response
@@ -41,27 +42,49 @@ router
             )
           );
 
-      const skip = 20 * Number(page);
+      const skip = 20 * (Number(page) - 1);
 
-      
+      const database_lodgings = await databaseNearbyLodgings({
+        longitude: Number(longitude),
+        latitude: Number(latitude),
+        max_distance: Number(max_distance),
+        skip,
+      });
 
-      const database_lodgings_json: (Omit<LodgingType, "photos"> & {
-        id: string;
-        photos: PhotoType[];
-        distance: number;
-      })[] = [];
+      if (database_lodgings.length === 20)
+        return response
+          .status(200)
+          .json(JSONResponse("OK", "request successful", database_lodgings));
 
-      //fetching nearby lodging using  google places api
-      const places_api_response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&rankby=distance`
-      );
+      let places_api_response;
+
+      if (google_next_page_token === null) {
+        if (database_lodgings.length > 1) {
+          return response
+            .status(200)
+            .json(JSONResponse("OK", "request successful", database_lodgings));
+        } else {
+          return response
+            .status(404)
+            .json(JSONResponse("NOT_FOUND", "no more nearby lodging found"));
+        }
+      }
+      if (google_next_page_token) {
+        places_api_response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&token=${google_next_page_token}`
+        );
+      } else {
+        places_api_response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&rankby=distance`
+        );
+      }
 
       const places_api_response_json =
         (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
 
       const google_nearby_place: (Omit<LodgingType, "photos"> & {
         id: string;
-        photos: Photo[];
+        photos: PhotoType[];
         distance: number;
       })[] = [];
 
@@ -72,7 +95,7 @@ router
           description: "",
           photos: place.photos
             ? place.photos.map((photo) => ({
-                type: "LODGING_PIC",
+                type: "LODGING",
                 id: "",
                 url: photo.photo_reference,
                 height: photo.height,
@@ -83,8 +106,8 @@ router
               }))
             : [],
           offers: [],
-          favored: [],
-          ratings: [],
+          favored_by: [],
+          rated_by: [],
           rooms: [],
           location: {
             type: "Point",
@@ -99,11 +122,26 @@ router
             municipality_city: "",
             province: "",
           },
-          distance: 0,
+          distance: getDistance(
+            { longitude: Number(longitude), latitude: Number(latitude) },
+            {
+              longitude: place.geometry.location.lng,
+              latitude: place.geometry.location.lat,
+            }
+          ),
           date_created: new Date(),
           last_updated: new Date(),
         });
       }
+      return response.status(200).json(
+        JSONResponse("OK", "request successful", {
+          page: Number(page),
+          google_next_page_token: places_api_response_json.next_page_token,
+          result: [...google_nearby_place, ...database_lodgings].sort(
+            (a, b) => a.distance - b.distance
+          ),
+        })
+      );
     } catch (error) {
       console.error(error);
       return response.status(500).json(JSONResponse("INTERNAL_SERVER_ERROR"));

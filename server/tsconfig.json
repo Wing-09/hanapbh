@@ -109,5 +109,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["./build", "./react-email-dev"]
+  "exclude": ["./build", "./react-email"]
 }

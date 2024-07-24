@@ -1,9 +1,9 @@
-import { compare, hash } from "bcrypt";
-import { Router } from "express";
+import Photo, { PhotoType } from "../../database/model/Photo";
+import User, { UserType } from "../../database/model/User";
 import exclude from "../../lib/exclude";
 import JSONResponse from "../../lib/json-response";
-import User, { UserType } from "../../database/model/User";
-import Photo, { PhotoType } from "src/database/model/Photo";
+import { compare, hash } from "bcrypt";
+import { Router } from "express";
 import { startSession } from "mongoose";
 
 const router = Router();

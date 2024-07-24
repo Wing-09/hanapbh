@@ -1,5 +1,13 @@
 {
-  "cSpell.words": ["barangay", "checklocation", "dsphere", "heroicons"],
+  "cSpell.words": [
+    "barangay",
+    "checklocation",
+    "codepaths",
+    "dsphere",
+    "heroicons",
+    "nodenext",
+    "tsbuildinfo"
+  ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true
