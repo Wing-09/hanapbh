@@ -15,10 +15,10 @@ export type User = {
   rated?: Rating[];
 
   contact?: {
-    phone_number: string = "";
-    facebook: string = "";
-    instagram: string = "";
-    twitter_x: string = "";
+    phone_number: string;
+    facebook: string;
+    instagram: string;
+    twitter_x: string;
   };
   photo?: {
     url: string;
