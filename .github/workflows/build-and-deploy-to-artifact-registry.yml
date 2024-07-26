@@ -67,23 +67,23 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      # - name: Build Client Image
-      #   run: |-
-      #     docker build -t "${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" ./client \
-      #     --build-arg GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} \
-      #     --build-arg GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} \
-      #     --build-arg GOOGLE_PLACES_API_KEY=${{secrets.GOOGLE_PLACES_API_KEY}} \
-      #     --build-arg NEXT_PUBLIC_SERVER=${{secrets.NEXT_PUBLIC_SERVER}} \
-      #     --build-arg SERVER_URL=${{secrets.SERVER_URL}} \
-      #     --build-arg ClIENT_URL=${{secrets.ClIENT_URL}} \
-      #     --build-arg NEXTAUTH_SECRET=${{secrets.NEXTAUTH_SECRET}} \
-      #     --build-arg NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}}
+      - name: Build Client Image
+        run: |-
+          docker build -t "${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" ./client \
+          --build-arg GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} \
+          --build-arg GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} \
+          --build-arg GOOGLE_PLACES_API_KEY=${{secrets.GOOGLE_PLACES_API_KEY}} \
+          --build-arg NEXT_PUBLIC_SERVER=${{secrets.NEXT_PUBLIC_SERVER}} \
+          --build-arg SERVER_URL=${{secrets.SERVER_URL}} \
+          --build-arg ClIENT_URL=${{secrets.ClIENT_URL}} \
+          --build-arg NEXTAUTH_SECRET=${{secrets.NEXTAUTH_SECRET}} \
+          --build-arg NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}}
 
-      # - name: Tag Client Image
-      #   run: docker tag "${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
+      - name: Tag Client Image
+        run: docker tag "${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
 
-      # - name: Push Client Image to Artifact Registry
-      #   run: docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
+      - name: Push Client Image to Artifact Registry
+        run: docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
 
       - name: Build Server Image
         run: |-
