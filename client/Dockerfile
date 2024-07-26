@@ -9,7 +9,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json pnpm-lock.yaml* ./
 RUN npm install pnpm -g
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+RUN pnpm i --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -41,7 +41,7 @@ ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
 ENV NEXTAUTH_URL=${NEXTAUTH_URL}
 ENV NODE_ENV production
 
-RUN corepack enable pnpm && pnpm run build
+RUN pnpm run build
 
 
 # Production image, copy all the files and run next
