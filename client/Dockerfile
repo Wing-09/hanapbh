@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -7,9 +7,14 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json pnpm-lock.yaml* ./
-RUN npm install pnpm -g
-RUN pnpm install --frozen-lockfile
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -22,32 +27,18 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-ARG GOOGLE_CLIENT_ID 
-ARG GOOGLE_CLIENT_SECRET
-ARG GOOGLE_PLACES_API_KEY
-ARG NEXT_PUBLIC_SERVER
-ARG SERVER_URL
-ARG ClIENT_URL
-ARG NEXTAUTH_SECRET
-ARG NEXTAUTH_URL
-
-ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-ENV GOOGLE_PLACES_API_KEY=${GOOGLE_PLACES_API_KEY}
-ENV NEXT_PUBLIC_SERVER=${NEXT_PUBLIC_SERVER}
-ENV SERVER_URL=${SERVER_URL}
-ENV ClIENT_URL=${ClIENT_URL}
-ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-ENV NEXTAUTH_URL=${NEXTAUTH_URL}
-ENV NODE_ENV production
-
-RUN pnpm build
-
+RUN \
+  if [ -f yarn.lock ]; then yarn run build; \
+  elif [ -f package-lock.json ]; then npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
+ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
