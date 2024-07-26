@@ -5,6 +5,7 @@ if (!places_api)
   throw new Error("GOOGLE_PLACES_API_KEY is missing on your .env.local file");
 
 const nextConfig = {
+  output: "standalone",
   images: {
     remotePatterns: [
       {
