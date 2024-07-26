@@ -107,7 +107,6 @@ const auth_options: AuthOptions = {
         }
         return true;
       } catch (error) {
-        console.error("ISngUP::", error);
         return false;
       }
     },

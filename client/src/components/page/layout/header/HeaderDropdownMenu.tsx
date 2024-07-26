@@ -20,7 +20,6 @@ export default function HeaderDropdownMenu() {
   <DropdownMenuSeparator />;
   const { status, data } = useSession();
   const pathname = usePathname();
-  console.log(data);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full">
