@@ -36,3 +36,6 @@ jobs:
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Echo events
+        run: |
+          echo  ${{ toJSON(github.event) }}
