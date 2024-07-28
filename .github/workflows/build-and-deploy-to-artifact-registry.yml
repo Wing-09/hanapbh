@@ -1,7 +1,9 @@
-name: Build and Deploy to Docker Hub
+name: Build and Deploy to Artifact registry
 
 on:
   push:
+    tags:
+      - "*"
 
 env:
   PROJECT_ID: hanapbh
@@ -9,7 +11,6 @@ env:
   CLIENT_SERVICE: hanapbh-client
   SERVER_SERVICE: hanapbh-server
   REGION: asia-southeast1
-  REGISTRY: wing09
 
 jobs:
   build_push_to_docker_hub:
@@ -25,28 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Node
-        uses: "actions/setup-node@v4"
-        with:
-          node-version: 20
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install Semantic Release
-        run: pnpm install -g semantic-release
-
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: run semantic release
-        id: semantic_release
-        run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
@@ -58,66 +37,85 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            "${{ env.REGISTRY }}/${{ env.CLIENT_SERVICE }}"
-            "${{ env.REGISTRY }}/${{ env.SERVER_SERVICE }}"
+            "${{ env.GAR_LOCATION }}/${{ env.CLIENT_SERVICE }}"
+            "${{ env.GAR_LOCATION }}/${{ env.SERVER_SERVICE }}"
           tags: |
             type=ref,event=tag
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Echo tag
+        run: echo ${{ steps.meta.outputs.tags }}
 
-      - name: Docker Auth
-        id: docker-auth
-        uses: "docker/login-action@v3"
-        with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push Clien Docker Image
-        id: client-build-and-push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./client
-          file: ./client/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          build-args: |
-            GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}"
-            GOOGLE_CLIENT_SECRET="${{secrets.GOOGLE_CLIENT_SECRET}}"
-            GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
-            NEXT_PUBLIC_SERVER="${{secrets.NEXT_PUBLIC_SERVER}}"
-            SERVER_URL="${{secrets.SERVER_URL}}"
-            ClIENT_URL="${{secrets.ClIENT_URL}}"
-            NEXTAUTH_SECRET="${{secrets.NEXTAUTH_SECRET}}"
-            NEXTAUTH_URL="${{secrets.NEXTAUTH_URL}}"
+      # - name: Google Auth
+      #   id: google-auth
+      #   uses: "google-github-actions/auth@v0"
+      #   with:
+      #     token_format: "access_token"
+      #     workload_identity_provider: "${{ secrets.WIF_PROVIDER }}"
+      #     service_account: "${{ secrets.WIF_SERVICE_ACCOUNT }}"
 
-      - name: Build and Push Server Docker Image
-        id: server-build-and-push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server
-          file: ./server/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          build-args: |
-            GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}"
-            GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
-            MONGODB_URI="${{secrets.MONGODB_URI}}"
-            GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
+      # - name: Docker Auth
+      #   id: docker-auth
+      #   uses: "docker/login-action@v3"
+      #   with:
+      #     registry: ${{env.GAR_LOCATION}}
+      #     username: ${{github.actor}}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Saving New Docker Images to README file
-        run: |
-          CLIENT_TAG="${{ env.REGISTRY }}/${{ env.CLIENT_SERVICE }}:${{ steps.meta.outputs.tags }}"
-          SERVER_TAG="${{ env.REGISTRY }}/${{ env.SERVER_SERVICE }}:${{ steps.meta.outputs.tags }}"
+      # - name: Build and Push Client Docker Image
+      #   id: client-build-and-push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./client
+      #     file: ./client/Dockerfile
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     build-args: |
+      #       GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}"
+      #       GOOGLE_CLIENT_SECRET="${{secrets.GOOGLE_CLIENT_SECRET}}"
+      #       GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
+      #       NEXT_PUBLIC_SERVER="${{secrets.NEXT_PUBLIC_SERVER}}"
+      #       SERVER_URL="${{secrets.SERVER_URL}}"
+      #       ClIENT_URL="${{secrets.ClIENT_URL}}"
+      #       NEXTAUTH_SECRET="${{secrets.NEXTAUTH_SECRET}}"
+      #       NEXTAUTH_URL="${{secrets.NEXTAUTH_URL}}"
 
-          sed -i 's|Client: .*|Client: $CLIENT_TAG|' README.md
-          sed -i 's|Server: .*|Server: $SERVER_TAG|' README.md
+      # - name: Build and Push Server Docker Image
+      #   id: server-build-and-push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./server
+      #     file: ./server/Dockerfile
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     build-args: |
+      #       GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}"
+      #       GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
+      #       MONGODB_URI="${{secrets.MONGODB_URI}}"
+      #       GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
 
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add README.md
-          git commit -m 'Update README.md with latest Docker image tags'
-          git push
+      # - name: Deploy to Cloud Run
+      #   id: deploy
+      #   uses: google-github-actions/deploy-cloudrun@v0
+      #   with:
+      #     service: ${{ env.SERVICE }}
+      #     region: ${{ env.REGION }}
+      #     image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}
+
+      # - name: Saving New Docker Images to README file
+      #   run: |
+      #     CLIENT_TAG="${{ env.GAR_LOCATION }}/${{ env.CLIENT_SERVICE }}:${{ steps.meta.outputs.tags }}"
+      #     SERVER_TAG="${{ env.GAR_LOCATION }}/${{ env.SERVER_SERVICE }}:${{ steps.meta.outputs.tags }}"
+
+      #     sed -i 's|Client: .*|Client: $CLIENT_TAG|' README.md
+      #     sed -i 's|Server: .*|Server: $SERVER_TAG|' README.md
+
+      #     git config --global user.name 'github-actions[bot]'
+      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      #     git add README.md
+      #     git commit -m 'Update README.md with latest Docker image tags'
+      #     git push

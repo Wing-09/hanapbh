@@ -1,12 +1,18 @@
 {
   "cSpell.words": [
     "barangay",
+    "Buildx",
     "checklocation",
+    "cloudrun",
     "codepaths",
     "dsphere",
+    "GEOCODE",
     "googleusercontent",
     "heroicons",
+    "NEXTAUTH",
     "nodenext",
+    "noreply",
+    "sigstore",
     "tsbuildinfo"
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
