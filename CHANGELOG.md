@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [1.0.45](https://github.com/Wilfreno/hanapbh/compare/v1.0.44...v1.0.45) (2024-07-31)
 
 
@@ -339,6 +340,9 @@
 * **Github Action:** set release.config to only run for the main branch ([70e492f](https://github.com/Wilfreno/hanapbh/commit/70e492f8dec691255ca342285f77d35aa0f64b12))
 
 # 1.0.0 (2024-07-28)
+=======
+# 1.0.0-github-action.1 (2024-07-28)
+>>>>>>> 89204ad (chore(release):1.0.0-github-action.1 [skip ci])
 
 
 ### Bug Fixes
@@ -356,9 +360,15 @@
 * **Dockerfile:** implement environment variable on the client docker container ([03149ed](https://github.com/Wilfreno/hanapbh/commit/03149ed0c95b5a24052d48807a4e4505464f3315))
 * **Dockerfile:** installing pnpm globally for client docker file ([ff05f8b](https://github.com/Wilfreno/hanapbh/commit/ff05f8b0bf96aa8f7353d5bbc8e8ea5a8f46643f))
 * **Dockerfile:** opt to use pnpm ([d3644b6](https://github.com/Wilfreno/hanapbh/commit/d3644b61e7e240ac9f501e3139ec807c1bbe220a))
+<<<<<<< HEAD
 * **Github action:** using type=ref on docker metadata tag ([4cc03b8](https://github.com/Wilfreno/hanapbh/commit/4cc03b806ac0367f7127f68ba17819bcaf86fc6b))
 * improve user and lodging query ([22d1793](https://github.com/Wilfreno/hanapbh/commit/22d1793a72e515d129925df0ac81023310cfacef))
 * logo href ([0880f79](https://github.com/Wilfreno/hanapbh/commit/0880f79e8c6fa384bf0ad7145386bc280c4b3cb1))
 * **next-config:** configure nextjs to support docker ([863a7f0](https://github.com/Wilfreno/hanapbh/commit/863a7f0dab566870206d5e22fa41e21e61aa29e2))
 * use default tagging ([a2e4b98](https://github.com/Wilfreno/hanapbh/commit/a2e4b9894f55275aa1f910cebf5f8eac4b6b6791))
+=======
+* improve user and lodging query ([22d1793](https://github.com/Wilfreno/hanapbh/commit/22d1793a72e515d129925df0ac81023310cfacef))
+* logo href ([0880f79](https://github.com/Wilfreno/hanapbh/commit/0880f79e8c6fa384bf0ad7145386bc280c4b3cb1))
+* **next-config:** configure nextjs to support docker ([863a7f0](https://github.com/Wilfreno/hanapbh/commit/863a7f0dab566870206d5e22fa41e21e61aa29e2))
+>>>>>>> 89204ad (chore(release):1.0.0-github-action.1 [skip ci])
 * user type ([f0beb4d](https://github.com/Wilfreno/hanapbh/commit/f0beb4d09f347c60c0a804bc9e10b27eb9b34cd3))
