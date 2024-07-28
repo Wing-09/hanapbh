@@ -72,8 +72,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.SERVER_SERVICE }}
           tags: |
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
 
       - name: Build and Push Clien Docker Image
         id: client-build-and-push
@@ -114,6 +112,7 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: true
+          tags: ${{ steps.meta.outputs.tags }}
           build-args: |
             GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}"
             GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"

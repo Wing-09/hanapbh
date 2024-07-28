@@ -21,6 +21,7 @@ const config = {
       },
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     [
       "@semantic-release/exec",
@@ -39,6 +40,8 @@ const config = {
       `,
       },
     ],
+=======
+>>>>>>> e22d066 (test)
     "@semantic-release/github",
 >>>>>>> 8f7b9ce (test)
   ],
