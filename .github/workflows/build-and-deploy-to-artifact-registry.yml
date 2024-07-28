@@ -2,8 +2,8 @@ name: Build and Deploy to Artifact registry
 
 on:
   push:
-    # tags:
-    #   - "v*.*.*"
+    tags:
+      - "*"
 
 env:
   PROJECT_ID: hanapbh
