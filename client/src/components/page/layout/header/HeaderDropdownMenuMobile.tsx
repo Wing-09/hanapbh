@@ -16,7 +16,7 @@ import { ThemeToggler } from "./ThemeToggler";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-export default function HeaderDropdownMenu() {
+export default function HeaderDropdownMenuMobile() {
   const { status, data } = useSession();
   const pathname = usePathname();
   return (
@@ -35,9 +35,9 @@ export default function HeaderDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        alignOffset={-30}
-        sideOffset={10}
-        className="w-[clamp(18rem,_18rem,_95vw)] "
+        alignOffset={-11}
+        sideOffset={50}
+        className="w-screen"
       >
         <DropdownMenuGroup className="space-y-1">
           {status === "unauthenticated" ? (
