@@ -67,10 +67,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: \
+          images: |
             ${{ env.REGISTRY }}/${{ env.CLIENT_SERVICE }}
             ${{ env.REGISTRY }}/${{ env.SERVER_SERVICE }}
-          tags: \
+          tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
@@ -83,7 +83,7 @@ jobs:
           file: ./client/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          build-args: \
+          build-args: |
             GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}"
             GOOGLE_CLIENT_SECRET="${{secrets.GOOGLE_CLIENT_SECRET}}"
             GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
@@ -114,9 +114,26 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: true
-          build-args: \
+          build-args: |
             GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}"
             GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
             MONGODB_URI="${{secrets.MONGODB_URI}}"
             GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
+<<<<<<< HEAD
 >>>>>>> 07ea0d5 (test)
+=======
+
+      - name: Saving New Docker Images to README file
+        run: |
+          CLIENT_TAG="${{ env.REGISTRY }}/${{ env.CLIENT_SERVICE }}:${{ steps.meta.outputs.tags }}"
+          SERVER_TAG="${{ env.REGISTRY }}/${{ env.SERVER_SERVICE }}:${{ steps.meta.outputs.tags }}"
+
+          sed -i 's|Client: .*|Client: $CLIENT_TAG|' README.md
+          sed -i 's|Server: .*|Server: $SERVER_TAG|' README.md
+
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git commit -m 'Update README.md with latest Docker image tags'
+          git push
+>>>>>>> 8f7b9ce (test)

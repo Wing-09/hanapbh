@@ -20,6 +20,27 @@ const config = {
         assets: ["CHANGELOG.md"],
       },
     ],
+<<<<<<< HEAD
+=======
+    [
+      "@semantic-release/exec",
+      {
+        successCmd: `
+
+        docker tag wing09/hanapbh-client:latest wing09/hanapbh-client:\${nextRelease.version}
+        docker push wing09/hanapbh-client:\${nextRelease.version}
+
+        docker tag wing09/hanapbh-server:latest wing09/hanapbh-client:\${nextRelease.version}
+        docker push wing09/hanapbh-server:\${nextRelease.version}
+
+        
+        
+    
+      `,
+      },
+    ],
+    "@semantic-release/github",
+>>>>>>> 8f7b9ce (test)
   ],
 };
 
