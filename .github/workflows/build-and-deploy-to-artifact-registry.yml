@@ -2,11 +2,7 @@ name: Build and Deploy to Artifact registry
 
 on:
   push:
-    tags:
-      - "*"
-  release:
-    types:
-      - published
+ 
 
 env:
   PROJECT_ID: hanapbh
