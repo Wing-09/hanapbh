@@ -35,17 +35,17 @@ jobs:
         with:
           version: 9
 
-      # - name: Install Semantic Release
-      #   run: pnpm install -g semantic-release
+      - name: Install Semantic Release
+        run: pnpm install -g semantic-release
 
-      # - name: Install Dependencies
-      #   run: pnpm install
+      - name: Install Dependencies
+        run: pnpm install
 
-      # - name: run semantic release
-      #   id: semantic_release
-      #   run: npx semantic-release
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: run semantic release
+        id: semantic_release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Extract Docker metadata
         id: meta
