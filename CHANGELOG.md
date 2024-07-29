@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/Wilfreno/hanapbh/compare/v1.0.2...v1.0.3) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Github Action:** add Google auth and Docker auth ([a9979a7](https://github.com/Wilfreno/hanapbh/commit/a9979a78c806c384c7ddf24406b986ed51d3e4cf))
+
 ## [1.0.2](https://github.com/Wilfreno/hanapbh/compare/v1.0.1...v1.0.2) (2024-07-29)
 
 
