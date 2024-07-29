@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/Wilfreno/hanapbh/compare/v1.0.10...v1.0.11) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Github action:** updating README gives an error ([90e1065](https://github.com/Wilfreno/hanapbh/commit/90e106507f1b763362ab4182afcd161ae995687f))
+
 ## [1.0.10](https://github.com/Wilfreno/hanapbh/compare/v1.0.9...v1.0.10) (2024-07-29)
 
 
