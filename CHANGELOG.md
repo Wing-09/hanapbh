@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/Wilfreno/hanapbh/compare/v1.0.8...v1.0.9) (2024-07-29)
+
+
+### Bug Fixes
+
+* **server:** use @react-email/components ([021dc6e](https://github.com/Wilfreno/hanapbh/commit/021dc6e1f62542ef5ee519c43693b1d5f40a699c))
+
 ## [1.0.8](https://github.com/Wilfreno/hanapbh/compare/v1.0.7...v1.0.8) (2024-07-29)
 
 
