@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/Wilfreno/hanapbh/compare/v1.0.6...v1.0.7) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Dockerfile:** deleted typos ([544b5bf](https://github.com/Wilfreno/hanapbh/commit/544b5bf7156a787f0763aa21ff502ceadeb92bbc))
+
 ## [1.0.6](https://github.com/Wilfreno/hanapbh/compare/v1.0.5...v1.0.6) (2024-07-29)
 
 
