@@ -2,8 +2,7 @@ name: Create Release Version
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   release:
