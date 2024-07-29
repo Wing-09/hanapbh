@@ -1,3 +1,29 @@
+## [1.0.2](https://github.com/Wilfreno/hanapbh/compare/v1.0.1...v1.0.2) (2024-07-29)
+
+
+### Bug Fixes
+
+*  testing if docker/metadata-action@v5 works ([061c1b1](https://github.com/Wilfreno/hanapbh/commit/061c1b1f1af7eaf0ff0e0a6508aae1dabed02231))
+* -- ([470b569](https://github.com/Wilfreno/hanapbh/commit/470b569a1e74ca761e065c88d192d824337b62ba))
+* -- ([7aa7361](https://github.com/Wilfreno/hanapbh/commit/7aa73617fd82fc34356fc6180c25d22e942361c5))
+* added build test on every push ([0095369](https://github.com/Wilfreno/hanapbh/commit/00953690ec3e96330cc1ce8d5b87c02b186ee49b))
+* echo events ([f92431c](https://github.com/Wilfreno/hanapbh/commit/f92431ca850c108d85edc7aa0a79cd6edcb984a6))
+* Echo tag ([bc7cc9d](https://github.com/Wilfreno/hanapbh/commit/bc7cc9d29feac3e01a1de67e5b91edc2752ddd18))
+* Echo tag ([d9b9dc5](https://github.com/Wilfreno/hanapbh/commit/d9b9dc5ddf0df53744cb0e72abc9c6fea87a20dc))
+* **Github Action:** run pnpm install before building the project ([51140b6](https://github.com/Wilfreno/hanapbh/commit/51140b60cded5b31ad389761ce372974610415ac))
+* listening to tag push and release event ([f35e590](https://github.com/Wilfreno/hanapbh/commit/f35e590f331abcf8d7c4d0091e2ff4c173e7b62a))
+* listing to tag push and release event ([7ad8515](https://github.com/Wilfreno/hanapbh/commit/7ad85152b16d295671933b0b122a3fa8ee35e730))
+* sssda ([e0a72a7](https://github.com/Wilfreno/hanapbh/commit/e0a72a76652f320c633c60898a7c4ecbca225b8c))
+* still trying to trigger a tag push event ([2965b45](https://github.com/Wilfreno/hanapbh/commit/2965b4507d58126bead43a0eb8033f7842bccd92))
+* testing if docker/metadata-action@v5 works ([c5c862c](https://github.com/Wilfreno/hanapbh/commit/c5c862ccced9620fc7d2866ec0343e21be09f7a7))
+* trying to trigger a rag push event ([545a8a1](https://github.com/Wilfreno/hanapbh/commit/545a8a1007e77714616aed0e9e3b78ee090e657c))
+* trying to trigger a tag event ([349d35e](https://github.com/Wilfreno/hanapbh/commit/349d35e7e6fbb08017699e47e2c1ce996c5c5c00))
+* trying to trigger a tag event ([659fb65](https://github.com/Wilfreno/hanapbh/commit/659fb65f347989e5ec3efd8e4367dd991e6140b2))
+* trying to trigger a tag push event ([4b1f6ab](https://github.com/Wilfreno/hanapbh/commit/4b1f6aba521ae8f2ada10bd89cd64841df23b6b3))
+* trying to trigger tag push event ([08cc1f9](https://github.com/Wilfreno/hanapbh/commit/08cc1f9c3f9c69302922b613d5d167bb3374b80d))
+* using only i workflow instead of 2 ([82bcc91](https://github.com/Wilfreno/hanapbh/commit/82bcc911a74eeb1e449c6bec04e855fa80fdbdfc))
+* using only i workflow instead of 2 ([af97332](https://github.com/Wilfreno/hanapbh/commit/af97332ccbbc1f6a130bfd95276ea408afa2bd65))
+
 ## [1.0.1](https://github.com/Wilfreno/hanapbh/compare/v1.0.0...v1.0.1) (2024-07-29)
 
 
