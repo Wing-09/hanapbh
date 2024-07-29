@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - "*"
+  release:
+    types:
+      - published
 
 env:
   PROJECT_ID: hanapbh

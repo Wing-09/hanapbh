@@ -24,13 +24,10 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
-
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Build Client
         run: |
-          cd ./client 
+          cd ./client
+          pnpm install 
           pnpm build
         env:
           GOOGLE_CLIENT_ID: "${{secrets.GOOGLE_CLIENT_ID}}"
@@ -44,7 +41,8 @@ jobs:
 
       - name: Build Server
         run: |
-          cd ./server 
+          cd ./server
+          pnpm install
           pnpm build
         env:
           GOOGLE_GEOCODE_API_KEY: "${{secrets.GOOGLE_GEOCODE_API_KEY}}"
