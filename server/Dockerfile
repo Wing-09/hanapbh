@@ -1,18 +1,30 @@
-FROM node:18-alpine
-
-
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
 WORKDIR /app
 
-RUN npm install -g pnpm
 
-COPY package*.json pnpm-lock.yaml ./
+ARG GOOGLE_GEOCODE_API_KEY
+ARG GOOGLE_PLACES_API_KEY
+ARG MONGODB_URI
+ARG GMAIL_2F_AUTH_APP_PASS
 
-RUN pnpm install 
+ENV GOOGLE_GEOCODE_API_KEY: ${secrets.GOOGLE_GEOCODE_API_KEY}
+ENV GOOGLE_PLACES_API_KEY: ${secrets.GOOGLE_PLACES_API_KEY}
+ENV MONGODB_URI: ${secrets.MONGODB_URI}
+ENV GMAIL_2F_AUTH_APP_PASS: ${secrets.GMAIL_2F_AUTH_APP_PASS}
 
-COPY . /app
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
-ENV PORT=8000
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
 
+FROM base
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/dist /app/dist
 EXPOSE 8000
-
-CMD ["pnpm", "production"]
+CMD [ "pnpm", "start" ]
