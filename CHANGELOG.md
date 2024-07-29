@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Wilfreno/hanapbh/compare/v1.0.0...v1.0.1) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Github Action:** set release.config to only run for the main branch ([70e492f](https://github.com/Wilfreno/hanapbh/commit/70e492f8dec691255ca342285f77d35aa0f64b12))
+
 # 1.0.0 (2024-07-28)
 
 
