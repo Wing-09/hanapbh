@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/Wilfreno/hanapbh/compare/v1.0.5...v1.0.6) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Dockerfile:** Environment value assigning fixed ([5e8adc0](https://github.com/Wilfreno/hanapbh/commit/5e8adc0c5bd790e1501862983c6102f8b2411976))
+
 ## [1.0.5](https://github.com/Wilfreno/hanapbh/compare/v1.0.4...v1.0.5) (2024-07-29)
 
 
