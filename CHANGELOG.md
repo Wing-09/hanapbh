@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/Wilfreno/hanapbh/compare/v1.0.7...v1.0.8) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Dockerfile:**  copy build cache to build directory ([32f581f](https://github.com/Wilfreno/hanapbh/commit/32f581f421b0d57ca5edef0184e6bf91596b14e9))
+
 ## [1.0.7](https://github.com/Wilfreno/hanapbh/compare/v1.0.6...v1.0.7) (2024-07-29)
 
 
