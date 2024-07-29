@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/Wilfreno/hanapbh/compare/v1.0.4...v1.0.5) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Dockerfile:** use build args to give image environment variables ([a79b10b](https://github.com/Wilfreno/hanapbh/commit/a79b10b1916f3c1766719ae048850c02f2375af0))
+
 ## [1.0.4](https://github.com/Wilfreno/hanapbh/compare/v1.0.3...v1.0.4) (2024-07-29)
 
 
