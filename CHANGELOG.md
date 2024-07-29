@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/Wilfreno/hanapbh/compare/v1.0.3...v1.0.4) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Github action:** build test will only start on pull requests ([8ea4955](https://github.com/Wilfreno/hanapbh/commit/8ea495561570fa37bfd9d20bc421400f7f3fc63b))
+* **Github action:** use google-github-actions/deploy-cloudrun@v2 ([23970f1](https://github.com/Wilfreno/hanapbh/commit/23970f172ffb9968d96ffa24dbdaa37f8b24561c))
+
 ## [1.0.3](https://github.com/Wilfreno/hanapbh/compare/v1.0.2...v1.0.3) (2024-07-29)
 
 
