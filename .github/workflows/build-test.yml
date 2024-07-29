@@ -29,7 +29,9 @@ jobs:
         run: pnpm install
 
       - name: Build Client
-        run: cd ./client pnpm build
+        run: |
+          cd ./client 
+          pnpm build
         env:
           GOOGLE_CLIENT_ID: "${{secrets.GOOGLE_CLIENT_ID}}"
           GOOGLE_CLIENT_SECRET: "${{secrets.GOOGLE_CLIENT_SECRET}}"
@@ -41,7 +43,9 @@ jobs:
           NEXTAUTH_URL: "${{secrets.NEXTAUTH_URL}}"
 
       - name: Build Server
-        run: cd ./server pnpm build
+        run: |
+          cd ./server 
+          pnpm build
         env:
           GOOGLE_GEOCODE_API_KEY: "${{secrets.GOOGLE_GEOCODE_API_KEY}}"
           GOOGLE_PLACES_API_KEY: "${{secrets.GOOGLE_PLACES_API_KEY}}"
