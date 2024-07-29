@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/Wilfreno/hanapbh/compare/v1.0.9...v1.0.10) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Github Action:** update cloud run image to be pushed ([1ed5325](https://github.com/Wilfreno/hanapbh/commit/1ed53257a3acf2461a8535d47cc91b3b46cdc9eb))
+
 ## [1.0.9](https://github.com/Wilfreno/hanapbh/compare/v1.0.8...v1.0.9) (2024-07-29)
 
 
