@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/Wilfreno/hanapbh/compare/v1.0.11...v1.0.12) (2024-07-29)
+
+
+### Bug Fixes
+
+* **Github action:** workflow wont push to main ([7c23501](https://github.com/Wilfreno/hanapbh/commit/7c235016f2c1e1c1fbd59f86571844c066935beb))
+
 ## [1.0.11](https://github.com/Wilfreno/hanapbh/compare/v1.0.10...v1.0.11) (2024-07-29)
 
 
