@@ -22,6 +22,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{secrets.GA_PAT}}
 
       - name: Extract Docker metadata
         id: meta
@@ -102,8 +105,8 @@ jobs:
           sed -i 's|Client: .*|Client: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"|' README.md
           sed -i 's|Server: .*|Server: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"|' README.md
 
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global user.name 'Wilfreno'
+          git config --global user.email 'w.gayongan@gmail.com'
 
           git add README.md
           git commit -m 'Update README.md with latest Docker image tags'
