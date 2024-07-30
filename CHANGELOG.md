@@ -1,3 +1,10 @@
+## [1.0.28](https://github.com/Wilfreno/hanapbh/compare/v1.0.27...v1.0.28) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github action:** to use environment variables ([dd5ed97](https://github.com/Wilfreno/hanapbh/commit/dd5ed9798862de16fb37d1ac11e704ffbf6b0b09))
+
 ## [1.0.27](https://github.com/Wilfreno/hanapbh/compare/v1.0.26...v1.0.27) (2024-07-30)
 
 
