@@ -98,7 +98,7 @@ jobs:
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}
 
       - name: Save new Docker Image version to README file
-        run: |
+        run: |-
           CLIENT_TAG="${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
           SERVER_TAG="${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"
 

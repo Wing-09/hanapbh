@@ -84,5 +84,5 @@ then Create your [Googpe Maps Credentials](https://console.cloud.google.com/apis
 
 ## Docker image
 
-    Client: $client
-    Server: $server
+    Client: $CLIENT_TAG
+    Server: $SERVER_TAG
