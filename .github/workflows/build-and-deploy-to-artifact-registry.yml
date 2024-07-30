@@ -97,67 +97,20 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}
 
-      - name: Update README
-        id: update-readme
+      - name: Save new Docker Image version to README file
         run: |
-          CLIENT_TAG="asia-southeast1-docker.pkg.dev/hanapbh/hanapbh-client/hanapbh-client:v1.0.17"
-          SERVER_TAG="asia-southeast1-docker.pkg.dev/hanapbh/hanapbh-server/hanapbh-server:v1.0.17"
+          CLIENT_TAG="${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
+          SERVER_TAG="${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"
 
-          sed -i 's|Client: .*|Client: '"$CLIENT_TAG"'|' README.md
-          sed -i 's|Server: .*|Server: '"$SERVER_TAG"'|' README.md
+          sed -i 's|Client: .*|Client: $CLIENT_TAG|' README.md
+          sed -i 's|Server: .*|Server: $SERVER_TAG|' README.md
 
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          BRANCH_NAME="update-readme-$(date +%Y%m%d%H%M%S)"
-          git checkout -b $BRANCH_NAME
           git add README.md
           git commit -m 'Update README.md with latest Docker image tags'
-          git push origin $BRANCH_NAME
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git push origin HEAD:main
 
-      - name: Create Pull Request
-        id: create-pull-request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ steps.update-readme.outputs.BRANCH_NAME }}
-          commit-message: "Update README.md with latest Docker image tags"
-          title: "Update README.md with latest Docker image tags"
-          body: "This PR updates the README.md with the latest Docker image tags."
-          labels: "auto-update"
-
-      - name: Approve Pull Request
-        uses: hmarr/auto-approve-action@v2
-        with:
-          github-token: ${{ secrets.PAT }}
-          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
-
-      - name: Wait for PR to be merged
-        id: wait-for-pr
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const prNumber = '${{ steps.create-pull-request.outputs.pull-request-number }}';
-            let pr = await github.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber
-            });
-            while (pr.data.state !== 'closed') {
-              await new Promise(resolve => setTimeout(resolve, 10000)); 
-              pr = await github.pulls.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber
-              });
-            }
-            return pr.data.merge_commit_sha;
-
-      - name: Delete Branch
-        if: steps.wait-for-pr.outputs.merge_commit_sha != ''
-        run: |
-          git push origin --delete ${{ steps.update-readme.outputs.BRANCH_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
