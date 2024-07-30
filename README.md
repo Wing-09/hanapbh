@@ -81,3 +81,8 @@ REACT_EDITOR = code
 
 first [Set up your Google Cloud project](https://developers.google.com/maps/documentation/places/web-service/cloud-setup#console),
 then Create your [Googpe Maps Credentials](https://console.cloud.google.com/apis/credentials?authuser=1&project=hanap-bh)
+
+## Docker image
+
+    Client: $client
+    Server: $server
