@@ -1,3 +1,10 @@
+## [1.0.26](https://github.com/Wilfreno/hanapbh/compare/v1.0.25...v1.0.26) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github action:** $CLIENT_TAG and ([a2f225f](https://github.com/Wilfreno/hanapbh/commit/a2f225fea5ea1b219f7a1a7e7244a8b2edc37396))
+
 ## [1.0.25](https://github.com/Wilfreno/hanapbh/compare/v1.0.24...v1.0.25) (2024-07-30)
 
 
