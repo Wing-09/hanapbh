@@ -84,5 +84,5 @@ then Create your [Googpe Maps Credentials](https://console.cloud.google.com/apis
 
 ## Docker Images
 
-- **Client:** Client: 
-- **Server:** Server: 
+- **Client:** Client: "asia-southeast1-docker.pkg.dev/hanapbh/hanapbh-client/hanapbh-client:v1.0.29"
+- **Server:** Server: "asia-southeast1-docker.pkg.dev/hanapbh/hanapbh-server/hanapbh-server:v1.0.29"
