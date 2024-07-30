@@ -1,3 +1,10 @@
+## [1.0.27](https://github.com/Wilfreno/hanapbh/compare/v1.0.26...v1.0.27) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github Action:** wrapping SERVER_TAG and SERVER_TAG with ${} ([58746df](https://github.com/Wilfreno/hanapbh/commit/58746df513e6fd5517c7452858474fe59ded71af))
+
 ## [1.0.26](https://github.com/Wilfreno/hanapbh/compare/v1.0.25...v1.0.26) (2024-07-30)
 
 
