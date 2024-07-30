@@ -1,3 +1,10 @@
+## [1.0.29](https://github.com/Wilfreno/hanapbh/compare/v1.0.28...v1.0.29) (2024-07-30)
+
+
+### Bug Fixes
+
+* Save new Docker Image version to README file ([a48402a](https://github.com/Wilfreno/hanapbh/commit/a48402af598dbcac8fb0cb513dce80dedd14b95e))
+
 ## [1.0.28](https://github.com/Wilfreno/hanapbh/compare/v1.0.27...v1.0.28) (2024-07-30)
 
 
