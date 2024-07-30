@@ -1,3 +1,10 @@
+## [1.0.16](https://github.com/Wilfreno/hanapbh/compare/v1.0.15...v1.0.16) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github action:** to push readme update om main branch ([29730c3](https://github.com/Wilfreno/hanapbh/commit/29730c3aa2c604a726919046ed006093af85efac))
+
 ## [1.0.15](https://github.com/Wilfreno/hanapbh/compare/v1.0.14...v1.0.15) (2024-07-30)
 
 
