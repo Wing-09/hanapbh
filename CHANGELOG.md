@@ -1,3 +1,10 @@
+## [1.0.22](https://github.com/Wilfreno/hanapbh/compare/v1.0.21...v1.0.22) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github action:** branch permissions ([2af5823](https://github.com/Wilfreno/hanapbh/commit/2af58230ff4d31466ad759e127036d92f86750cf))
+
 ## [1.0.21](https://github.com/Wilfreno/hanapbh/compare/v1.0.20...v1.0.21) (2024-07-30)
 
 
