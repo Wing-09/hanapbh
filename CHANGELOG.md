@@ -1,3 +1,10 @@
+## [1.0.19](https://github.com/Wilfreno/hanapbh/compare/v1.0.18...v1.0.19) (2024-07-30)
+
+
+### Bug Fixes
+
+* branch protection ([a2ba243](https://github.com/Wilfreno/hanapbh/commit/a2ba2434e4020833bcec6af0e7b340ff71eec8e4))
+
 ## [1.0.18](https://github.com/Wilfreno/hanapbh/compare/v1.0.17...v1.0.18) (2024-07-30)
 
 
