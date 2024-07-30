@@ -1,3 +1,10 @@
+## [1.0.15](https://github.com/Wilfreno/hanapbh/compare/v1.0.14...v1.0.15) (2024-07-30)
+
+
+### Bug Fixes
+
+* **readme:** not having a placeholder for client and server image ([865f777](https://github.com/Wilfreno/hanapbh/commit/865f77704a8c4c78deb47ae09d6ecf107f8e1798))
+
 ## [1.0.14](https://github.com/Wilfreno/hanapbh/compare/v1.0.13...v1.0.14) (2024-07-30)
 
 
