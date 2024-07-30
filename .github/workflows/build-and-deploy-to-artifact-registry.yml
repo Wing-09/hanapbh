@@ -104,8 +104,9 @@ jobs:
 
           echo $CLIENT_TAG
           echo $SERVER_TAG
-          sed -i 's|Client: .*|Client: $CLIENT_TAG|' README.md
-          sed -i 's|Server: .*|Server: $SERVER_TAG|' README.md
+
+          sed -i 's|Client: .*|Client: ${CLIENT_TAG}|' README.md
+          sed -i 's|Server: .*|Server: ${SERVER_TAG}|' README.md
 
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
