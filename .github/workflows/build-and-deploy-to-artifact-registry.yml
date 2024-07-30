@@ -111,6 +111,5 @@ jobs:
           git add README.md
           git commit -m 'Update README.md with latest Docker image tags'
           git push origin HEAD:main --force
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
