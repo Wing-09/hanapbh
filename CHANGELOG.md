@@ -1,3 +1,10 @@
+## [1.0.20](https://github.com/Wilfreno/hanapbh/compare/v1.0.19...v1.0.20) (2024-07-30)
+
+
+### Bug Fixes
+
+*  Update README ([cca20c2](https://github.com/Wilfreno/hanapbh/commit/cca20c2ed9d814526513b93d76b5be96bab423ed))
+
 ## [1.0.19](https://github.com/Wilfreno/hanapbh/compare/v1.0.18...v1.0.19) (2024-07-30)
 
 
