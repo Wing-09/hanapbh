@@ -4,7 +4,6 @@ import JSONResponse from "./lib/json-response";
 import mongoDBConnection from "./database/connection";
 import v1_router from "./routes/v1/v1";
 
-// server configuration
 const app = express();
 
 //middleware
