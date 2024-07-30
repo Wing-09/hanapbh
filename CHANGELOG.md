@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/Wilfreno/hanapbh/compare/v1.0.13...v1.0.14) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github action:** add github token ([3ae5ccb](https://github.com/Wilfreno/hanapbh/commit/3ae5ccbd5ea25fb7d5e490992835432724f67682))
+
 ## [1.0.13](https://github.com/Wilfreno/hanapbh/compare/v1.0.12...v1.0.13) (2024-07-30)
 
 
