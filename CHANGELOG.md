@@ -1,3 +1,10 @@
+## [1.0.24](https://github.com/Wilfreno/hanapbh/compare/v1.0.23...v1.0.24) (2024-07-30)
+
+
+### Bug Fixes
+
+* readme not updating ([d7713e8](https://github.com/Wilfreno/hanapbh/commit/d7713e8fe0adf1a4193a6122c3e78769b3e68b85))
+
 ## [1.0.23](https://github.com/Wilfreno/hanapbh/compare/v1.0.22...v1.0.23) (2024-07-30)
 
 
