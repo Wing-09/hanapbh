@@ -1,3 +1,10 @@
+## [1.0.17](https://github.com/Wilfreno/hanapbh/compare/v1.0.16...v1.0.17) (2024-07-30)
+
+
+### Bug Fixes
+
+* **Github action:** Save new Docker Image version to README file git commit tag from -a to -m ([87df4f0](https://github.com/Wilfreno/hanapbh/commit/87df4f00bb271dcecd671e7b5fc851d46fa3818e))
+
 ## [1.0.16](https://github.com/Wilfreno/hanapbh/compare/v1.0.15...v1.0.16) (2024-07-30)
 
 
