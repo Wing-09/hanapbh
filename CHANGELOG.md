@@ -1,3 +1,10 @@
+## [1.0.37](https://github.com/Wilfreno/hanapbh/compare/v1.0.36...v1.0.37) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** re tag server image ([92dfca1](https://github.com/Wilfreno/hanapbh/commit/92dfca11219e94240492742d909228a6416bfade))
+
 ## [1.0.36](https://github.com/Wilfreno/hanapbh/compare/v1.0.35...v1.0.36) (2024-07-31)
 
 
