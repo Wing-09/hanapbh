@@ -1,3 +1,11 @@
+## [1.0.30](https://github.com/Wilfreno/hanapbh/compare/v1.0.29...v1.0.30) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to deploy on docker hub instead of artifact registry ([68bdae2](https://github.com/Wilfreno/hanapbh/commit/68bdae2e960ea90edb422d31f3b3b306d32e30f0))
+* **Github action:** to use access token to force push ([f325dd2](https://github.com/Wilfreno/hanapbh/commit/f325dd2e58c643526b931e2816054edf5d651a82))
+
 ## [1.0.29](https://github.com/Wilfreno/hanapbh/compare/v1.0.28...v1.0.29) (2024-07-30)
 
 
