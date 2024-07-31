@@ -1,3 +1,10 @@
+## [1.0.42](https://github.com/Wilfreno/hanapbh/compare/v1.0.41...v1.0.42) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to pull docker image instead of building before deploying to cloud run ([390bd42](https://github.com/Wilfreno/hanapbh/commit/390bd42212649f47eb025b82890ed67490669c48))
+
 ## [1.0.41](https://github.com/Wilfreno/hanapbh/compare/v1.0.40...v1.0.41) (2024-07-31)
 
 
