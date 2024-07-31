@@ -1,3 +1,10 @@
+## [1.0.41](https://github.com/Wilfreno/hanapbh/compare/v1.0.40...v1.0.41) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** force to push on main branch ([36754c6](https://github.com/Wilfreno/hanapbh/commit/36754c62eb3183c4ea3066497fa11e9c8a20dbba))
+
 ## [1.0.40](https://github.com/Wilfreno/hanapbh/compare/v1.0.39...v1.0.40) (2024-07-31)
 
 
