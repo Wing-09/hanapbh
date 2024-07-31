@@ -1,3 +1,12 @@
+## [1.0.43](https://github.com/Wilfreno/hanapbh/compare/v1.0.42...v1.0.43) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:**  Save new Docker Image version ([98c80ff](https://github.com/Wilfreno/hanapbh/commit/98c80ff1c03a31e9ae99fa65faeae0df80d467a1))
+* **Github action:** actions/checkout@v4 missing ([5525522](https://github.com/Wilfreno/hanapbh/commit/552552203fdd0f5881647ff0beca70e33ea07f68))
+* **Github action:** deploying jobs to be only one file ([462abed](https://github.com/Wilfreno/hanapbh/commit/462abed5f9704701705d34884e80b92abac95cda))
+
 ## [1.0.42](https://github.com/Wilfreno/hanapbh/compare/v1.0.41...v1.0.42) (2024-07-31)
 
 
