@@ -79,7 +79,7 @@ jobs:
             GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
             MONGODB_URI="${{secrets.MONGODB_URI}}"
             GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
-          context: ./client
+          context: ./server
           push: true
           tags: "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
 
