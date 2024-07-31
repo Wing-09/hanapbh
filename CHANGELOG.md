@@ -1,3 +1,10 @@
+## [1.0.31](https://github.com/Wilfreno/hanapbh/compare/v1.0.30...v1.0.31) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to use docker/build-push-action@v6 ([9f772bb](https://github.com/Wilfreno/hanapbh/commit/9f772bb8895715032f5114dbd31101f95bf75e03))
+
 ## [1.0.30](https://github.com/Wilfreno/hanapbh/compare/v1.0.29...v1.0.30) (2024-07-31)
 
 
