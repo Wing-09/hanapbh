@@ -1,3 +1,10 @@
+## [1.0.38](https://github.com/Wilfreno/hanapbh/compare/v1.0.37...v1.0.38) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to push to artifact registry ([1b56306](https://github.com/Wilfreno/hanapbh/commit/1b56306852f4e3ddc554e4583769faa0285a6bfd))
+
 ## [1.0.37](https://github.com/Wilfreno/hanapbh/compare/v1.0.36...v1.0.37) (2024-07-31)
 
 
