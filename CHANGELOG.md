@@ -1,3 +1,10 @@
+## [1.0.40](https://github.com/Wilfreno/hanapbh/compare/v1.0.39...v1.0.40) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:**  google-github-actions/auth permissions ([bcc275c](https://github.com/Wilfreno/hanapbh/commit/bcc275cf9668a18c15e8bd44304f01e7ed83bb91))
+
 ## [1.0.39](https://github.com/Wilfreno/hanapbh/compare/v1.0.38...v1.0.39) (2024-07-31)
 
 
