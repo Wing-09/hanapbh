@@ -234,7 +234,7 @@ docker-compose down
 
 ### CLient Image
 ```bash
-docker pull wing09/hanapbh-client:v1.0.29
+docker pull wing09/hanapbh-client:wew
 ```
 
 ### Server Image
