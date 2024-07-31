@@ -1,3 +1,10 @@
+## [1.0.34](https://github.com/Wilfreno/hanapbh/compare/v1.0.33...v1.0.34) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Dockerfile:**  CLIENT_URL typo ([2c626e1](https://github.com/Wilfreno/hanapbh/commit/2c626e1546fe5f59e871e2281debfbbcbf9a5b75))
+
 ## [1.0.33](https://github.com/Wilfreno/hanapbh/compare/v1.0.32...v1.0.33) (2024-07-31)
 
 
