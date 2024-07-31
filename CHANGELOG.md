@@ -1,3 +1,10 @@
+## [1.0.45](https://github.com/Wilfreno/hanapbh/compare/v1.0.44...v1.0.45) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to push on HEAD:main ([a9864fa](https://github.com/Wilfreno/hanapbh/commit/a9864fa0041b9c8bcbf8fc678749dc7c20146318))
+
 ## [1.0.44](https://github.com/Wilfreno/hanapbh/compare/v1.0.43...v1.0.44) (2024-07-31)
 
 
