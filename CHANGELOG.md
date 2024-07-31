@@ -1,3 +1,10 @@
+## [1.0.39](https://github.com/Wilfreno/hanapbh/compare/v1.0.38...v1.0.39) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** separate pushing to docker hub and deployment to cloud run ([0c811ec](https://github.com/Wilfreno/hanapbh/commit/0c811ec18239f6b5678837f01d02f71930f1f9bc))
+
 ## [1.0.38](https://github.com/Wilfreno/hanapbh/compare/v1.0.37...v1.0.38) (2024-07-31)
 
 
