@@ -1,3 +1,10 @@
+## [1.0.44](https://github.com/Wilfreno/hanapbh/compare/v1.0.43...v1.0.44) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** sed not replacing ([91c3aee](https://github.com/Wilfreno/hanapbh/commit/91c3aeef1ddd66c09d2dcfa8deed7bdb6190e242))
+
 ## [1.0.43](https://github.com/Wilfreno/hanapbh/compare/v1.0.42...v1.0.43) (2024-07-31)
 
 
