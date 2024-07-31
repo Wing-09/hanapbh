@@ -1,3 +1,11 @@
+## [1.0.32](https://github.com/Wilfreno/hanapbh/compare/v1.0.31...v1.0.32) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github Action:** to use docker credentials ([6392a2b](https://github.com/Wilfreno/hanapbh/commit/6392a2be1dc355cd196d2009c1d3d9aad9b0e1b1))
+* **Github action:** to use Public access token as password ([46334dc](https://github.com/Wilfreno/hanapbh/commit/46334dc279722cdcfd8d1f984fcece868a09f68f))
+
 ## [1.0.31](https://github.com/Wilfreno/hanapbh/compare/v1.0.30...v1.0.31) (2024-07-31)
 
 
