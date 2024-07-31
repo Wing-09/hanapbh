@@ -63,6 +63,7 @@ jobs:
           password: ${{ secrets.DOCKER_PAT}}
 
       - name: Build and Push Client Image
+        id: build-push-client-image
         uses: docker/build-push-action@v6
         with:
           build-args: |
@@ -78,22 +79,19 @@ jobs:
           push: true
           tags: "wing09/${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}"
 
-      - name: Build and Push Server Image
-        uses: docker/build-push-action@v6
-        with:
-          build-args: |
-            GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}"
-            GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
-            MONGODB_URI="${{secrets.MONGODB_URI}}"
-            GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
+      - name: Build Server Image
+        run: |-
+          docker build -t "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" ./server \
+          --build-arg GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}" \
+          --build-arg GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}" \
+          --build-arg MONGODB_URI="${{secrets.MONGODB_URI}}" \
+          --build-arg GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
 
-          context: ./server
-          push: true
-          tags: "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
+      - name: Push Server Image to Docker Hub
+        run: docker push "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
 
-      - name: Retag Server Image
-        run: docker tag "wing09/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}" ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}
-
+      - name: ReTag Server Image
+        run: docker tag "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"
 
       - name: Deploy to Cloud Run
         id: deploy
