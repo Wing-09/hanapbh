@@ -1,9 +1,9 @@
 services:
   client:
-    image: wing09/hanapbh-client:v1.0.29
+    image: wing09/hanapbh-client:v1.0.45
     ports:
       - 3000:3000
   server:
-    image: wing09/hanapbh-server:v1.0.29
+    image: wing09/hanapbh-server:v1.0.45
     ports:
       - 8000:8000
