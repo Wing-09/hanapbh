@@ -1,4 +1,4 @@
-name: Build and Deploy to Artifact registry
+name: Build and Deploy to Docker Hub
 
 on:
   release:
@@ -13,7 +13,7 @@ env:
   REGION: asia-southeast1
 
 jobs:
-  build_push_to_artifact_registry_and_cloud_run:
+  build_push_to_docker_hub_and_cloud_run:
     permissions:
       contents: "write"
       id-token: "write"
@@ -22,6 +22,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{secrets.GA_PAT}}
 
       - name: Extract Docker metadata
         id: meta
@@ -59,7 +62,7 @@ jobs:
 
       - name: Build Client Image
         run: |-
-          docker build -t "${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" ./client \
+          docker build -t "wing09/${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" ./client \
           --build-arg GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}" \
           --build-arg GOOGLE_CLIENT_SECRET="${{secrets.GOOGLE_CLIENT_SECRET}}" \
           --build-arg GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}" \
@@ -69,25 +72,19 @@ jobs:
           --build-arg NEXTAUTH_SECRET="${{secrets.NEXTAUTH_SECRET}}" \
           --build-arg NEXTAUTH_URL="${{secrets.NEXTAUTH_URL}}"
 
-      - name: Tag Client Image
-        run: docker tag "${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}" "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
-
-      - name: Push Client Image to Artifact Registry
-        run: docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"
+      - name: Push Client Image to Docker hub
+        run: docker push "wing09/${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}"
 
       - name: Build Server Image
         run: |-
-          docker build -t "${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" ./server \
+          docker build -t "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" ./server \
           --build-arg GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}" \
           --build-arg GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}" \
           --build-arg MONGODB_URI="${{secrets.MONGODB_URI}}" \
           --build-arg GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
 
-      - name: Tag Server Image
-        run: docker tag "${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"
-
-      - name: Push Server Image to Artifact Registry
-        run: docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"
+      - name: Push Server Image to Docker Hub
+        run: docker push "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
 
       - name: Deploy to Cloud Run
         id: deploy
@@ -95,17 +92,20 @@ jobs:
         with:
           service: ${{ env.SERVER_SERVICE }}
           region: ${{ env.REGION }}
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}
+          image: "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
 
       - name: Save new Docker Image version to README file
         run: |-
-          sed -i 's|Client: .*|Client: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.CLIENT_SERVICE }}/${{ env.CLIENT_SERVICE }}:${{env.REPO_TAG }}"|' README.md
-          sed -i 's|Server: .*|Server: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"|' README.md
+          sed -i 's|wing09/${{ env.CLIENT_SERVICE }}: .*|wing09/${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}|' README.md
+          sed -i 's|wing09/${{ env.SERVER_SERVICE }}: .*|wing09/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}|' README.md
 
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          sed -i 's|wing09/${{ env.CLIENT_SERVICE }}: .*|wing09/${{ env.CLIENT_SERVICE }}:${{ env.REPO_TAG }}|' docker-compose.yml
+          sed -i 's|wing09/${{ env.SERVER_SERVICE }}: .*|wing09/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}|' docker-compose.yml
 
-          git add README.md
+          git config --global user.name 'Wilfreno'
+          git config --global user.email 'w.gayongan@gmail.com'
+
+          git add README.md docker-compose.yml
           git commit -m 'Update README.md with latest Docker image tags'
           git push origin HEAD:main
 
