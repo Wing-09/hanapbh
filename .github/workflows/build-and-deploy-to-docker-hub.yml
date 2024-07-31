@@ -86,6 +86,7 @@ jobs:
             GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}"
             MONGODB_URI="${{secrets.MONGODB_URI}}"
             GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
+
           context: ./client
           push: true
           tags: "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
@@ -111,7 +112,7 @@ jobs:
 
           git add README.md docker-compose.yml
           git commit -m 'Update README.md with latest Docker image tags'
-          git push origin HEAD:main
+          git push origin HEAD:main --force
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
