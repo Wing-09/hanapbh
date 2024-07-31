@@ -1,3 +1,10 @@
+## [1.0.35](https://github.com/Wilfreno/hanapbh/compare/v1.0.34...v1.0.35) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** steps both building client image ([7107f90](https://github.com/Wilfreno/hanapbh/commit/7107f90b2c36fbe7f4f23e191a61a5c1438a3137))
+
 ## [1.0.34](https://github.com/Wilfreno/hanapbh/compare/v1.0.33...v1.0.34) (2024-07-31)
 
 
