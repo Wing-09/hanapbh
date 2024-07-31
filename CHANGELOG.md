@@ -1,3 +1,10 @@
+## [1.0.36](https://github.com/Wilfreno/hanapbh/compare/v1.0.35...v1.0.36) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to retag server image for cloud run deployment ([6eede13](https://github.com/Wilfreno/hanapbh/commit/6eede13803feea159c699589c8e67ca0772e6a4d))
+
 ## [1.0.35](https://github.com/Wilfreno/hanapbh/compare/v1.0.34...v1.0.35) (2024-07-31)
 
 
