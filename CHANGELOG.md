@@ -1,3 +1,10 @@
+## [1.0.33](https://github.com/Wilfreno/hanapbh/compare/v1.0.32...v1.0.33) (2024-07-31)
+
+
+### Bug Fixes
+
+* **Github action:** to use Docker PAT ([58bf23d](https://github.com/Wilfreno/hanapbh/commit/58bf23d0e6fd34dff543fc96ed1654938d07edf7))
+
 ## [1.0.32](https://github.com/Wilfreno/hanapbh/compare/v1.0.31...v1.0.32) (2024-07-31)
 
 
