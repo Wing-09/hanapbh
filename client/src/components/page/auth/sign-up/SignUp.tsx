@@ -46,7 +46,7 @@ export default function SignUp() {
       }
     >
       <DialogTrigger></DialogTrigger>
-      <DialogContent className="w-[clamp(25rem, 25rem, 95vw)] p-0">
+      <DialogContent className="w-screen sm:w-[25rem] h-screen sm:h-auto p-0">
         <div className="relative">
           <DialogClose className="absolute top-2 right-3 z-10" asChild>
             <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">
@@ -71,17 +71,17 @@ export default function SignUp() {
                 />
                 <SignUpOTP form_data={form_data} setFormData={setFormData} />
               </form>
-              <DialogFooter className="text-center mx-auto">
+              <section className="justify-center flex flex-nowrap space-x-5 h-10">
                 <p>Already have an account ?</p>
                 <Link
                   href={"/login?exit=" + exit}
                   as={"/login?exit=" + exit}
                   prefetch
-                  className="font-bold"
+                  className="font-bold "
                 >
                   Login
                 </Link>
-              </DialogFooter>
+              </section>
             </div>
           </ScrollArea>
         </div>

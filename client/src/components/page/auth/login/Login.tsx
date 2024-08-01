@@ -26,7 +26,7 @@ export default function Login() {
         e === false && router.replace(exit && exit !== "null" ? exit : "/")
       }
     >
-      <DialogContent className=" w-[clamp(25rem,_25rem,_95vw)]">
+      <DialogContent className="w-screen sm:w-[25rem] h-screen sm:h-auto">
         <div className="space-y-5 relative flex flex-col">
           <DialogClose className="absolute -top-4 -right-3" asChild>
             <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">

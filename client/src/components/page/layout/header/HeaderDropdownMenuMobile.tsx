@@ -16,12 +16,12 @@ import { ThemeToggler } from "./ThemeToggler";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-export default function HeaderDropdownMenu() {
+export default function HeaderDropdownMenuMobile() {
   const { status, data } = useSession();
   const pathname = usePathname();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full">
+      <DropdownMenuTrigger asChild className="rounded-full">
         <Avatar>
           <AvatarImage src={data?.user.photo?.url} />
           <AvatarFallback className="p-2">
@@ -35,9 +35,9 @@ export default function HeaderDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        alignOffset={-30}
-        sideOffset={10}
-        className="w-[clamp(18rem,_18rem,_95vw)] "
+        alignOffset={-11}
+        sideOffset={50}
+        className="w-screen"
       >
         <DropdownMenuGroup className="space-y-1">
           {status === "unauthenticated" ? (
@@ -65,12 +65,12 @@ export default function HeaderDropdownMenu() {
             </>
           ) : (
             <>
-              <DropdownMenuItem className="py-0">
+              <DropdownMenuItem className="py-2">
                 <Link
                   className="py-1 w-full flex items-center space-x-5"
                   href="/sign-up"
                 >
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 ">
                     <AvatarImage src={data?.user.photo?.url} />
                     <AvatarFallback className="p-2">
                       {data?.user.first_name.slice(0, 1).toUpperCase()}
