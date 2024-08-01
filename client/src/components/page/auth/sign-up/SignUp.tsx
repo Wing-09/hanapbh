@@ -71,17 +71,17 @@ export default function SignUp() {
                 />
                 <SignUpOTP form_data={form_data} setFormData={setFormData} />
               </form>
-              <DialogFooter className="text-center mx-auto">
+              <section className="justify-center flex flex-nowrap space-x-5 h-10">
                 <p>Already have an account ?</p>
                 <Link
                   href={"/login?exit=" + exit}
                   as={"/login?exit=" + exit}
                   prefetch
-                  className="font-bold"
+                  className="font-bold "
                 >
                   Login
                 </Link>
-              </DialogFooter>
+              </section>
             </div>
           </ScrollArea>
         </div>
