@@ -2,11 +2,9 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useToast } from "./ui/use-toast";
-import NoLocationSVG from "./svg/NoLocationSVG";
-import { Button } from "./ui/button";
-import useHTTPRequest from "./hooks/useHTTPRequest";
-import { Truculenta } from "next/font/google";
+import { useToast } from "../ui/use-toast";
+import NoLocationSVG from "../svg/NoLocationSVG";
+import useHTTPRequest from "../hooks/useHTTPRequest";
 
 export default function UserLocation({
   children,
