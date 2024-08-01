@@ -11,7 +11,7 @@ import Image from "next/image";
 import LodgingCard from "@/components/page/LodgingCard";
 import { NearbyLodgingResponse } from "@/lib/types/server-response";
 
-export default function page() {
+export default function Page() {
   const [loading, setLoading] = useState(true);
   const [lodgings, setLodgings] = useState<Lodging[]>([]);
   const [page, setPage] = useState(1);
