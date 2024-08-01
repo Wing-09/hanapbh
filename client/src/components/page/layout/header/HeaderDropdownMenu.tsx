@@ -21,7 +21,7 @@ export default function HeaderDropdownMenu() {
   const pathname = usePathname();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full">
+      <DropdownMenuTrigger asChild className="rounded-full cursor-pointer">
         <Avatar>
           <AvatarImage src={data?.user.photo?.url} />
           <AvatarFallback className="p-2">
@@ -36,7 +36,7 @@ export default function HeaderDropdownMenu() {
       <DropdownMenuContent
         align="end"
         alignOffset={-30}
-        sideOffset={10}
+        sideOffset={8}
         className="w-[clamp(18rem,_18rem,_95vw)] "
       >
         <DropdownMenuGroup className="space-y-1">

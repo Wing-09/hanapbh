@@ -22,7 +22,7 @@ export default function HeaderDropdownMenuMobile() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="rounded-full">
-        <Avatar>
+        <Avatar className="h-6 w-6">
           <AvatarImage src={data?.user.photo?.url} />
           <AvatarFallback className="p-2">
             {status === "authenticated" ? (
