@@ -46,7 +46,7 @@ export default function SignUp() {
       }
     >
       <DialogTrigger></DialogTrigger>
-      <DialogContent className="w-[clamp(25rem, 25rem, 95vw)] p-0">
+      <DialogContent className="w-screen sm:w-[25rem] h-screen sm:h-auto p-0">
         <div className="relative">
           <DialogClose className="absolute top-2 right-3 z-10" asChild>
             <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">
