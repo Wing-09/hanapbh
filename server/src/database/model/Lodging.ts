@@ -16,12 +16,15 @@ export type LodgingType = {
     type: "Point";
     coordinates: [number, number];
   };
+  distance: number;
   address: {
+    vicinity: string;
     street: string;
     province: string;
     municipality_city: string;
     barangay: string;
   };
+  provider: string;
   photos: Types.ObjectId[];
   favored_by: Types.ObjectId[];
   rated_by: Types.ObjectId[];
@@ -70,6 +73,10 @@ const lodgingSchema = new Schema<LodgingType>(
       },
     },
     address: {
+      vicinity: {
+        type: String,
+        required: true,
+      },
       street: {
         type: String,
         default: "",
@@ -86,6 +93,10 @@ const lodgingSchema = new Schema<LodgingType>(
         type: String,
         default: "",
       },
+    },
+    provider: {
+      type: String,
+      default: "DB",
     },
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
     photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],

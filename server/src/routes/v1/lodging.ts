@@ -85,7 +85,6 @@ router
       const google_nearby_place: (Omit<LodgingType, "photos"> & {
         id: string;
         photos: PhotoType[];
-        distance: number;
       })[] = [];
 
       for (const place of places_api_response_json.results) {
@@ -105,6 +104,7 @@ router
                 last_updated: new Date(),
               }))
             : [],
+          provider: "GOOGLE",
           offers: [],
           favored_by: [],
           rated_by: [],
@@ -117,6 +117,7 @@ router
             ],
           },
           address: {
+            vicinity: place.vicinity,
             street: "",
             barangay: "",
             municipality_city: "",
@@ -135,7 +136,6 @@ router
       }
       return response.status(200).json(
         JSONResponse("OK", "request successful", {
-          page: Number(page),
           google_next_page_token: places_api_response_json.next_page_token,
           result: [...google_nearby_place, ...database_lodgings].sort(
             (a, b) => a.distance - b.distance

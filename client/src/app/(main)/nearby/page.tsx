@@ -7,6 +7,9 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LodgingCardsSkeleton from "@/components/page/loading-skeleton/LodgingCardsSkeleton";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import LodgingCard from "@/components/page/LodgingCard";
+import { NearbyLodgingResponse } from "@/lib/types/server-response";
 
 export default function page() {
   const [loading, setLoading] = useState(true);
@@ -29,8 +32,7 @@ export default function page() {
           page,
           max_distance,
         });
-        setLodgings(data as Lodging[]);
-        console.log(data);
+        setLodgings((data as NearbyLodgingResponse).result);
         setLoading(false);
       } catch (error) {
         throw error;
@@ -44,9 +46,15 @@ export default function page() {
     <main className="grid grid-rows-[auto_1fr] px-[10vw] py-[5dvh] space-y-10">
       <Input />
       <UserLocation>
-        <ul className="grid grid-cols-4 gap-5">
-          <LodgingCardsSkeleton />
-        </ul>
+        <section className="grid grid-cols-4">
+          {loading ? (
+            <LodgingCardsSkeleton />
+          ) : (
+            lodgings.map((lodging) => (
+              <LodgingCard key={lodging.id} lodging={lodging} />
+            ))
+          )}
+        </section>
       </UserLocation>
     </main>
   );

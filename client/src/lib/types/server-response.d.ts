@@ -1,3 +1,5 @@
+import { Lodging } from "./data-type";
+
 export type ServerResponse = {
   status:
     | "OK"
@@ -12,4 +14,9 @@ export type ServerResponse = {
 
   message: string;
   data: unknown;
+};
+
+export type NearbyLodgingResponse = {
+  result: Lodging[];
+  google_next_page_token: string;
 };

@@ -48,15 +48,31 @@ export type Lodging = {
     coordinates: [number, number];
   };
   address: {
+    vicinity: string;
     street: string;
     province: string;
     municipality_city: string;
     barangay: string;
   };
-  photos: string[];
+  distance: number;
+  provider: "GOOGLE" | "DB";
+  photos: Photo[];
   favored_by: string[];
   rated_by: string[];
   rooms: string[];
   date_created: Date;
+  last_updated: Date;
+};
+
+export type Photo = {
+  id: string;
+  url: string;
+  type?: "PROFILE" | "LODGING" | "ROOM";
+  width: number;
+  height: number;
+  user?: string;
+  lodging?: string;
+  room?: string;
+  date_created?: Date;
   last_updated: Date;
 };
