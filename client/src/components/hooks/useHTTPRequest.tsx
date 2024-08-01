@@ -4,9 +4,7 @@ import { useToast } from "../ui/use-toast";
 export default function useHTTPRequest() {
   const server_url = process.env.NEXT_PUBLIC_SERVER!;
   if (!server_url)
-    throw new Error(
-      "NEXT_PUBLIC_SERVER is missing from your .env.local file"
-    );
+    throw new Error("NEXT_PUBLIC_SERVER is missing from your .env.local file");
 
   const { toast } = useToast();
 
@@ -14,7 +12,7 @@ export default function useHTTPRequest() {
     if (!url.startsWith("/")) throw new Error("url must start with /");
   }
 
-  async function responseJSON(response: Response) {
+  async function responseJSON(response: Response): Promise<ServerResponse> {
     try {
       const response_json = (await response.json()) as ServerResponse;
 

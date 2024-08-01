@@ -1,5 +1,6 @@
 "use client";
 import Header from "@/components/page/layout/header/Header";
+import UserLocation from "@/components/UserLocation";
 import { usePathname } from "next/navigation";
 import React from "react";
 

@@ -7,7 +7,8 @@ export type ServerResponse = {
     | "CONFLICT"
     | "FORBIDDEN"
     | "BAD_REQUEST"
-    | "CREATED";
+    | "CREATED"
+    | "OUT_OF_BOUND";
 
   message: string;
   data: unknown;
