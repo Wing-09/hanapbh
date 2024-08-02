@@ -109,9 +109,7 @@ export default function HeaderDropdownMenu() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="py-2 cursor-pointer font-bold space-x-3 justify-center"
-                onClick={() =>
-                  signOut({ redirect: true, callbackUrl: pathname })
-                }
+                onClick={() => signOut()}
               >
                 <p>Logout</p> <ArrowRightEndOnRectangleIcon className="h-5" />
               </DropdownMenuItem>

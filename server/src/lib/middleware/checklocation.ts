@@ -36,7 +36,6 @@ export default async function checkLocation(
     );
     const geolocation_response_json =
       (await geolocation_response.json()) as GoogleGeocodeAPIResponse;
-
     if (
       geolocation_response_json.results[0].formatted_address.toLocaleLowerCase() !==
       "philippines"

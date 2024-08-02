@@ -6,15 +6,25 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
 export default function LoginWithGoogle() {
+  const cb_url = useSearchParams().get("cb_url");
   const exit = useSearchParams().get("exit");
   const { toast } = useToast();
   const router = useRouter();
 
   async function signInWithGoogle() {
+    let callbackUrl = "/";
+
+    if (cb_url) {
+      callbackUrl = cb_url;
+    } else if (exit) {
+      callbackUrl = exit;
+    }
+
+    
     try {
       const response = await signIn("google", {
         redirect: true,
-        callbackUrl: !exit ? "/" : exit === "null" ? "/" : exit,
+        callbackUrl,
       });
 
       if (response?.error) {

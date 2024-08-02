@@ -32,6 +32,7 @@ export default function Page() {
           page,
           max_distance,
         });
+        console.log(data);
         setLodgings((data as NearbyLodgingResponse).result);
         setLoading(false);
       } catch (error) {
