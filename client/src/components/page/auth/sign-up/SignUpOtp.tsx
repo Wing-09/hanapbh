@@ -14,7 +14,6 @@ import {
   useState,
 } from "react";
 import { User } from "@/lib/types/data-type";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import {
   InputOTP,
@@ -27,6 +26,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import LoadingSvg from "@/components/svg/LoadingSvg";
+import { ChevronLeft } from "lucide-react";
 
 export default function SignUpOTP({
   form_data,
@@ -153,7 +153,7 @@ export default function SignUpOTP({
           <div className="grid">
             <DialogClose asChild>
               <Button variant="link" className="w-fit justify-start p-0 mb-5">
-                <ChevronLeftIcon className="h-5" /> back
+                <ChevronLeft className="h-5" /> back
               </Button>
             </DialogClose>
             <p className="">An OTP was sent to your email:</p>

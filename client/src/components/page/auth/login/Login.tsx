@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import LoginWithCredentials from "./LoginWithCredentials";
 import LoginWithGoogle from "./LoginWithGoogle";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { X } from "lucide-react";
 
 export default function Login() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function Login() {
         <div className="space-y-5 relative flex flex-col">
           <DialogClose className="absolute -top-4 -right-3" asChild>
             <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">
-              <XMarkIcon className="h-5" />
+              <X className="h-5" />
             </Button>
           </DialogClose>
           <DialogHeader>

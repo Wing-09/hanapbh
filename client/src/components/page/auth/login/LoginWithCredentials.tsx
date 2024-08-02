@@ -2,7 +2,7 @@ import LoadingSvg from "@/components/svg/LoadingSvg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -59,9 +59,9 @@ export default function LoginWithCredentials() {
           onClick={() => setSeePassword((prev) => !prev)}
         >
           {see_password ? (
-            <EyeOpenIcon className="h-full w-auto" />
+            <Eye className="h-full w-auto" />
           ) : (
-            <EyeClosedIcon className="h-full w-auto" />
+            <EyeOff className="h-full w-auto" />
           )}
         </Button>
       </div>

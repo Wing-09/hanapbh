@@ -10,7 +10,6 @@ export async function middleware(request: NextRequest) {
   try {
     const token = await getToken({ req: request });
 
-    console.log(pathname.startsWith("/hosting") && !token);
     if (pathname.startsWith("/hosting") && !token) {
       NextResponse.json({ message: "user unauthenticated" }, { status: 401 });
       return NextResponse.redirect(
