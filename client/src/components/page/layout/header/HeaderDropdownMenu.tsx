@@ -21,7 +21,7 @@ export default function HeaderDropdownMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="rounded-full cursor-pointer">
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-9 w-9">
           <AvatarImage src={data?.user.photo?.url} />
           <AvatarFallback className="p-2">
             {status === "authenticated" ? (

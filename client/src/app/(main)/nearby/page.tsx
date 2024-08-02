@@ -32,7 +32,6 @@ export default function Page() {
           page,
           max_distance,
         });
-        console.log(data);
         setLodgings((data as NearbyLodgingResponse).result);
         setLoading(false);
       } catch (error) {
@@ -44,10 +43,10 @@ export default function Page() {
   }, [lat, lng, page, max_distance]);
 
   return (
-    <main className="grid grid-rows-[auto_1fr] px-[10vw] py-[5dvh] space-y-10">
+    <main className="grid grid-rows-[auto_1fr] sm:px-[10vw] py-[5dvh] space-y-10">
       <Input />
       <UserLocation>
-        <section className="grid grid-cols-4">
+        <section className="grid grid-cols-1 sm:grid-cols-4">
           {loading ? (
             <LodgingCardsSkeleton />
           ) : (

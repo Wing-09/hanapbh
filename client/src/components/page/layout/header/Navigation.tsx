@@ -37,7 +37,7 @@ export default function Navigation() {
           </Link>
         ))}
       </nav>
-      <nav className="flex sm:hidden w-full justify-evenly shadow-sm space-x-5">
+      <nav className="flex sm:hidden w-full justify-evenly shadow-sm space-x-5 px-1">
         {items.map((item) => (
           <Link
             href={item.link}
@@ -46,7 +46,7 @@ export default function Navigation() {
             className={cn(
               "grow flex justify-center py-1 stroke-[5px]",
               pathname.startsWith(item.link)
-                ? "text-primary  border-b-2 border-primary"
+                ? "text-primary  border-b-4 border-primary"
                 : "text-muted-foreground"
             )}
           >
