@@ -3,8 +3,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useToast } from "../ui/use-toast";
-import NoLocationSVG from "../svg/NoLocationSVG";
 import useHTTPRequest from "../hooks/useHTTPRequest";
+import { MapPinOff, MapPinX, MapPinXInside } from "lucide-react";
 
 export default function UserLocation({
   children,
@@ -71,7 +71,7 @@ export default function UserLocation({
   if (location === "off")
     return (
       <main className="my-auto grid place-content-center space-y-5">
-        <NoLocationSVG className="h-auto w-[5vw] stroke-2 stroke-white mx-auto fill-muted-foreground" />
+        <MapPinOff className="h-auto w-[5vw] stroke-2 stroke-white mx-auto fill-muted-foreground" />
         <span className="text-lg text-muted-foreground text-center">
           <p>Location access is denied</p>
           <p>
@@ -83,7 +83,7 @@ export default function UserLocation({
   if (location === "none")
     return (
       <main className="my-auto grid place-content-center space-y-5">
-        <NoLocationSVG className="h-auto w-[5vw] stroke-2 stroke-white mx-auto fill-muted-foreground" />
+        <MapPinXInside className="h-auto w-[5vw] stroke-2 stroke-white mx-auto fill-muted-foreground" />
         <p className="text-center text-lg text-muted-foreground">
           Location detector is not supported in your browser no data will be
           displayed
@@ -94,7 +94,7 @@ export default function UserLocation({
   if (out_of_bound)
     return (
       <main className="my-auto grid place-content-center space-y-5">
-        <NoLocationSVG className="h-auto w-[5vw] stroke-2 stroke-white mx-auto fill-muted-foreground" />
+        <MapPinX className="h-auto w-[5vw] stroke-2 stroke-white mx-auto fill-muted-foreground" />
         <span className="text-center text-lg text-muted-foreground">
           <p>
             Looks like your trying to access the app outside the Philippines.

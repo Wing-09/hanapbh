@@ -24,7 +24,7 @@ export default function Header() {
         </div>
         <Navigation />
       </span>
-      <span className="hidden sm:flex grow px-8 py-1">
+      <span className="hidden sm:flex grow px-8 py-1 items-center">
         <Link href="/" as="/" prefetch className="flex space-x-5 items-center">
           <HanapBHLogo className="h-6 w-auto fill-primary" />
           <h1 className="text-xl font-bold italic">Hanap BH</h1>

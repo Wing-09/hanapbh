@@ -1,7 +1,9 @@
 import { Lodging } from "@/lib/types/data-type";
-import { MapPinIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
+import { MapPin } from "lucide-react";
 import Image from "next/image";
+
+
 export default function LodgingCard({ lodging }: { lodging: Lodging }) {
   const places_api_key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
   if (!places_api_key)
@@ -50,7 +52,7 @@ export default function LodgingCard({ lodging }: { lodging: Lodging }) {
         </span>
         <div className="text-sm font-semibold">
           <span className="flex items-center space-x-1">
-            <MapPinIcon className="h-4" />
+            <MapPin className="h-4" />
             <p>{lodging.distance.toFixed(2)} KM</p>
           </span>
           <span>{}</span>

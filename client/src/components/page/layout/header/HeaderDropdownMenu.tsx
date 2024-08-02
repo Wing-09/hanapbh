@@ -7,15 +7,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ArrowRightEndOnRectangleIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+
 import Link from "next/link";
 import { ThemeToggler } from "./ThemeToggler";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { LogOut, UserRound } from "lucide-react";
 
 export default function HeaderDropdownMenu() {
   const { status, data } = useSession();
@@ -29,7 +27,7 @@ export default function HeaderDropdownMenu() {
             {status === "authenticated" ? (
               data?.user.first_name.slice(0, 1).toUpperCase()
             ) : (
-              <UserIcon className="h-full stroke-primary" />
+              <UserRound className="h-full" />
             )}
           </AvatarFallback>
         </Avatar>
@@ -114,7 +112,7 @@ export default function HeaderDropdownMenu() {
                 className="py-2 cursor-pointer font-bold space-x-3 justify-center"
                 onClick={() => signOut()}
               >
-                <p>Logout</p> <ArrowRightEndOnRectangleIcon className="h-5" />
+                <p>Logout</p> <LogOut className="h-5" />
               </DropdownMenuItem>
             </>
           )}
