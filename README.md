@@ -77,7 +77,7 @@ create a **.env.local** file inside the client directory and paste the environme
 ```env
 GOOGLE_CLIENT_ID = 
 GOOGLE_CLIENT_SECRET = 
-GOOGLE_PLACES_API_KEY = 
+NEXT_PUBLIC_GOOGLE_PLACES_API_KEY = 
 
 
 NEXT_PUBLIC_SERVER = http://127.0.0.1:8000
