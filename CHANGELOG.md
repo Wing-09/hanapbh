@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/Wilfreno/hanapbh/compare/v1.1.0...v1.2.0) (2024-08-04)
+
+
+### Bug Fixes
+
+* **Dockerfile:** cannot read environment variable ([6816cec](https://github.com/Wilfreno/hanapbh/commit/6816cecc656d281fe326fc68580b71f185075f67))
+* use lucid-react instead of hero icons as icon library ([bda9cab](https://github.com/Wilfreno/hanapbh/commit/bda9cabdc2cc65180b19df3f7aca5a902918e3a2))
+
+
+### Features
+
+* add middleware protection for hosting ([a7813ce](https://github.com/Wilfreno/hanapbh/commit/a7813ceb083ab5dd09f1c3569569eb6bb3104707))
+* initialize dashboard ui ([8c64626](https://github.com/Wilfreno/hanapbh/commit/8c64626e2a6e4491fdcc4307dc20043128215cf0))
+
 # [1.1.0](https://github.com/Wilfreno/hanapbh/compare/v1.0.45...v1.1.0) (2024-08-04)
 
 
