@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## [1.0.45](https://github.com/Wilfreno/hanapbh/compare/v1.0.44...v1.0.45) (2024-07-31)
 
 
@@ -340,9 +339,6 @@
 * **Github Action:** set release.config to only run for the main branch ([70e492f](https://github.com/Wilfreno/hanapbh/commit/70e492f8dec691255ca342285f77d35aa0f64b12))
 
 # 1.0.0 (2024-07-28)
-=======
-# 1.0.0-github-action.1 (2024-07-28)
->>>>>>> 89204ad (chore(release):1.0.0-github-action.1 [skip ci])
 
 
 ### Bug Fixes

@@ -1,133 +1,141 @@
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import Photo, { PhotoType } from "../../database/model/Photo";
 import User, { UserType } from "../../database/model/User";
 import exclude from "../../lib/exclude";
-import JSONResponse from "../../lib/json-response";
 import { compare, hash } from "bcrypt";
-import { Router } from "express";
+import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
 
-const router = Router();
-
-router
+export default function user_v1_router(
+  fastify: FastifyInstance,
+  _: FastifyPluginOptions,
+  done: () => void
+) {
   //create route
-  .post("/", async (request, response) => {
-    try {
-      const session = await startSession();
-      await session.startTransaction();
+  fastify.post<{ Body: UserType & { photo: PhotoType } }>(
+    "/",
+    async (request, reply) => {
+      try {
+        const session = await startSession();
+        session.startTransaction();
 
-      const user: UserType & { photo: PhotoType } = request.body;
+        const user = request.body;
 
-      const found_email = await User.findOne({ email: user.email });
+        const found_email = await User.findOne({ email: user.email });
 
-      if (found_email)
-        return response
-          .status(409)
-          .json(JSONResponse("CONFLICT", "email already used"));
+        if (found_email)
+          return reply
+            .code(409)
+            .send(JSONResponse("CONFLICT", "email already used"));
 
-      let password = "";
+        let password = "";
 
-      if (user.password) {
-        password = await hash(user.password, 14);
-      }
+        if (user.password) {
+          password = await hash(user.password, 14);
+        }
 
-      const new_user = new User<UserType>({
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        password: password ? password : null,
-        birthday: user.birthday ? user.birthday : undefined,
-        gender: user.gender
-          ? { type: user.gender.type, other: user.gender.other }
-          : undefined,
-        last_updated: new Date(),
-      });
+        const new_user = new User<UserType>({
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          password: password ? password : null,
+          birthday: user.birthday ? user.birthday : undefined,
+          gender: user.gender
+            ? { type: user.gender.type, other: user.gender.other }
+            : undefined,
+          last_updated: new Date(),
+        });
 
-      await new_user.save({ session });
+        await new_user.save({ session });
 
-      const new_photo = new Photo<PhotoType>({
-        user: new_user._id!,
-        url: user.photo.url,
-        height: user.photo.height,
-        width: user.photo.width,
-        last_updated: new Date(),
-        type: "PROFILE",
-      });
+        const new_photo = new Photo<PhotoType>({
+          user: new_user._id!,
+          url: user.photo.url,
+          height: user.photo.height,
+          width: user.photo.width,
+          last_updated: new Date(),
+          type: "PROFILE",
+        });
 
-      await new_photo.save({ session });
-      new_user.photo = new_photo._id;
-      await new_user.save({ session });
+        await new_photo.save({ session });
+        new_user.photo = new_photo._id;
+        await new_user.save({ session });
 
-      await session.commitTransaction();
-      await session.endSession();
+        await session.commitTransaction();
+        await session.endSession();
 
-      return response
-        .status(201)
-        .json(
-          JSONResponse(
-            "CREATED",
-            " new user created",
-            exclude(new_user.toJSON(), ["password"])
-          )
-        );
-    } catch (error) {
-      console.error(error);
-      return response
-        .status(500)
-        .json(
-          JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
-        );
-    }
-  })
-  .post("/authenticate", async (request, response) => {
-    try {
-      const { email, password }: Record<string, string> = request.body;
-
-      const found_user = await User.findOne({
-        email: {
-          $regex: "^" + email.toLowerCase(),
-        },
-      }).populate("photo");
-
-      if (!found_user)
-        return response
-          .status(404)
-          .json(JSONResponse("NOT_FOUND", "user does not exist"));
-
-      if (!found_user.password)
-        return response
-          .status(403)
-          .json(
+        return reply
+          .code(201)
+          .send(
             JSONResponse(
-              "FORBIDDEN",
-              "you can only login in with the account using google authentication"
+              "CREATED",
+              " new user created",
+              exclude(new_user.toJSON(), ["password"])
             )
           );
-
-      if (!(await compare(password, found_user.password!)))
-        return response
-          .status(401)
-          .json(JSONResponse("UNAUTHORIZED", "incorrect password"));
-
-      return response
-        .status(200)
-        .json(
-          JSONResponse(
-            "OK",
-            "user authenticated",
-            exclude(found_user.toJSON(), ["password"])
-          )
-        );
-    } catch (error) {
-      console.error(error);
-      return response
-        .status(500)
-        .json(
-          JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
-        );
+      } catch (error) {
+        fastify.log.error(error);
+        return reply
+          .code(500)
+          .send(
+            JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
+          );
+      }
     }
-  })
+  );
+  fastify.post<{ Body: Record<string, string> }>(
+    "/authenticate",
+    async (request, reply) => {
+      try {
+        const { email, password } = request.body;
+
+        const found_user = await User.findOne({
+          email: {
+            $regex: "^" + email.toLowerCase(),
+          },
+        }).populate("photo");
+
+        if (!found_user)
+          return reply
+            .code(404)
+            .send(JSONResponse("NOT_FOUND", "user does not exist"));
+
+        if (!found_user.password)
+          return reply
+            .code(403)
+            .send(
+              JSONResponse(
+                "FORBIDDEN",
+                "you can only login in with the account using google authentication"
+              )
+            );
+
+        if (!(await compare(password, found_user.password!)))
+          return reply
+            .code(401)
+            .send(JSONResponse("UNAUTHORIZED", "incorrect password"));
+
+        return reply
+          .code(200)
+          .send(
+            JSONResponse(
+              "OK",
+              "user authenticated",
+              exclude(found_user.toJSON(), ["password"])
+            )
+          );
+      } catch (error) {
+        fastify.log.error(error);
+        return reply
+          .code(500)
+          .send(
+            JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
+          );
+      }
+    }
+  );
   //read route
-  .get("/:id", async (request, response) => {
+  fastify.get<{ Params: { id: string } }>("/:id", async (request, reply) => {
     try {
       const user_id = request.params.id;
 
@@ -136,13 +144,13 @@ router
         .populate("photo");
 
       if (!found_user)
-        return response
-          .status(404)
-          .json(JSONResponse("NOT_FOUND", "user does not exist"));
+        return reply
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "user does not exist"));
 
-      return response
-        .status(200)
-        .json(
+      return reply
+        .code(200)
+        .send(
           JSONResponse(
             "OK",
             "request successful",
@@ -150,57 +158,60 @@ router
           )
         );
     } catch (error) {
-      console.error(error);
-      return response
-        .status(500)
-        .json(
+      fastify.log.error(error);
+      return reply
+        .code(500)
+        .send(
           JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
         );
     }
-  })
-  .get("/email/:email", async (request, response) => {
-    try {
-      const user_email = request.params.email;
+  });
+  fastify.get<{ Params: { email: string } }>(
+    "/email/:email",
+    async (request, reply) => {
+      try {
+        const user_email = request.params.email;
 
-      const found_user = await User.findOne({
-        email: user_email.toLowerCase(),
-      })
-        .select("-password")
-        .populate("photo");
+        const found_user = await User.findOne({
+          email: user_email.toLowerCase(),
+        })
+          .select("-password")
+          .populate("photo");
 
-      if (!found_user)
-        return response
-          .status(404)
-          .json(JSONResponse("NOT_FOUND", "user not found"));
+        if (!found_user)
+          return reply
+            .code(404)
+            .send(JSONResponse("NOT_FOUND", "user not found"));
 
-      return response
-        .status(200)
-        .json(
-          JSONResponse(
-            "OK",
-            "request successful",
-            exclude(found_user.toJSON(), ["password"])
-          )
-        );
-    } catch (error) {
-      console.error(error);
-      return response
-        .status(500)
-        .json(
-          JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
-        );
+        return reply
+          .code(200)
+          .send(
+            JSONResponse(
+              "OK",
+              "request successful",
+              exclude(found_user.toJSON(), ["password"])
+            )
+          );
+      } catch (error) {
+        fastify.log.error(error);
+        return reply
+          .code(500)
+          .send(
+            JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
+          );
+      }
     }
-  })
+  );
   //update route
   //delete route
-  .delete("/", async (request, response) => {
+  fastify.delete<{ Body: { id: string } }>("/", async (request, reply) => {
     try {
       const { id } = request.body;
 
       if (!id)
-        return response
-          .status(400)
-          .json(
+        return reply
+          .code(400)
+          .send(
             JSONResponse(
               "BAD_REQUEST",
               "id field is required on the request body"
@@ -210,22 +221,21 @@ router
       const found_user = await User.findOne({ _id: id });
 
       if (!found_user)
-        return response
-          .status(404)
-          .json(JSONResponse("NOT_FOUND", "user not found"));
+        return reply
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "user not found"));
 
       await User.deleteOne({ _id: id });
 
-      return response.status(200).json(JSONResponse("OK", "user deleted"));
+      return reply.code(200).send(JSONResponse("OK", "user deleted"));
     } catch (error) {
-      console.error(error);
-      return response
-        .status(500)
-        .json(
+      fastify.log.error(error);
+      return reply
+        .code(500)
+        .send(
           JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
         );
     }
   });
-const user_v1_router = router;
-
-export default user_v1_router;
+  done();
+}

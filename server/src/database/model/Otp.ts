@@ -1,22 +1,25 @@
 import { Model, model, Schema } from "mongoose";
 
-const otpSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  pin: {
-    type: String,
-    required: true,
-  },
-  date_created: {
-    type: Date,
+const otpSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    pin: {
+      type: String,
+      required: true,
+    },
+    date_created: {
+      type: Date,
 
-    default: Date.now,
+      default: Date.now,
+    },
   },
-}, {versionKey: false});
+  { versionKey: false }
+);
 
-const OTP = model("OTP", otpSchema);
+const Otp = model("OTP", otpSchema);
 
-export type OTPType = typeof OTP extends Model<infer D, any, any> ? D : never;
-export default OTP;
+export type OTPType = typeof Otp extends Model<infer D, any, any> ? D : never;
+export default Otp;

@@ -24,6 +24,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@fastify/cors": "^9.0.1",
     "@react-email/components": "^0.0.22",
     "@react-email/render": "^0.0.17",
     "@react-email/tailwind": "^0.0.19",
@@ -33,6 +34,7 @@
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "express": "^4.19.2",
+    "fastify": "^4.28.1",
     "mongoose": "^8.5.0",
     "nodemailer": "^6.9.14",
     "react": "^18.3.1"
