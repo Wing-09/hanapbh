@@ -8,16 +8,14 @@ import JSONResponse from "../../lib/json-response";
 import databaseNearbyLodgings from "./lodging/database-nearby-lodging-query";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
-const router = Router();
-const places_api_key = process.env.GOOGLE_PLACES_API_KEY;
-if (!places_api_key)
-  throw new Error("GOOGLE_PLACES_API_KEY is missing from your .env file");
-
 export default function lodging_v1_router(
   fastify: FastifyInstance,
   _: FastifyPluginOptions,
   done: () => void
 ) {
+  const places_api_key = process.env.GOOGLE_PLACES_API_KEY;
+  if (!places_api_key)
+    throw new Error("GOOGLE_PLACES_API_KEY is missing from your .env file");
   fastify.get<{ Querystring: Record<string, string> }>(
     "/nearby",
     async (request, reply) => {
@@ -156,10 +154,3 @@ export default function lodging_v1_router(
 
   done();
 }
-
-router;
-
-//create route
-//read route
-//update route
-//delete route

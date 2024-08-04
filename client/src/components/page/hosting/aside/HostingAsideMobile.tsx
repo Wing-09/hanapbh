@@ -5,7 +5,6 @@ import {
   Package,
   Package2,
   PanelLeft,
-  Search,
   ShoppingCart,
   Users2,
 } from "lucide-react";

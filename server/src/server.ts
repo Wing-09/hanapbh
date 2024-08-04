@@ -12,7 +12,7 @@ const log_file_path = path.join(__dirname, "production.log");
 const log_stream = fs.createWriteStream(log_file_path, { flags: "a" });
 
 const fastify = Fastify({
-  logger: process.env.NODE_ENV === "production" ? { stream: log_stream } : true,
+  logger: true,
 });
 
 //middleware
@@ -29,11 +29,9 @@ fastify.get("/ready", async (_, response) => {
 });
 
 // ensure to connect to the database before the server run
-mongoDBConnection(fastify)
-  .then(() =>
-    fastify.listen({ port: 8000 }).catch((error) => {
-      fastify.log.error(error);
-      process.exit(1);
-    })
-  )
-  .catch((error) => fastify.log.fatal(error));
+fastify.register(mongoDBConnection).then(() =>
+  fastify.listen({ port: 8000 }).catch((error) => {
+    fastify.log.error(error);
+    process.exit(1);
+  })
+);
