@@ -2,7 +2,7 @@
 import Header from "@/components/page/layout/header/Header";
 import UserLocation from "@/components/page/UserLocation";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function Layout({
   children,
@@ -14,12 +14,12 @@ export default function Layout({
   const pathname = usePathname();
 
   return (
-    <>
+    <Suspense>
       <Header />
       {pathname.startsWith("/login") || pathname.startsWith("/sign-up")
         ? auth
         : null}
       {children}
-    </>
+    </Suspense>
   );
 }
