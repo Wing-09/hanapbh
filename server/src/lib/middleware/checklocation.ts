@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import JSONResponse from "../json-response";
+import Fastify, { FastifyReply, FastifyRequest } from "fastify";
 
 type GoogleGeocodeAPIResponse = {
   results: [
@@ -9,10 +9,13 @@ type GoogleGeocodeAPIResponse = {
   ];
 };
 
+const fastify = Fastify();
+
 export default async function checkLocation(
-  request: Request,
-  response: Response,
-  next: NextFunction
+  request: FastifyRequest<{
+    Querystring: { longitude: string; latitude: string };
+  }>,
+  reply: FastifyReply
 ) {
   const geocode_api_key = process.env.GOOGLE_GEOCODE_API_KEY;
   if (!geocode_api_key)
@@ -22,9 +25,9 @@ export default async function checkLocation(
     const { longitude, latitude } = request.query;
 
     if (!longitude || !latitude)
-      return response
-        .status(400)
-        .json(
+      return reply
+        .code(400)
+        .send(
           JSONResponse(
             "BAD_REQUEST",
             "latitude and latitude is required as a query parameter"
@@ -41,18 +44,16 @@ export default async function checkLocation(
       geolocation_response_json.results[0].formatted_address.toLocaleLowerCase() !==
       "philippines"
     )
-      return response
-        .status(403)
-        .json(
+      return reply
+        .code(403)
+        .send(
           JSONResponse(
             "FORBIDDEN",
             "the server only accepts request from the philippines"
           )
         );
-
-    next();
   } catch (error) {
-    console.error(error);
-    return response.status(500).json(JSONResponse("INTERNAL_SERVER_ERROR"));
+    fastify.log.error(error);
+    return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
   }
 }

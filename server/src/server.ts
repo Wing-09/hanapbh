@@ -1,28 +1,39 @@
-import express from "express";
-import cors from "cors";
 import JSONResponse from "./lib/json-response";
 import mongoDBConnection from "./database/connection";
 import v1_router from "./routes/v1/v1";
+import Fastify from "fastify";
+import cors from "@fastify/cors";
+import "dotenv/config";
+import path from "path";
+import fs from "fs";
 
-const app = express();
+const log_file_path = path.join(__dirname, "production.log");
 
-//middleware
-app.use(express.json());
-app.use(cors());
+const log_stream = fs.createWriteStream(log_file_path, { flags: "a" });
 
-//routes
-app.use("/v1", v1_router);
-app.get("/ready", (_, response) => {
-  return response.status(200).json(JSONResponse("OK", "server running"));
+const fastify = Fastify({
+  logger: process.env.NODE_ENV === "production" ? { stream: log_stream } : true,
 });
 
-//ensuring to connect on the database before listening
-mongoDBConnection()
+//middleware
+fastify.register(cors, {
+  origin:
+    process.env.NODE_ENV === "production" ? "https://hanapbh.vercel.app/" : "*",
+  methods: ["POST", "GET", "PATCH", "DELETE"],
+});
+
+//routes
+fastify.register(v1_router, { prefix: "/v1" });
+fastify.get("/ready", async (_, response) => {
+  return response.code(200).send(JSONResponse("OK", "server running"));
+});
+
+// ensure to connect to the database before the server run
+mongoDBConnection(fastify)
   .then(() =>
-    app.listen(8000, () =>
-      console.log(`server running in ${process.env.NODE_ENV} mode ...`)
-    )
+    fastify.listen({ port: 8000 }).catch((error) => {
+      fastify.log.error(error);
+      process.exit(1);
+    })
   )
-  .catch((error) => {
-    throw error;
-  });
+  .catch((error) => fastify.log.fatal(error));

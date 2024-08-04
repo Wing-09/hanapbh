@@ -1,6 +1,5 @@
 "use client";
 import useHTTPRequest from "@/components/hooks/useHTTPRequest";
-import LoadingSvg from "@/components/svg/LoadingSvg";
 import UserLocation from "@/components/page/UserLocation";
 import { Lodging } from "@/lib/types/data-type";
 import { useSearchParams } from "next/navigation";
