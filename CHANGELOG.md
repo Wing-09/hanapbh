@@ -1,4 +1,18 @@
-<<<<<<< HEAD
+# [1.1.0](https://github.com/Wilfreno/hanapbh/compare/v1.0.45...v1.1.0) (2024-08-04)
+
+
+### Bug Fixes
+
+* Delete unwanted workflows ([27127a6](https://github.com/Wilfreno/hanapbh/commit/27127a659f742dc8460aec864bd63c94d6192c09))
+* **nearby -page:** linting error want to have Capital letters for component name ([821375a](https://github.com/Wilfreno/hanapbh/commit/821375a69f7486b401e33dab509856f8f57c5c0e))
+* project secrets ([f51f3d4](https://github.com/Wilfreno/hanapbh/commit/f51f3d487bba3cdb2c5b5732964b1330e13899b4))
+* **semantic release:** config merge conflict ([82f4dfd](https://github.com/Wilfreno/hanapbh/commit/82f4dfdb46528d69cb13547bd6d6c0f0b8d2f370))
+
+
+### Features
+
+*  migrate from express.js to fastify ([d11201b](https://github.com/Wilfreno/hanapbh/commit/d11201be28c663db251f8cc8a46833dc486194d6))
+
 ## [1.0.45](https://github.com/Wilfreno/hanapbh/compare/v1.0.44...v1.0.45) (2024-07-31)
 
 
@@ -340,9 +354,6 @@
 * **Github Action:** set release.config to only run for the main branch ([70e492f](https://github.com/Wilfreno/hanapbh/commit/70e492f8dec691255ca342285f77d35aa0f64b12))
 
 # 1.0.0 (2024-07-28)
-=======
-# 1.0.0-github-action.1 (2024-07-28)
->>>>>>> 89204ad (chore(release):1.0.0-github-action.1 [skip ci])
 
 
 ### Bug Fixes

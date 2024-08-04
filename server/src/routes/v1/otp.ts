@@ -3,24 +3,28 @@ import "dotenv/config";
 import { createTransport } from "nodemailer";
 import { render } from "@react-email/components";
 import JSONResponse from "../../lib/json-response";
-import OTP from "../../database/model/Otp";
+import Otp from "../../database/model/Otp";
 import OTPEmail from "../../lib/email/OTPEmail";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 const router = Router();
 const gmail_password = process.env.GMAIL_2F_AUTH_APP_PASS;
 if (!gmail_password)
   throw new Error("GMAIL_2F_AUTH_APP_PASS is missing from your .env file");
 
-router
-  // create router
-  .post("/", async (request, response) => {
+export default function otp_v1_router(
+  fastify: FastifyInstance,
+  _: FastifyPluginOptions,
+  done: () => void
+) {
+  fastify.post<{ Body: { email: string } }>("/", async (request, reply) => {
     try {
       const { email } = request.body;
 
       if (!email)
-        return response
-          .status(400)
-          .json(
+        return reply
+          .code(400)
+          .send(
             JSONResponse(
               "BAD_REQUEST",
               "email field is required on the request body"
@@ -38,9 +42,9 @@ router
       const verify = await transport.verify();
 
       if (!verify)
-        response
-          .status(500)
-          .json(
+        reply
+          .code(500)
+          .send(
             JSONResponse(
               "INTERNAL_SERVER_ERROR",
               "email transport verify failed"
@@ -54,7 +58,7 @@ router
         random_string += chars[Math.floor(Math.random() * chars.length)];
       }
 
-      const otp = new OTP({
+      const otp = new Otp({
         email: email,
         pin: random_string.toUpperCase(),
       });
@@ -76,53 +80,57 @@ router
         },
         (error) => {
           if (error)
-            return response
-              .status(500)
-              .json(JSONResponse("INTERNAL_SERVER_ERROR"));
+            return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
         }
       );
 
-      return response
-        .status(201)
-        .json(JSONResponse("CREATED", "OTP verification code is sent"));
+      return reply
+        .code(201)
+        .send(JSONResponse("CREATED", "OTP verification code is sent"));
     } catch (error) {
       console.error(error);
-      return response.status(500).json(JSONResponse("INTERNAL_SERVER_ERROR"));
-    }
-  })
-  .post("/authenticate", async (request, response) => {
-    try {
-      const { otp, email } = request.body;
-      if (!otp || !email)
-        return response
-          .status(400)
-          .json(
-            JSONResponse(
-              "BAD_REQUEST",
-              "otp and email field is required on the request body"
-            )
-          );
-
-      const found_otp = await OTP.findOne({ email, pin: otp });
-
-      if (!found_otp)
-        return response
-          .status(401)
-          .json(JSONResponse("UNAUTHORIZED", "otp is incorrect"));
-
-      await OTP.deleteMany({ email });
-      return response.status(200).json(JSONResponse("OK", "otp verified"));
-    } catch (error) {
-      console.error(error);
-      return response.status(500).json(JSONResponse("INTERNAL_SERVER_ERROR"));
+      return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
     }
   });
+
+  fastify.post<{ Body: { otp: string; email: string } }>(
+    "/authenticate",
+    async (request, reply) => {
+      try {
+        const { otp, email } = request.body;
+        if (!otp || !email)
+          return reply
+            .code(400)
+            .send(
+              JSONResponse(
+                "BAD_REQUEST",
+                "otp and email field is required on the request body"
+              )
+            );
+
+        const found_otp = await Otp.findOne({ email, pin: otp });
+
+        if (!found_otp)
+          return reply
+            .code(401)
+            .send(JSONResponse("UNAUTHORIZED", "otp is incorrect"));
+
+        await Otp.deleteMany({ email });
+        return reply.code(200).send(JSONResponse("OK", "otp verified"));
+      } catch (error) {
+        console.error(error);
+        return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+      }
+    }
+  );
+
+  done();
+}
+
+router;
+// create router
 
 // read router
 
 // update router
 // delete router
-
-const otp_v1_router = router;
-
-export default otp_v1_router;

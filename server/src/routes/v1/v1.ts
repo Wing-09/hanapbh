@@ -1,13 +1,15 @@
-import { Router } from "express";
 import user_v1_router from "./user";
 import otp_v1_router from "./otp";
 import lodging_v1_router from "./lodging";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
-const router = Router();
-
-router.use("/user", user_v1_router);
-router.use("/otp", otp_v1_router);
-router.use("/lodging", lodging_v1_router);
-const v1_router = router;
-
-export default v1_router;
+export default function v1_router(
+  fastify: FastifyInstance,
+  _: FastifyPluginOptions,
+  done: () => void
+) {
+  fastify.register(user_v1_router, { prefix: "/user" });
+  fastify.register(otp_v1_router, { prefix: "/otp" });
+  fastify.register(lodging_v1_router, { prefix: "/lodging" });
+  done();
+}
