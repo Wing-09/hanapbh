@@ -1,11 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  GlobeAltIcon,
-  ListBulletIcon,
-  MapIcon,
-} from "@heroicons/react/24/outline";
+import { Globe, Map, MapPinned } from "lucide-react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,10 +12,10 @@ export default function Navigation() {
     {
       name: "Nearby",
       link: "/nearby",
-      icon: <ListBulletIcon className="h-6" />,
+      icon: <MapPinned className="h-6" />,
     },
-    { name: "Browse", link: "/browse", icon: <GlobeAltIcon className="h-6" /> },
-    { name: "Map", link: "/map", icon: <MapIcon className="h-6" /> },
+    { name: "Browse", link: "/browse", icon: <Globe className="h-6" /> },
+    { name: "Map", link: "/map", icon: <Map className="h-6" /> },
   ];
 
   return (
@@ -40,7 +37,7 @@ export default function Navigation() {
           </Link>
         ))}
       </nav>
-      <nav className="flex sm:hidden w-full justify-evenly shadow-sm space-x-5">
+      <nav className="flex sm:hidden w-full justify-evenly shadow-sm space-x-5 px-1">
         {items.map((item) => (
           <Link
             href={item.link}
@@ -49,7 +46,7 @@ export default function Navigation() {
             className={cn(
               "grow flex justify-center py-1 stroke-[5px]",
               pathname.startsWith(item.link)
-                ? "text-primary  border-b-2 border-primary"
+                ? "text-primary  border-b-4 border-primary"
                 : "text-muted-foreground"
             )}
           >

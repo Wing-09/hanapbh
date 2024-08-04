@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,7 +20,7 @@ import SignUPGender from "./SignUpGender";
 import SignUpOTP from "./SignUpOtp";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { X } from "lucide-react";
 
 export default function SignUp() {
   const [form_data, setFormData] = useState<Omit<User, "id">>({
@@ -50,7 +49,7 @@ export default function SignUp() {
         <div className="relative">
           <DialogClose className="absolute top-2 right-3 z-10" asChild>
             <Button variant="ghost" className="h-fit w-auto p-1 rounded-full">
-              <XMarkIcon className="h-5" />
+              <X className="h-5" />
             </Button>
           </DialogClose>
           <ScrollArea className="h-[90dvh]">
