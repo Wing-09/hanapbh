@@ -74,14 +74,15 @@ export default function lodging_v1_router(
         }
         if (google_next_page_token) {
           places_api_response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/send?key=${places_api_key}&token=${google_next_page_token}`
+            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&token=${google_next_page_token}`
           );
         } else {
           places_api_response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/send?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&radius=${max_distance}`
+            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&radius=${max_distance}`
           );
         }
 
+        console.log(places_api_response);
         const places_api_response_json =
           (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
 
@@ -146,7 +147,7 @@ export default function lodging_v1_router(
           })
         );
       } catch (error) {
-        console.error(error);
+        fastify.log.error(error);
         return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
       }
     }
