@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/Wilfreno/hanapbh/compare/v1.2.2...v1.2.3) (2024-08-05)
+
+
+### Bug Fixes
+
+* **Dockerfile:** building image without build args ([c6cb6f6](https://github.com/Wilfreno/hanapbh/commit/c6cb6f6f321729b4dde1b60a618f55eb26795032))
+
 ## [1.2.2](https://github.com/Wilfreno/hanapbh/compare/v1.2.1...v1.2.2) (2024-08-05)
 
 
