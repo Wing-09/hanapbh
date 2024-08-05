@@ -69,7 +69,7 @@ export default function user_v1_router(
           .send(
             JSONResponse(
               "CREATED",
-              " new user created",
+              "new user created",
               exclude(new_user.toJSON(), ["password"])
             )
           );
