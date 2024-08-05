@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/Wilfreno/hanapbh/compare/v1.2.0...v1.2.1) (2024-08-05)
+
+
+### Bug Fixes
+
+* Next.js build  requires to put suspense on every page using searchParams hook ([c83acbf](https://github.com/Wilfreno/hanapbh/commit/c83acbf571eb4ef357e442c7efbbda6dfa7e2ada))
+
 # [1.2.0](https://github.com/Wilfreno/hanapbh/compare/v1.1.0...v1.2.0) (2024-08-04)
 
 
