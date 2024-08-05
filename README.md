@@ -11,6 +11,24 @@
 
 <p align="center" >A complete Full-Stack Web Application that help filipinos locate the nearest lodgings on their vicinity </p>
 
+# Content
+
+- [The Motivation](#the-motivation)
+- [Website](#website)
+- [Features](#features)
+- [Technologies used](#technologies-used)
+- [Run the app locally](#run-the-app-locally)
+    - [Configure Client](#configure-client)
+        - [Clone the repository](#clone-the-github-repository)
+        - [Give the client environment variables](#give-the-client-environment-variables)
+           - [GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET](#google_client_id-and-google_client_secret)
+           - [GOOGLE_PLACES_API_KEY](#google_places_api_key)
+           - [NEXTAUTH_SECRET](#nextauth_secret)
+    - [Configure Server](#configure-server)
+    - [Give the server environment variables](#give-the-server-environment-variables)
+        - [GOOGLE_PLACES_API_KEY](#google_places_api_key-1)
+        - [GOOGLE_GEOCODE_API_KEY](#google_geocode_api_key)
+        - [MONGODB_URI](#mongodb_uri)
 # The Motivation
 
 <p>In the Philippines it is common for students to enroll to a School / University / College far away from home to get a better quality of education. As a result, it is a struggle for students to find a decent home for them to rest. With <b>Hanap-BH</b> finding the right lodging for them is a breeze.<p/>
@@ -32,33 +50,30 @@
 - [React-google-maps](https://github.com/visgl/react-google-maps)
 - [Tailwind-css](https://tailwindcss.com/)
 - [Mongoose.js](https://mongoosejs.com/)
-- [Express.js](https://expressjs.com/)
+- [Fastify](https://fastify.dev/)
 
 # Run the App Locally
-
-you can run the app locally by [cloning](#clone-the-repository) or with [docker compose](#run-with-docker-compose)
-
-## Clone the Repository
 
 :warning: **Disclaimer** The application is using [GOOGLE Places API](https://developers.google.com/maps/documentation/places/web-service) and [GOOGLE Maps API](https://developers.google.com/maps/documentation/javascript). Running the application locally by only cloning the repository requires a [GOOGLE CLOUD](https://console.cloud.google.com/welcome/new) account
 with [BILLING](https://console.cloud.google.com/billing) enabled. It is recommended to [run the app locally with docker compose](#with-docker-compose)
 
-- Clone the github [repository](https://github.com/Wilfreno/hanapbh)
+### Clone the github [repository](https://github.com/Wilfreno/hanapbh)
 
 ```bash 
 git clone https://github.com/Wilfreno/hanapbh.git
 ```
-- go to the project root directory
+### Configure Client
+
+- Go to the project root directory
 ```bash
 cd ./hanapbh
 ```
-### Configure Client
 
-- go to the client directory
+-  Go to the client directory
 ```bash
 cd ./client
 ```
-- install dependencies
+-  Install dependencies
 
 :warning: The project is using pnpm as a package manager to use pnpm you have tp install it via npm
 ```bash
@@ -68,9 +83,9 @@ npm install pnpm -g
 pnpm install
 ```
 
-- Give the client environment variables 
+#### Give the client environment variables 
 
-create a **.env.local** file inside the client directory and paste the environment variables
+Create a **.env.local** file inside the client directory and paste the environment variables
 
 **./client/.env.local**
 
@@ -88,10 +103,12 @@ NEXTAUTH_SECRET =
 NEXTAUTH_URL = http://127.0.0.1:3000
 ```
 
-**GOOGLE_CLIENT_ID** and **GOOGLE_CLIENT_SECRET** is required for [auth.js](https://authjs.dev/) to work with GOOGLE OAUTH.
+#### GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET 
+
+Is required for [auth.js](https://authjs.dev/) to work with GOOGLE OAUTH.
 to get them you can read the [auth.js with google provider document](https://authjs.dev/getting-started/providers/google) or follow the steps:
 
-- got to the [credentials page](https://console.cloud.google.com/apis/credentials) on GOOGLE Cloud Console's APIs & Services
+Got to the [credentials page](https://console.cloud.google.com/apis/credentials) on GOOGLE Cloud Console's APIs & Services
 - click **Create Credentials** and choose **OAuth Client ID** 
 
 If this is your first time using google OAUTH you might have to create [OAuth Consent Screen](https://console.cloud.google.com/apis/credentials/consent), fill out the required information and select **External**
@@ -118,13 +135,18 @@ http://127.0.0.1:3000/api/auth/callback/google
 - click **create**
 - copy the provided **CLIENT ID** and **CLIENT SECRET**
 
-**GOOGLE_PLACES_API_KEY** is required to display nearby lodgings, to create one: 
+#### GOOGLE_PLACES_API_KEY 
+
+Is required to display nearby lodgings, to create one: 
 
 - got to the [credentials page](https://console.cloud.google.com/apis/credentials) on GOOGLE Cloud Console's APIs & Services
 - click **Create Credentials** and choose **API KEY** 
 - and copy the provided key
 
-**NEXTAUTH_SECRET** is a string to be used as the has key for JSON Web Token(JWT) to have a random generated string you can run:
+#### NEXTAUTH_SECRET
+
+
+Is a string to be used as the has key for JSON Web Token(JWT) to have a random generated string you can run:
 
 ```bash 
 node
@@ -141,22 +163,22 @@ pnpm start
 ```
 ### Configure Server
 
-- go back to the root directory
+- Go back to the root directory
 ```bash 
 cd ..
 ```
 
-- navigate to server directory
+- Navigate to server directory
 ```bash
 cd ./server
 ```
 
-- install dependencies 
+- Install dependencies 
 ```bash
 pnpm install
 ```
 
-- give the server environment variables
+#### Give the server environment variables
 
 create a **.env** file inside the server directory and paste the environment variables
 
@@ -167,13 +189,17 @@ GOOGLE_GEOCODE_API_KEY =
 MONGODB_URI = 
 GMAIL_2F_AUTH_APP_PASS = 
 ```
-**GOOGLE_PLACES_API_KEY** is required to display nearby lodgings, to create one: 
+#### GOOGLE_PLACES_API_KEY 
+
+Is required to display nearby lodgings, to create one: 
 
 - got to the [credentials page](https://console.cloud.google.com/apis/credentials) on GOOGLE Cloud Console's APIs & Services
 - click **Create Credentials** and choose **API KEY** 
 - and copy the provided key
 
-**GOOGLE_GEOCODE_API_KEY** is required to verify users location,
+#### GOOGLE_GEOCODE_API_KEY 
+
+Is required to verify users location,
 If you did not restrict the GOOGLE_PLACES_API_KEY you can reuse it. otherwise:
 
 - got to the [credentials page](https://console.cloud.google.com/apis/credentials) on GOOGLE Cloud Console's APIs & Services
@@ -182,46 +208,12 @@ If you did not restrict the GOOGLE_PLACES_API_KEY you can reuse it. otherwise:
 
 The server uses [mongodb](https://www.mongodb.com/) as the database system and [mongoose.js](https://mongoosejs.com/) as its Object Data Modeling (ODM) 
 
-the **MONGODB_URI** is the mongodb connection string, you can follow the mongodb [Get Your Free MongoDB Atlas Cluster!](https://www.youtube.com/watch?v=VkXvVOb99g0) youtube guide to get your own connection string 
+#### MONGODB_URI
+Is the mongodb connection string, you can follow the mongodb [Get Your Free MongoDB Atlas Cluster!](https://www.youtube.com/watch?v=VkXvVOb99g0) youtube guide to get your own connection string 
 
-- build and run server
+- Build and run server
+
 ```bash
 pnpm build
 pnpm start
-```
-
-## Run With Docker Compose
-
-This step would require for you to have a docker installed in your machine. the easiest way to install docker is to [ install docker desktop](https://docs.docker.com/desktop/install/windows-install/)
-
-- clone the repository
-```bash 
-git clone https://github.com/Wilfreno/hanapbh.git
-```
-
-Make sure docker engine is running by running Docker Desktop
-
-- navigate to the project root directory and run docker compose
-
-```bash
-cd ./hanapbh
-docker-compose up
-
-```
-:warning: Don't forget to close the running containers
-
-```bash
-docker-compose down
-```
-## Run Docker Image Individually
-
-### CLient Image
-```bash
-docker pull wing09/hanapbh-client:v1.0.45
-```
-
-### Server Image
-
-```bash
-docker pull wing09/hanapbh-server:v1.0.45
 ```
