@@ -16,7 +16,7 @@
 - [The Motivation](#the-motivation)
 - [Website](#website)
 - [Features](#features)
-- [Technologies used](#technologies-used)
+- [Technology used](#technologies-used)
 - [Run the app locally](#run-the-app-locally)
     - [Configure Client](#configure-client)
         - [Clone the repository](#clone-the-github-repository)
@@ -42,7 +42,7 @@
 - Utilizes the [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript) to have an interactive map to locate the nearest lodgings
 - Utilizes the [Google Places API](https://developers.google.com/maps/documentation/places/web-service/overview) to provide reliable data for the lodgings
 
-# Technologies Used
+# Technology Used
 
 - [Next.js](https://nextjs.org/)
 - [React.js](https://react.dev/)
