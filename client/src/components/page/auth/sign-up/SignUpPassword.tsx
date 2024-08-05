@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User } from "@/lib/types/data-type";
 import { cn } from "@/lib/utils";
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function SignUpPassword({
   form_data,
@@ -36,9 +36,9 @@ export default function SignUpPassword({
             onClick={() => setSeePassword((prev) => [!prev[0], prev[1]])}
           >
             {see_password[0] ? (
-              <EyeOpenIcon className="h-5 w-auto" />
+              <Eye className="h-5 w-auto" />
             ) : (
-              <EyeClosedIcon className="h-5 w-auto " />
+              <EyeOff className="h-5 w-auto " />
             )}
           </Button>
         </div>
@@ -73,9 +73,9 @@ export default function SignUpPassword({
           onClick={() => setSeePassword((prev) => [prev[0], !prev[1]])}
         >
           {see_password[1] ? (
-            <EyeOpenIcon className="h-5 w-auto" />
+            <Eye className="h-5 w-auto" />
           ) : (
-            <EyeClosedIcon className="h-5 w-auto " />
+            <EyeOff className="h-5 w-auto " />
           )}
         </Button>
       </div>

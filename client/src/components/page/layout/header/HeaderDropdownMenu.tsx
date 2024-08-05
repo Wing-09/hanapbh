@@ -7,14 +7,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ArrowRightEndOnRectangleIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+
 import Link from "next/link";
 import { ThemeToggler } from "./ThemeToggler";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { LogOut, UserRound } from "lucide-react";
 
 export default function HeaderDropdownMenu() {
   const { status, data } = useSession();
@@ -22,13 +21,13 @@ export default function HeaderDropdownMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="rounded-full cursor-pointer">
-        <Avatar>
+        <Avatar className="h-9 w-9">
           <AvatarImage src={data?.user.photo?.url} />
           <AvatarFallback className="p-2">
             {status === "authenticated" ? (
               data?.user.first_name.slice(0, 1).toUpperCase()
             ) : (
-              <UserIcon className="h-full stroke-primary" />
+              <UserRound className="h-full" />
             )}
           </AvatarFallback>
         </Avatar>
@@ -65,7 +64,7 @@ export default function HeaderDropdownMenu() {
             </>
           ) : (
             <>
-              <DropdownMenuItem className="py-0">
+              <DropdownMenuItem className="py-1">
                 <Link
                   className="py-1 w-full flex items-center space-x-5"
                   href="/sign-up"
@@ -85,8 +84,10 @@ export default function HeaderDropdownMenu() {
             </>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="py-0">
-            <Link className="py-3 w-full " href="#">
+          <DropdownMenuItem
+            className={cn("py-0", pathname.startsWith("/hosting") && "hidden")}
+          >
+            <Link className="py-3 w-full " href={"/hosting?exit=" + pathname}>
               Add your Place
             </Link>
           </DropdownMenuItem>
@@ -109,11 +110,9 @@ export default function HeaderDropdownMenu() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="py-2 cursor-pointer font-bold space-x-3 justify-center"
-                onClick={() =>
-                  signOut({ redirect: true, callbackUrl: pathname })
-                }
+                onClick={() => signOut()}
               >
-                <p>Logout</p> <ArrowRightEndOnRectangleIcon className="h-5" />
+                <p>Logout</p> <LogOut className="h-5" />
               </DropdownMenuItem>
             </>
           )}

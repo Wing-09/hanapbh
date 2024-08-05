@@ -1,3 +1,32 @@
+# [1.2.0](https://github.com/Wilfreno/hanapbh/compare/v1.1.0...v1.2.0) (2024-08-04)
+
+
+### Bug Fixes
+
+* **Dockerfile:** cannot read environment variable ([6816cec](https://github.com/Wilfreno/hanapbh/commit/6816cecc656d281fe326fc68580b71f185075f67))
+* use lucid-react instead of hero icons as icon library ([bda9cab](https://github.com/Wilfreno/hanapbh/commit/bda9cabdc2cc65180b19df3f7aca5a902918e3a2))
+
+
+### Features
+
+* add middleware protection for hosting ([a7813ce](https://github.com/Wilfreno/hanapbh/commit/a7813ceb083ab5dd09f1c3569569eb6bb3104707))
+* initialize dashboard ui ([8c64626](https://github.com/Wilfreno/hanapbh/commit/8c64626e2a6e4491fdcc4307dc20043128215cf0))
+
+# [1.1.0](https://github.com/Wilfreno/hanapbh/compare/v1.0.45...v1.1.0) (2024-08-04)
+
+
+### Bug Fixes
+
+* Delete unwanted workflows ([27127a6](https://github.com/Wilfreno/hanapbh/commit/27127a659f742dc8460aec864bd63c94d6192c09))
+* **nearby -page:** linting error want to have Capital letters for component name ([821375a](https://github.com/Wilfreno/hanapbh/commit/821375a69f7486b401e33dab509856f8f57c5c0e))
+* project secrets ([f51f3d4](https://github.com/Wilfreno/hanapbh/commit/f51f3d487bba3cdb2c5b5732964b1330e13899b4))
+* **semantic release:** config merge conflict ([82f4dfd](https://github.com/Wilfreno/hanapbh/commit/82f4dfdb46528d69cb13547bd6d6c0f0b8d2f370))
+
+
+### Features
+
+*  migrate from express.js to fastify ([d11201b](https://github.com/Wilfreno/hanapbh/commit/d11201be28c663db251f8cc8a46833dc486194d6))
+
 ## [1.0.45](https://github.com/Wilfreno/hanapbh/compare/v1.0.44...v1.0.45) (2024-07-31)
 
 

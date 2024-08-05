@@ -8,7 +8,7 @@ import HeaderDropdownMenuMobile from "./HeaderDropdownMenuMobile";
 
 export default function Header() {
   return (
-    <header className="w-screen flex border-b shadow-sm items-center ">
+    <header className="w-screen flex border-b shadow-sm items-center sticky top-0 z-10 bg-background">
       <span className="sm:hidden grow space-y-2">
         <div className="flex justify-between grow px-3 py-2">
           <Link
@@ -24,7 +24,7 @@ export default function Header() {
         </div>
         <Navigation />
       </span>
-      <span className="hidden sm:flex grow px-8 py-1">
+      <span className="hidden sm:flex grow px-8 py-1 items-center">
         <Link href="/" as="/" prefetch className="flex space-x-5 items-center">
           <HanapBHLogo className="h-6 w-auto fill-primary" />
           <h1 className="text-xl font-bold italic">Hanap BH</h1>

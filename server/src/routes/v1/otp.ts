@@ -8,15 +8,16 @@ import OTPEmail from "../../lib/email/OTPEmail";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 const router = Router();
-const gmail_password = process.env.GMAIL_2F_AUTH_APP_PASS;
-if (!gmail_password)
-  throw new Error("GMAIL_2F_AUTH_APP_PASS is missing from your .env file");
 
 export default function otp_v1_router(
   fastify: FastifyInstance,
   _: FastifyPluginOptions,
   done: () => void
 ) {
+  const gmail_password = process.env.GMAIL_2F_AUTH_APP_PASS;
+  if (!gmail_password)
+    throw new Error("GMAIL_2F_AUTH_APP_PASS is missing from your .env file");
+
   fastify.post<{ Body: { email: string } }>("/", async (request, reply) => {
     try {
       const { email } = request.body;
