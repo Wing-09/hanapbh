@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Wilfreno/hanapbh/compare/v1.2.6...v1.3.0) (2024-08-05)
+
+
+### Features
+
+* Implement create lodging api route ([dd39e7c](https://github.com/Wilfreno/hanapbh/commit/dd39e7c31924e73eea5cfe750377be7f4b3b8593))
+
 ## [1.2.6](https://github.com/Wilfreno/hanapbh/compare/v1.2.5...v1.2.6) (2024-08-05)
 
 
