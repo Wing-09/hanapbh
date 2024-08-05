@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/Wilfreno/hanapbh/compare/v1.2.1...v1.2.2) (2024-08-05)
+
+
+### Bug Fixes
+
+* delete saving the docker image to docker compose and readme ([30e35f2](https://github.com/Wilfreno/hanapbh/commit/30e35f294d1bb5fe13d8f1a78a675b458e224a84))
+
 ## [1.2.1](https://github.com/Wilfreno/hanapbh/compare/v1.2.0...v1.2.1) (2024-08-05)
 
 
