@@ -1,3 +1,10 @@
+## [1.2.6](https://github.com/Wilfreno/hanapbh/compare/v1.2.5...v1.2.6) (2024-08-05)
+
+
+### Bug Fixes
+
+* **server:**  expose host to 0.0.0.0 ([24ff967](https://github.com/Wilfreno/hanapbh/commit/24ff9675efbaa51e347d651054ecc26bf77c8357))
+
 ## [1.2.5](https://github.com/Wilfreno/hanapbh/compare/v1.2.4...v1.2.5) (2024-08-05)
 
 
