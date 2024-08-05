@@ -1,3 +1,10 @@
+## [1.2.5](https://github.com/Wilfreno/hanapbh/compare/v1.2.4...v1.2.5) (2024-08-05)
+
+
+### Bug Fixes
+
+* **Docker file:** host environment ([0ceb97a](https://github.com/Wilfreno/hanapbh/commit/0ceb97a47b2b763c1ecb188c89b12b2890be87db))
+
 ## [1.2.4](https://github.com/Wilfreno/hanapbh/compare/v1.2.3...v1.2.4) (2024-08-05)
 
 
