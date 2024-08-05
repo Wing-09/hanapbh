@@ -30,8 +30,14 @@ fastify.get("/ready", async (_, response) => {
 
 // ensure to connect to the database before the server run
 fastify.register(mongoDBConnection).then(() =>
-  fastify.listen({ port: 8000 }).catch((error) => {
-    fastify.log.error(error);
-    process.exit(1);
-  })
+  fastify
+    .listen(
+      process.env.NODE_ENV === "production"
+        ? { port: 8000, host: "0.0.0.0" }
+        : { port: 8000 }
+    )
+    .catch((error) => {
+      fastify.log.error(error);
+      process.exit(1);
+    })
 );
