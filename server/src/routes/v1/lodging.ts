@@ -269,16 +269,10 @@ export default function lodging_v1_router(
           },
           {
             $lookup: {
-              from: "Photo",
+              from: "photos",
               as: "photos",
               localField: "photos",
               foreignField: "_id",
-            },
-          },
-          {
-            $unwind: {
-              path: "$photos",
-              preserveNullAndEmptyArrays: true,
             },
           },
         ])) as
@@ -288,7 +282,6 @@ export default function lodging_v1_router(
               })[]
           | null;
 
-        console.log(database_lodgings);
         return reply.code(200).send(
           JSONResponse("OK", "request successful", {
             result: database_lodgings!.map((l) => ({
