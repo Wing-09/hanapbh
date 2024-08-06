@@ -209,6 +209,72 @@ export default function lodging_v1_router(
 
   //update routes
 
+  fastify.patch<{
+    Params: { key: keyof LodgingType };
+    Body: Omit<LodgingType, "photos"> & { id: string; photos: PhotoType[] };
+  }>("/:key", async (request, reply) => {
+    try {
+      const { key } = request.params;
+      const { id, name, photos } = request.body;
+
+      if (!id)
+        return reply
+          .code(400)
+          .send(
+            JSONResponse(
+              "BAD_REQUEST",
+              "id field is required on the request body"
+            )
+          );
+
+      const found_lodging = await Lodging.exists({ _id: id });
+      if (!found_lodging)
+        return reply
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "lodging not found"));
+
+      switch (key) {
+        case "name": {
+          if (!name)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "name field is required as a request body"
+                )
+              );
+          await Lodging.updateOne(
+            { _id: id },
+            { $set: { name, last_updated: new Date() } }
+          );
+          break;
+        }
+        default:
+          return reply
+            .code(400)
+            .send(
+              JSONResponse(
+                "BAD_REQUEST",
+                "key of LodgingType is needed as request parameter"
+              )
+            );
+      }
+
+      const new_lodging = await Lodging.findOne({ _id: id }).populate([
+        "photos",
+        "rooms",
+        "favored_by",
+        "rated_by",
+      ]);
+      return reply
+        .code(200)
+        .send(JSONResponse("OK", "lodging updated", new_lodging!.toJSON()));
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+    }
+  });
   //delete routes
   done();
 }
