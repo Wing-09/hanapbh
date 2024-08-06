@@ -10,10 +10,7 @@ import {
   LayoutDashboard,
   LineChart,
   MessageCircleMore,
-  Package,
   Settings,
-  ShoppingCart,
-  Users2,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -28,7 +25,7 @@ export default function HostingAside() {
             className=" h-8 w-8 p-2 bg-primary rounded-full"
           >
             <HanapBHLogo className="h-full w-full fill-background " />
-            <span className="sr-only">Acme Inc</span>
+            <span className="sr-only">Hanap BH</span>
           </Link>
           <Tooltip>
             <TooltipTrigger asChild>

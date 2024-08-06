@@ -1,4 +1,3 @@
-import getDistance from "../../lib/distance";
 import Photo, { PhotoType } from "../../database/model/Photo";
 import Lodging, { LodgingType } from "../../database/model/Lodging";
 import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
@@ -6,6 +5,7 @@ import JSONResponse from "../../lib/json-response";
 import databaseNearbyLodgings from "./lodging/database-nearby-lodging-query";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { startSession } from "mongoose";
+import User from "../../database/model/User";
 
 export default function lodging_v1_router(
   fastify: FastifyInstance,
@@ -42,7 +42,7 @@ export default function lodging_v1_router(
 
         for (const photo of photos) {
           const new_photo = new Photo({
-            type: photo.type,
+            type: "LODGING",
             lodging: new_lodging._id,
             url: photo.url,
             height: photo.height,
@@ -69,8 +69,137 @@ export default function lodging_v1_router(
       }
     }
   );
+  fastify.post<{ Body: { latitude: number; longitude: number } }>(
+    "/save",
+    async (request, reply) => {
+      try {
+        const session = await startSession();
+        session.startTransaction();
+
+        const { latitude, longitude } = request.body;
+
+        const places_api_response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&rankby=distance`
+        );
+
+        const places_api_response_json =
+          (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
+
+        let next_page_token = places_api_response_json.next_page_token;
+
+        const user = await User.findOne({ _id: "66ab0b4833f908410394cc7c" });
+
+        for (const place of places_api_response_json.results) {
+          const new_lodging = new Lodging({
+            owner: user!._id,
+            name: place.name,
+            description: "",
+            favored_by: [],
+            rated_by: [],
+            rooms: [],
+            location: {
+              type: "Point",
+              coordinates: [
+                place.geometry.location.lng,
+                place.geometry.location.lat,
+              ],
+            },
+            address: {
+              vicinity: place.vicinity,
+              street: "",
+              barangay: "",
+              municipality_city: "",
+              province: "",
+            },
+            last_updated: new Date(),
+          });
+          await new_lodging.save({ session });
+
+          if (place.photos) {
+            const new_photo = await Photo.insertMany(
+              place.photos.map((photo) => ({
+                type: "LODGING",
+                url: photo.photo_reference,
+                height: photo.height,
+                width: photo.width,
+                lodging_id: null,
+                last_updated: new Date(),
+              })),
+              { session }
+            );
+            new_lodging.photos.push(...new_photo.map((photo) => photo._id));
+            await new_lodging.save({ session });
+          }
+        }
+
+        while (next_page_token) {
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          console.log(next_page_token)
+          const next_page_response = await fetch(
+            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&pagetoken=${next_page_token}`
+          );
+          const next_page_response_json =
+            (await next_page_response.json()) as GooglePlacesAPINearbyResponse;
+          console.log(next_page_response_json);
+
+          for (const place of next_page_response_json.results) {
+            const new_lodging = new Lodging({
+              owner: user?._id,
+              name: place.name,
+              description: "",
+              favored_by: [],
+              rated_by: [],
+              rooms: [],
+              location: {
+                type: "Point",
+                coordinates: [
+                  place.geometry.location.lng,
+                  place.geometry.location.lat,
+                ],
+              },
+              address: {
+                vicinity: place.vicinity,
+                street: "",
+                barangay: "",
+                municipality_city: "",
+                province: "",
+              },
+              last_updated: new Date(),
+            });
+            await new_lodging.save({ session });
+
+            if (place.photos) {
+              const new_photo = await Photo.insertMany(
+                place.photos.map((photo) => ({
+                  type: "LODGING",
+                  url: photo.photo_reference,
+                  height: photo.height,
+                  width: photo.width,
+                  lodging_id: null,
+                  last_updated: new Date(),
+                })),
+                { session }
+              );
+              new_lodging.photos.push(...new_photo.map((photo) => photo._id));
+              await new_lodging.save({ session });
+            }
+
+            next_page_token = next_page_response_json.next_page_token;
+          }
+        }
+        await session.commitTransaction();
+        await session.endSession();
+
+        return reply.code(201).send(JSONResponse("CREATED", "lodging saved"));
+      } catch (error) {
+        fastify.log.error(error);
+        return reply.code(500).send(JSONResponse("BAD_REQUEST"));
+      }
+    }
+  );
 
   //read routes
+
   fastify.get<{ Querystring: Record<string, string> }>(
     "/nearby",
     async (request, reply) => {
@@ -112,8 +241,6 @@ export default function lodging_v1_router(
             .code(200)
             .send(JSONResponse("OK", "request successful", database_lodgings));
 
-        let places_api_response;
-
         if (google_next_page_token === null) {
           if (database_lodgings.length > 1) {
             return reply
@@ -127,78 +254,10 @@ export default function lodging_v1_router(
               .send(JSONResponse("NOT_FOUND", "no more nearby lodging found"));
           }
         }
-        if (google_next_page_token) {
-          places_api_response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&token=${google_next_page_token}`
-          );
-        } else {
-          places_api_response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&radius=${max_distance}`
-          );
-        }
 
-        console.log(places_api_response);
-        const places_api_response_json =
-          (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
-
-        const google_nearby_place: (Omit<LodgingType, "photos"> & {
-          id: string;
-          photos: PhotoType[];
-        })[] = [];
-
-        for (const place of places_api_response_json.results) {
-          google_nearby_place.push({
-            id: place.place_id,
-            name: place.name,
-            description: "",
-            photos: place.photos
-              ? place.photos.map((photo) => ({
-                  type: "LODGING",
-                  id: "",
-                  url: photo.photo_reference,
-                  height: photo.height,
-                  width: photo.width,
-                  lodging_id: null,
-                  date_created: new Date(),
-                  last_updated: new Date(),
-                }))
-              : [],
-            provider: "GOOGLE",
-            offers: [],
-            favored_by: [],
-            rated_by: [],
-            rooms: [],
-            location: {
-              type: "Point",
-              coordinates: [
-                place.geometry.location.lng,
-                place.geometry.location.lat,
-              ],
-            },
-            address: {
-              vicinity: place.vicinity,
-              street: "",
-              barangay: "",
-              municipality_city: "",
-              province: "",
-            },
-            distance: getDistance(
-              { longitude: Number(longitude), latitude: Number(latitude) },
-              {
-                longitude: place.geometry.location.lng,
-                latitude: place.geometry.location.lat,
-              }
-            ),
-            date_created: new Date(),
-            last_updated: new Date(),
-          });
-        }
         return reply.code(200).send(
           JSONResponse("OK", "request successful", {
-            google_next_page_token: places_api_response_json.next_page_token,
-            result: [...google_nearby_place, ...database_lodgings].sort(
-              (a, b) => a.distance - b.distance
-            ),
+            result: database_lodgings.sort((a, b) => a.distance - b.distance),
           })
         );
       } catch (error) {

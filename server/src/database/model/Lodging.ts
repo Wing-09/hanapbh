@@ -46,7 +46,7 @@ const lodgingSchema = new Schema<LodgingType>(
 
     type: {
       type: String,
-      enum: ["BOARDING_HOUSE", "BED_SPACER", "APARTMENT", "PAD", null],
+      enum: ["BOARDING_HOUSE", "BED_SPACER", "APARTMENT", "PAD", ""],
       default: "",
     },
     description: {
@@ -57,7 +57,7 @@ const lodgingSchema = new Schema<LodgingType>(
       {
         type: String,
         enum: ["WATER", "WIFI", "COMFORT_ROOM", "LAUNDRY_AREA", "KITCHEN_AREA"],
-        default: "",
+        default: [],
       },
     ],
     location: {
@@ -98,10 +98,10 @@ const lodgingSchema = new Schema<LodgingType>(
       type: String,
       default: "DB",
     },
-    rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
+    rooms: [{ type: Schema.Types.ObjectId, ref: "Room", default: [] }],
     photos: [{ type: Schema.Types.ObjectId, ref: "Photo", default: [] }],
-    favored_by: [{ type: Schema.Types.ObjectId, ref: "Favorite" }],
-    rated_by: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
+    favored_by: [{ type: Schema.Types.ObjectId, ref: "Favorite", default: [] }],
+    rated_by: [{ type: Schema.Types.ObjectId, ref: "Rating", default: [] }],
     date_created: {
       type: Date,
       default: Date.now,
