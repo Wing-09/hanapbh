@@ -93,7 +93,16 @@ export default function lodging_v1_router(
           const new_lodging = new Lodging({
             owner: user!._id,
             name: place.name,
-            description: "",
+            type: "BOARDING_HOUSE",
+            description:
+              "Escape to comfort in our cozy retreat, where modern convenience meets homely charm. Enjoy fast, free Wi-Fi to stay connected, a fully-equipped kitchen area to whip up your favorite meals, and a convenient laundry area to keep everything fresh during your stay. Whether you're here for business or leisure, we've got all the essentials covered for a stress-free experience!",
+            offers: [
+              "COMFORT_ROOM",
+              "KITCHEN_AREA",
+              "LAUNDRY_AREA",
+              "WATER",
+              "WIFI",
+            ],
             favored_by: [],
             rated_by: [],
             rooms: [],
@@ -134,7 +143,7 @@ export default function lodging_v1_router(
 
         while (next_page_token) {
           await new Promise((resolve) => setTimeout(resolve, 5000));
-          console.log(next_page_token)
+          console.log(next_page_token);
           const next_page_response = await fetch(
             `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&pagetoken=${next_page_token}`
           );
@@ -146,7 +155,16 @@ export default function lodging_v1_router(
             const new_lodging = new Lodging({
               owner: user?._id,
               name: place.name,
-              description: "",
+              offers: [
+                "COMFORT_ROOM",
+                "KITCHEN_AREA",
+                "LAUNDRY_AREA",
+                "WATER",
+                "WIFI",
+              ],
+              type: "BOARDING_HOUSE",
+              description:
+                "Escape to comfort in our cozy retreat, where modern convenience meets homely charm. Enjoy fast, free Wi-Fi to stay connected, a fully-equipped kitchen area to whip up your favorite meals, and a convenient laundry area to keep everything fresh during your stay. Whether you're here for business or leisure, we've got all the essentials covered for a stress-free experience!",
               favored_by: [],
               rated_by: [],
               rooms: [],
