@@ -1,12 +1,11 @@
-import { Router } from "express";
 import getDistance from "../../lib/distance";
-import { PhotoType } from "../../database/model/Photo";
-import { LodgingType } from "../../database/model/Lodging";
+import Photo, { PhotoType } from "../../database/model/Photo";
+import Lodging, { LodgingType } from "../../database/model/Lodging";
 import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
-import checkLocation from "../../lib/middleware/checklocation";
 import JSONResponse from "../../lib/json-response";
 import databaseNearbyLodgings from "./lodging/database-nearby-lodging-query";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import { startSession } from "mongoose";
 
 export default function lodging_v1_router(
   fastify: FastifyInstance,
@@ -16,6 +15,62 @@ export default function lodging_v1_router(
   const places_api_key = process.env.GOOGLE_PLACES_API_KEY;
   if (!places_api_key)
     throw new Error("GOOGLE_PLACES_API_KEY is missing from your .env file");
+
+  //create routes
+  fastify.post<{ Body: Omit<LodgingType, "photos"> & { photos: PhotoType[] } }>(
+    "/",
+    async (request, reply) => {
+      try {
+        const session = await startSession();
+        session.startTransaction();
+        const { name, address, description, owner, type, location, photos } =
+          request.body;
+
+        const new_lodging = new Lodging({
+          name,
+          address,
+          description,
+          owner,
+          type,
+          location: {
+            coordinates: location.coordinates,
+          },
+          last_updated: new Date(),
+        });
+
+        await new_lodging.save({ session });
+
+        for (const photo of photos) {
+          const new_photo = new Photo({
+            type: photo.type,
+            lodging: new_lodging._id,
+            url: photo.url,
+            height: photo.height,
+            width: photo.width,
+            last_updated: new Date(),
+          });
+          await new_photo.save({ session });
+          new_lodging.photos.push(new_photo._id);
+        }
+
+        await new_lodging.save({ session });
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return reply
+          .code(201)
+          .send(
+            JSONResponse("CREATED", "new lodging created", new_lodging.toJSON())
+          );
+      } catch (error) {
+        fastify.log.error(error);
+        return reply.code(500).send(JSONResponse("BAD_REQUEST"));
+      }
+    }
+  );
+
+  //read routes
   fastify.get<{ Querystring: Record<string, string> }>(
     "/nearby",
     async (request, reply) => {
@@ -153,5 +208,74 @@ export default function lodging_v1_router(
     }
   );
 
+  //update routes
+
+  fastify.patch<{
+    Params: { key: keyof LodgingType };
+    Body: Omit<LodgingType, "photos"> & { id: string; photos: PhotoType[] };
+  }>("/:key", async (request, reply) => {
+    try {
+      const { key } = request.params;
+      const { id, name, photos } = request.body;
+
+      if (!id)
+        return reply
+          .code(400)
+          .send(
+            JSONResponse(
+              "BAD_REQUEST",
+              "id field is required on the request body"
+            )
+          );
+
+      const found_lodging = await Lodging.exists({ _id: id });
+      if (!found_lodging)
+        return reply
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "lodging not found"));
+
+      switch (key) {
+        case "name": {
+          if (!name)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "name field is required as a request body"
+                )
+              );
+          await Lodging.updateOne(
+            { _id: id },
+            { $set: { name, last_updated: new Date() } }
+          );
+          break;
+        }
+        default:
+          return reply
+            .code(400)
+            .send(
+              JSONResponse(
+                "BAD_REQUEST",
+                "key of LodgingType is needed as request parameter"
+              )
+            );
+      }
+
+      const new_lodging = await Lodging.findOne({ _id: id }).populate([
+        "photos",
+        "rooms",
+        "favored_by",
+        "rated_by",
+      ]);
+      return reply
+        .code(200)
+        .send(JSONResponse("OK", "lodging updated", new_lodging!.toJSON()));
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+    }
+  });
+  //delete routes
   done();
 }

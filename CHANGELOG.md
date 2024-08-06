@@ -1,3 +1,66 @@
+# [1.3.0](https://github.com/Wilfreno/hanapbh/compare/v1.2.6...v1.3.0) (2024-08-05)
+
+
+### Features
+
+* Implement create lodging api route ([dd39e7c](https://github.com/Wilfreno/hanapbh/commit/dd39e7c31924e73eea5cfe750377be7f4b3b8593))
+
+## [1.2.6](https://github.com/Wilfreno/hanapbh/compare/v1.2.5...v1.2.6) (2024-08-05)
+
+
+### Bug Fixes
+
+* **server:**  expose host to 0.0.0.0 ([24ff967](https://github.com/Wilfreno/hanapbh/commit/24ff9675efbaa51e347d651054ecc26bf77c8357))
+
+## [1.2.5](https://github.com/Wilfreno/hanapbh/compare/v1.2.4...v1.2.5) (2024-08-05)
+
+
+### Bug Fixes
+
+* **Docker file:** host environment ([0ceb97a](https://github.com/Wilfreno/hanapbh/commit/0ceb97a47b2b763c1ecb188c89b12b2890be87db))
+
+## [1.2.4](https://github.com/Wilfreno/hanapbh/compare/v1.2.3...v1.2.4) (2024-08-05)
+
+
+### Bug Fixes
+
+* **Dockerfile:** building image without build args ([36ff082](https://github.com/Wilfreno/hanapbh/commit/36ff0825dd0281aa1ea9885281791ed2f8a69b81))
+
+## [1.2.3](https://github.com/Wilfreno/hanapbh/compare/v1.2.2...v1.2.3) (2024-08-05)
+
+
+### Bug Fixes
+
+* **Dockerfile:** building image without build args ([c6cb6f6](https://github.com/Wilfreno/hanapbh/commit/c6cb6f6f321729b4dde1b60a618f55eb26795032))
+
+## [1.2.2](https://github.com/Wilfreno/hanapbh/compare/v1.2.1...v1.2.2) (2024-08-05)
+
+
+### Bug Fixes
+
+* delete saving the docker image to docker compose and readme ([30e35f2](https://github.com/Wilfreno/hanapbh/commit/30e35f294d1bb5fe13d8f1a78a675b458e224a84))
+
+## [1.2.1](https://github.com/Wilfreno/hanapbh/compare/v1.2.0...v1.2.1) (2024-08-05)
+
+
+### Bug Fixes
+
+* Next.js build  requires to put suspense on every page using searchParams hook ([c83acbf](https://github.com/Wilfreno/hanapbh/commit/c83acbf571eb4ef357e442c7efbbda6dfa7e2ada))
+
+# [1.2.0](https://github.com/Wilfreno/hanapbh/compare/v1.1.0...v1.2.0) (2024-08-04)
+
+
+### Bug Fixes
+
+* **Dockerfile:** cannot read environment variable ([6816cec](https://github.com/Wilfreno/hanapbh/commit/6816cecc656d281fe326fc68580b71f185075f67))
+* use lucid-react instead of hero icons as icon library ([bda9cab](https://github.com/Wilfreno/hanapbh/commit/bda9cabdc2cc65180b19df3f7aca5a902918e3a2))
+
+
+### Features
+
+* add middleware protection for hosting ([a7813ce](https://github.com/Wilfreno/hanapbh/commit/a7813ceb083ab5dd09f1c3569569eb6bb3104707))
+* initialize dashboard ui ([8c64626](https://github.com/Wilfreno/hanapbh/commit/8c64626e2a6e4491fdcc4307dc20043128215cf0))
+
 # [1.1.0](https://github.com/Wilfreno/hanapbh/compare/v1.0.45...v1.1.0) (2024-08-04)
 
 

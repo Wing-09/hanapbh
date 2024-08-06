@@ -99,7 +99,7 @@ const lodgingSchema = new Schema<LodgingType>(
       default: "DB",
     },
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
-    photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
+    photos: [{ type: Schema.Types.ObjectId, ref: "Photo", default: [] }],
     favored_by: [{ type: Schema.Types.ObjectId, ref: "Favorite" }],
     rated_by: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
     date_created: {

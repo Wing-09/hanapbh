@@ -82,18 +82,3 @@ jobs:
           context: ./server
           push: true
           tags: "wing09/${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}"
-
-      - name: Save new Docker Image version
-        run: |-
-          sed -i 's|wing09/hanapbh-client:.*|wing09/hanapbh-client:${{ env.REPO_TAG }}|' README.md
-          sed -i 's|wing09/hanapbh-server:.*|wing09/hanapbh-server:${{ env.REPO_TAG }}|' README.md
-
-          sed -i 's|wing09/hanapbh-client:.*|wing09/hanapbh-client:${{ env.REPO_TAG }}|' docker-compose.yml
-          sed -i 's|wing09/hanapbh-server:.*|wing09/hanapbh-server:${{ env.REPO_TAG }}|' docker-compose.yml
-
-          git config --global user.name 'Wilfreno'
-          git config --global user.email 'w.gayongan@gmail.com'
-
-          git add README.md docker-compose.yml
-          git commit -m 'Update README.md with latest Docker image tags'
-          git push origin HEAD:main --force

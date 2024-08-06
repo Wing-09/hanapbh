@@ -57,11 +57,7 @@ jobs:
 
       - name: Build Server Image
         run: |-
-          docker build -t "${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" ./server \
-          --build-arg GOOGLE_GEOCODE_API_KEY="${{secrets.GOOGLE_GEOCODE_API_KEY}}" \
-          --build-arg GOOGLE_PLACES_API_KEY="${{secrets.GOOGLE_PLACES_API_KEY}}" \
-          --build-arg MONGODB_URI="${{secrets.MONGODB_URI}}" \
-          --build-arg GMAIL_2F_AUTH_APP_PASS="${{secrets.GMAIL_2F_AUTH_APP_PASS}}"
+          docker build -t "${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" ./server
 
       - name: Tag Server Image
         run: docker tag "${{env.SERVER_SERVICE}}:${{ env.REPO_TAG }}" "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVER_SERVICE }}/${{ env.SERVER_SERVICE }}:${{ env.REPO_TAG }}"
