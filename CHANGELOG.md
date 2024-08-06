@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/Wilfreno/hanapbh/compare/v1.3.0...v1.4.0) (2024-08-06)
+
+
+### Bug Fixes
+
+* server importing removed modules ([53cd2f7](https://github.com/Wilfreno/hanapbh/commit/53cd2f70a42673759e1b21e512e9c62cb208e959))
+
+
+### Features
+
+* create lodging update api route ([59ec945](https://github.com/Wilfreno/hanapbh/commit/59ec9451ff9f706313b91bdc534da9acc24432ed))
+
 # [1.3.0](https://github.com/Wilfreno/hanapbh/compare/v1.2.6...v1.3.0) (2024-08-05)
 
 
