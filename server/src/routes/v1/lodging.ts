@@ -2,10 +2,11 @@ import Photo, { PhotoType } from "../../database/model/Photo";
 import Lodging, { LodgingType } from "../../database/model/Lodging";
 import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
 import JSONResponse from "../../lib/json-response";
-import databaseNearbyLodgings from "./lodging/database-nearby-lodging-query";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { startSession } from "mongoose";
+import { Document, startSession, Types } from "mongoose";
 import User from "../../database/model/User";
+import getDistance from "../../lib/distance";
+import exclude from "../../lib/exclude";
 
 export default function lodging_v1_router(
   fastify: FastifyInstance,
@@ -69,6 +70,7 @@ export default function lodging_v1_router(
       }
     }
   );
+
   fastify.post<{ Body: { latitude: number; longitude: number } }>(
     "/save",
     async (request, reply) => {
@@ -223,7 +225,7 @@ export default function lodging_v1_router(
     async (request, reply) => {
       try {
         const { latitude, longitude } = request.query;
-        const { page, google_next_page_token, max_distance } = request.query;
+        const { page, max_distance } = request.query;
 
         if (!page || !max_distance)
           return reply
@@ -247,35 +249,58 @@ export default function lodging_v1_router(
 
         const skip = 20 * (Number(page) - 1);
 
-        const database_lodgings = await databaseNearbyLodgings({
-          longitude: Number(longitude),
-          latitude: Number(latitude),
-          max_distance: Number(max_distance),
-          skip,
-        });
+        const database_lodgings = (await Lodging.aggregate([
+          {
+            $geoNear: {
+              near: {
+                type: "Point",
+                coordinates: [Number(longitude), Number(latitude)],
+              },
+              distanceField: "distance",
+              maxDistance: Number(max_distance),
+              spherical: true,
+            },
+          },
+          {
+            $skip: skip,
+          },
+          {
+            $limit: 20,
+          },
+          {
+            $lookup: {
+              from: "Photo",
+              as: "photos",
+              localField: "photos",
+              foreignField: "_id",
+            },
+          },
+          {
+            $unwind: {
+              path: "$photos",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+        ])) as
+          | (Document<unknown, {}, LodgingType> &
+              LodgingType & {
+                _id: Types.ObjectId;
+              })[]
+          | null;
 
-        if (database_lodgings.length === 20)
-          return reply
-            .code(200)
-            .send(JSONResponse("OK", "request successful", database_lodgings));
-
-        if (google_next_page_token === null) {
-          if (database_lodgings.length > 1) {
-            return reply
-              .code(200)
-              .send(
-                JSONResponse("OK", "request successful", database_lodgings)
-              );
-          } else {
-            return reply
-              .code(404)
-              .send(JSONResponse("NOT_FOUND", "no more nearby lodging found"));
-          }
-        }
-
+        console.log(database_lodgings);
         return reply.code(200).send(
           JSONResponse("OK", "request successful", {
-            result: database_lodgings.sort((a, b) => a.distance - b.distance),
+            result: database_lodgings!.map((l) => ({
+              ...exclude({ id: l._id, ...l }, ["_id"]),
+              distance: getDistance(
+                { latitude: Number(latitude), longitude: Number(longitude) },
+                {
+                  latitude: l.location.coordinates[1],
+                  longitude: l.location.coordinates[0],
+                }
+              ),
+            })),
           })
         );
       } catch (error) {
