@@ -1,4 +1,3 @@
-import { Router } from "express";
 import "dotenv/config";
 import { createTransport } from "nodemailer";
 import { render } from "@react-email/components";
@@ -7,7 +6,6 @@ import Otp from "../../database/model/Otp";
 import OTPEmail from "../../lib/email/OTPEmail";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
-const router = Router();
 
 export default function otp_v1_router(
   fastify: FastifyInstance,
@@ -127,11 +125,3 @@ export default function otp_v1_router(
 
   done();
 }
-
-router;
-// create router
-
-// read router
-
-// update router
-// delete router
