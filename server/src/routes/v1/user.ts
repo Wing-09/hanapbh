@@ -5,6 +5,7 @@ import exclude from "../../lib/exclude";
 import { compare, hash } from "bcrypt";
 import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
+import Lodging from "../../database/model/Lodging";
 
 export default function user_v1_router(
   fastify: FastifyInstance,
@@ -200,6 +201,33 @@ export default function user_v1_router(
             JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
           );
       }
+    }
+  );
+  fastify.get<{ Params: { id: string } }>(
+    "/:id/lodging",
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
+
+        const found_user = await User.exists({ _id: id });
+
+        if (!found_user)
+          return reply
+            .code(404)
+            .send(JSONResponse("NOT_FOUND", "use does not exist"));
+
+        const found_lodging = await Lodging.find({ owner: id }).populate(
+          "photos"
+        );
+
+        return reply.code(200).send(
+          JSONResponse(
+            "OK",
+            "request successful",
+            found_lodging.map((l) => l.toJSON())
+          )
+        );
+      } catch (error) {}
     }
   );
   //update route

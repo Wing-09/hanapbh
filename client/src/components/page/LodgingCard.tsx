@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import Image from "next/image";
 
-
 export default function LodgingCard({ lodging }: { lodging: Lodging }) {
   const places_api_key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
   if (!places_api_key)
@@ -20,16 +19,14 @@ export default function LodgingCard({ lodging }: { lodging: Lodging }) {
         {lodging.photos.length > 0 ? (
           <Image
             src={
-              lodging.provider === "DB"
-                ? lodging.photos[0].url
-                : "https://maps.googleapis.com/maps/api/place/photo?key=" +
-                  places_api_key +
-                  "&photo_reference=" +
-                  lodging.photos[0].url +
-                  "&maxwidth=" +
-                  lodging.photos[0].width +
-                  "&maxheight" +
-                  lodging.photos[0].height
+              "https://maps.googleapis.com/maps/api/place/photo?key=" +
+              places_api_key +
+              "&photo_reference=" +
+              lodging.photos[0].url +
+              "&maxwidth=" +
+              lodging.photos[0].width +
+              "&maxheight" +
+              lodging.photos[0].height
             }
             alt={lodging.name}
             width={lodging.photos[0].width}
