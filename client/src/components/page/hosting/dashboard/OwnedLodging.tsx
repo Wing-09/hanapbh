@@ -1,5 +1,6 @@
 "use client";
 import useHTTPRequest from "@/components/hooks/useHTTPRequest";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -41,8 +42,9 @@ export default function OwnedLodging() {
 
   return (
     <Card className="h-fit w-[60vw]">
-      <CardHeader>
+      <CardHeader className="flex items-center flex-row justify-between">
         <CardTitle>Owned Lodgings</CardTitle>
+        <Button>view </Button>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[50dvh] relative">

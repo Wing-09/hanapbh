@@ -6,7 +6,7 @@ import HeaderDropdownMenu from "../../layout/header/HeaderDropdownMenu";
 
 export default function HostingHeader() {
   return (
-    <header className="w-full flex items-center justify-between p-5 sm:px-8 ">
+    <header className="grow flex items-center justify-between p-5 ">
       <span className="flex">
         <HostingAsideMobile />
         <HostingPathCrumb />

@@ -25,14 +25,14 @@ export default function HostingAside() {
       ),
     },
     {
-      name: "Owned",
-      link: "/owned",
+      name: "Properties",
+      link: "/properties",
       icon: (
         <MapPinHouse className="h-5 w-5 transition-all group-hover:scale-110" />
       ),
     },
     {
-      name: "Direct Message",
+      name: "Message",
       link: "/dm",
       icon: (
         <MessageCircleMore className="h-5 w-5 transition-all group-hover:scale-110" />
@@ -56,16 +56,21 @@ export default function HostingAside() {
 
   return (
     <TooltipProvider>
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <aside className="z-10 hidden h-screen flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
-          <Link
-            href="/"
-            as="/"
-            className=" h-8 w-8 p-2 bg-primary rounded-full"
-          >
-            <HanapBHLogo className="h-full w-full fill-background " />
-            <span className="sr-only">Hanap BH</span>
-          </Link>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                href="/"
+                as="/"
+                className=" h-8 w-8 p-2 bg-primary rounded-full"
+              >
+                <HanapBHLogo className="h-full w-full fill-background " />
+                <span className="sr-only">Hanap BH</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">hanap bh</TooltipContent>
+          </Tooltip>
           {items.map((item) => (
             <Tooltip>
               <TooltipTrigger asChild>

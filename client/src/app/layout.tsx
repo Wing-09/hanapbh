@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "grid grid-rows-[auto_1fr] w-screen h-dvh overflow-x-hidden",
+          // "grid grid-rows-[auto_1fr] w-screen h-dvh overflow-x-hidden",
           manrope.className
         )}
       >
