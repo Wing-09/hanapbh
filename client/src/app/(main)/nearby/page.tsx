@@ -44,7 +44,7 @@ export default function Page() {
     <main className="grid grid-rows-[auto_1fr] sm:px-[10vw] py-[5dvh] space-y-10">
       <Input />
       <UserLocation>
-        <section className="grid grid-cols-1 sm:grid-cols-4">
+        <section className="grid grid-cols-1 gap-10 sm:grid-cols-4">
           {loading ? (
             <LodgingCardsSkeleton />
           ) : (

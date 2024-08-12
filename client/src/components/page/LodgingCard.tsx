@@ -1,6 +1,6 @@
 import { Lodging } from "@/lib/types/data-type";
 import { motion } from "framer-motion";
-import { MapPin } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 
 export default function LodgingCard({ lodging }: { lodging: Lodging }) {
@@ -47,12 +47,15 @@ export default function LodgingCard({ lodging }: { lodging: Lodging }) {
             {lodging.address.vicinity}
           </h2>
         </span>
-        <div className="text-sm font-semibold">
+        <div className="text-sm font-semibold flex items-center justify-between">
           <span className="flex items-center space-x-1">
             <MapPin className="h-4" />
             <p>{lodging.distance.toFixed(2)} KM</p>
           </span>
-          <span>{}</span>
+          <span className="flex items-center space-x-1">
+            <Star className="h-4 fill-primary" />
+            <p>3.5</p>
+          </span>
         </div>
       </div>
     </motion.div>
