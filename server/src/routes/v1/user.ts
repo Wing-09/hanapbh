@@ -6,7 +6,7 @@ import { compare, hash } from "bcrypt";
 import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
 import Property from "../../database/model/Property";
-import Room from "src/database/model/Room";
+import Room from "../../database/model/Room";
 
 export default function user_v1_router(
   fastify: FastifyInstance,
