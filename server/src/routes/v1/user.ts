@@ -5,7 +5,8 @@ import exclude from "../../lib/exclude";
 import { compare, hash } from "bcrypt";
 import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
-import Lodging from "../../database/model/Lodging";
+import Property from "../../database/model/Property";
+import Room from "src/database/model/Room";
 
 export default function user_v1_router(
   fastify: FastifyInstance,
@@ -223,7 +224,7 @@ export default function user_v1_router(
           },
           {
             $lookup: {
-              from: "lodgings",
+              from: "properties",
               as: "properties",
               localField: "properties",
               foreignField: "_id",
@@ -284,6 +285,75 @@ export default function user_v1_router(
                   occupancy_rate: 0,
                 }
           )
+        );
+      } catch (error) {
+        fastify.log.error(error);
+        return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+      }
+    }
+  );
+  fastify.get<{ Params: { id: string } }>(
+    "/:id/revenue/estimate",
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
+
+        const found_user = User.exists({ _id: id });
+
+        if (!found_user)
+          return reply
+            .code(404)
+            .send(JSONResponse("NOT_FOUND", "user does not exist"));
+
+        const properties = await Property.find({ owner: id });
+
+        let revenue = 0;
+        if (properties.length < 1)
+          return reply.code(404).send(
+            JSONResponse("NOT_FOUND", "user does not have any property", {
+              revenue,
+            })
+          );
+
+        for (const property of properties) {
+          const rooms = await Room.find({ property: property._id });
+
+          for (const room of rooms) {
+            let room_revenue = 0;
+            switch (room.price.per_time) {
+              case "PER_HOUR": {
+                room_revenue += room.price.amount * 24 * 30;
+                break;
+              }
+              case "PER_SIX_HOUR": {
+                room_revenue += room.price.amount * 4 * 30;
+                break;
+              }
+              case "PER_TWELVE_HOUR": {
+                room_revenue += room.price.amount * 2 * 30;
+                break;
+              }
+              case "PER_NIGHT": {
+                room_revenue += room.price.amount * 30;
+                break;
+              }
+              case "PER_MONTH": {
+                room_revenue += room.price.amount;
+                break;
+              }
+              default:
+                break;
+            }
+
+            if (room.price.type === "PER_PERSON") {
+              revenue += room_revenue * room.occupants.occupying.length;
+            }
+          }
+        }
+        return reply.code(200).send(
+          JSONResponse("OK", "request successful", {
+            estimate_revenue: revenue,
+          })
         );
       } catch (error) {
         fastify.log.error(error);

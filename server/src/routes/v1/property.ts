@@ -1,5 +1,5 @@
 import Photo, { PhotoType } from "../../database/model/Photo";
-import Lodging, { LodgingType } from "../../database/model/Lodging";
+import Property, { PropertyType } from "../../database/model/Property";
 import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
 import JSONResponse from "../../lib/json-response";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
@@ -8,7 +8,7 @@ import User from "../../database/model/User";
 import getDistance from "../../lib/distance";
 import exclude from "../../lib/exclude";
 
-export default function lodging_v1_router(
+export default function property_v1_router(
   fastify: FastifyInstance,
   _: FastifyPluginOptions,
   done: () => void
@@ -18,58 +18,57 @@ export default function lodging_v1_router(
     throw new Error("GOOGLE_PLACES_API_KEY is missing from your .env file");
 
   //create routes
-  fastify.post<{ Body: Omit<LodgingType, "photos"> & { photos: PhotoType[] } }>(
-    "/",
-    async (request, reply) => {
-      try {
-        const session = await startSession();
-        session.startTransaction();
-        const { name, address, description, owner, type, location, photos } =
-          request.body;
+  fastify.post<{
+    Body: Omit<PropertyType, "photos"> & { photos: PhotoType[] };
+  }>("/", async (request, reply) => {
+    try {
+      const session = await startSession();
+      session.startTransaction();
+      const { name, address, description, owner, type, location, photos } =
+        request.body;
 
-        const new_lodging = new Lodging({
-          name,
-          address,
-          description,
-          owner,
-          type,
-          location: {
-            coordinates: location.coordinates,
-          },
+      const new_property = new Property({
+        name,
+        address,
+        description,
+        owner,
+        type,
+        location: {
+          coordinates: location.coordinates,
+        },
+        last_updated: new Date(),
+      });
+
+      await new_property.save({ session });
+
+      for (const photo of photos) {
+        const new_photo = new Photo({
+          type: "property",
+          property: new_property._id,
+          url: photo.url,
+          height: photo.height,
+          width: photo.width,
           last_updated: new Date(),
         });
-
-        await new_lodging.save({ session });
-
-        for (const photo of photos) {
-          const new_photo = new Photo({
-            type: "LODGING",
-            lodging: new_lodging._id,
-            url: photo.url,
-            height: photo.height,
-            width: photo.width,
-            last_updated: new Date(),
-          });
-          await new_photo.save({ session });
-          new_lodging.photos.push(new_photo._id);
-        }
-
-        await new_lodging.save({ session });
-
-        await session.commitTransaction();
-        await session.endSession();
-
-        return reply
-          .code(201)
-          .send(
-            JSONResponse("CREATED", "new lodging created", new_lodging.toJSON())
-          );
-      } catch (error) {
-        fastify.log.error(error);
-        return reply.code(500).send(JSONResponse("BAD_REQUEST"));
+        await new_photo.save({ session });
+        new_property.photos.push(new_photo._id);
       }
+
+      await new_property.save({ session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return reply
+        .code(201)
+        .send(
+          JSONResponse("CREATED", "new property created", new_property.toJSON())
+        );
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.code(500).send(JSONResponse("BAD_REQUEST"));
     }
-  );
+  });
 
   fastify.post<{ Body: { latitude: number; longitude: number } }>(
     "/save",
@@ -81,7 +80,7 @@ export default function lodging_v1_router(
         const { latitude, longitude } = request.body;
 
         const places_api_response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=lodging&rankby=distance`
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=property&rankby=distance`
         );
 
         const places_api_response_json =
@@ -92,7 +91,7 @@ export default function lodging_v1_router(
         const user = await User.findOne({ _id: "66ab0b4833f908410394cc7c" });
 
         for (const place of places_api_response_json.results) {
-          const new_lodging = new Lodging({
+          const new_property = new Property({
             owner: user!._id,
             name: place.name,
             type: "BOARDING_HOUSE",
@@ -124,22 +123,22 @@ export default function lodging_v1_router(
             },
             last_updated: new Date(),
           });
-          await new_lodging.save({ session });
+          await new_property.save({ session });
 
           if (place.photos) {
             const new_photo = await Photo.insertMany(
               place.photos.map((photo) => ({
-                type: "LODGING",
+                type: "property",
                 url: photo.photo_reference,
                 height: photo.height,
                 width: photo.width,
-                lodging_id: null,
+                property_id: null,
                 last_updated: new Date(),
               })),
               { session }
             );
-            new_lodging.photos.push(...new_photo.map((photo) => photo._id));
-            await new_lodging.save({ session });
+            new_property.photos.push(...new_photo.map((photo) => photo._id));
+            await new_property.save({ session });
           }
         }
 
@@ -153,7 +152,7 @@ export default function lodging_v1_router(
           console.log(next_page_response_json);
 
           for (const place of next_page_response_json.results) {
-            const new_lodging = new Lodging({
+            const new_property = new Property({
               owner: user?._id,
               name: place.name,
               offers: [
@@ -185,22 +184,22 @@ export default function lodging_v1_router(
               },
               last_updated: new Date(),
             });
-            await new_lodging.save({ session });
+            await new_property.save({ session });
 
             if (place.photos) {
               const new_photo = await Photo.insertMany(
                 place.photos.map((photo) => ({
-                  type: "LODGING",
+                  type: "property",
                   url: photo.photo_reference,
                   height: photo.height,
                   width: photo.width,
-                  lodging_id: null,
+                  property_id: null,
                   last_updated: new Date(),
                 })),
                 { session }
               );
-              new_lodging.photos.push(...new_photo.map((photo) => photo._id));
-              await new_lodging.save({ session });
+              new_property.photos.push(...new_photo.map((photo) => photo._id));
+              await new_property.save({ session });
             }
 
             next_page_token = next_page_response_json.next_page_token;
@@ -209,7 +208,7 @@ export default function lodging_v1_router(
         await session.commitTransaction();
         await session.endSession();
 
-        return reply.code(201).send(JSONResponse("CREATED", "lodging saved"));
+        return reply.code(201).send(JSONResponse("CREATED", "property saved"));
       } catch (error) {
         fastify.log.error(error);
         return reply.code(500).send(JSONResponse("BAD_REQUEST"));
@@ -248,7 +247,7 @@ export default function lodging_v1_router(
 
         const skip = 20 * (Number(page) - 1);
 
-        const database_lodgings = (await Lodging.aggregate([
+        const database_propertys = (await Property.aggregate([
           {
             $geoNear: {
               near: {
@@ -275,15 +274,15 @@ export default function lodging_v1_router(
             },
           },
         ])) as
-          | (Document<unknown, {}, LodgingType> &
-              LodgingType & {
+          | (Document<unknown, {}, PropertyType> &
+              PropertyType & {
                 _id: Types.ObjectId;
               })[]
           | null;
 
         return reply.code(200).send(
           JSONResponse("OK", "request successful", {
-            result: database_lodgings!.map((l) => ({
+            result: database_propertys!.map((l) => ({
               ...exclude({ id: l._id, ...l }, ["_id"]),
               distance: getDistance(
                 { latitude: Number(latitude), longitude: Number(longitude) },
@@ -305,8 +304,8 @@ export default function lodging_v1_router(
   //update routes
 
   fastify.patch<{
-    Params: { key: keyof LodgingType };
-    Body: Omit<LodgingType, "photos"> & {
+    Params: { key: keyof PropertyType };
+    Body: Omit<PropertyType, "photos"> & {
       id: string;
       photos: (PhotoType & { id: string })[];
     };
@@ -326,11 +325,11 @@ export default function lodging_v1_router(
             )
           );
 
-      const found_lodging = await Lodging.exists({ _id: id });
-      if (!found_lodging)
+      const found_property = await Property.exists({ _id: id });
+      if (!found_property)
         return reply
           .code(404)
-          .send(JSONResponse("NOT_FOUND", "lodging not found"));
+          .send(JSONResponse("NOT_FOUND", "property not found"));
 
       switch (key) {
         case "name": {
@@ -343,7 +342,7 @@ export default function lodging_v1_router(
                   "name field is required as a request body"
                 )
               );
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             { $set: { name, last_updated: new Date() } }
           );
@@ -378,7 +377,7 @@ export default function lodging_v1_router(
               );
           }
 
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             { $set: { address, last_updated: new Date() } }
           );
@@ -405,7 +404,7 @@ export default function lodging_v1_router(
                   "coordinates field with value [longitude, latitude] is required on location"
                 )
               );
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             { $set: { location, last_updated: new Date() } }
           );
@@ -421,7 +420,7 @@ export default function lodging_v1_router(
                   "offers field is required on request body"
                 )
               );
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             { $set: { offers, last_updated: new Date() } }
           );
@@ -438,7 +437,7 @@ export default function lodging_v1_router(
                 )
               );
 
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             { $set: { type, last_updated: new Date() } }
           );
@@ -461,9 +460,9 @@ export default function lodging_v1_router(
             if (found_photo) continue;
             new_photos.push(
               new Photo({
-                type: "LODGING",
+                type: "property",
                 url: photo.url,
-                lodging: found_lodging._id,
+                property: found_property._id,
                 width: photo.width,
                 height: photo.height,
                 last_updated: new Date(),
@@ -471,7 +470,7 @@ export default function lodging_v1_router(
             );
           }
 
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             {
               $push: {
@@ -493,7 +492,7 @@ export default function lodging_v1_router(
                 )
               );
 
-          await Lodging.updateOne(
+          await Property.updateOne(
             { _id: id },
             { $set: { description, last_updated: new Date() } }
           );
@@ -506,12 +505,12 @@ export default function lodging_v1_router(
             .send(
               JSONResponse(
                 "BAD_REQUEST",
-                "key of LodgingType is needed as request parameter"
+                "key of propertyType is needed as request parameter"
               )
             );
       }
 
-      const new_lodging = await Lodging.findOne({ _id: id }).populate([
+      const new_property = await Property.findOne({ _id: id }).populate([
         "photos",
         "rooms",
         "favored_by",
@@ -519,7 +518,7 @@ export default function lodging_v1_router(
       ]);
       return reply
         .code(200)
-        .send(JSONResponse("OK", "lodging updated", new_lodging!.toJSON()));
+        .send(JSONResponse("OK", "property updated", new_property!.toJSON()));
     } catch (error) {
       fastify.log.error(error);
       return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));

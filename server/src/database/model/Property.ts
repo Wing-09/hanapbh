@@ -1,6 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 
-export type LodgingType = {
+export type PropertyType = {
   owner?: Types.ObjectId;
   name: string;
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
@@ -32,7 +32,7 @@ export type LodgingType = {
   last_updated: Date;
 };
 
-const lodgingSchema = new Schema<LodgingType>(
+const propertySchema = new Schema<PropertyType>(
   {
     owner: {
       type: Schema.Types.ObjectId,
@@ -112,8 +112,8 @@ const lodgingSchema = new Schema<LodgingType>(
   { versionKey: false }
 );
 
-lodgingSchema.index({ location: "2dsphere" });
-lodgingSchema.set("toJSON", {
+propertySchema.index({ location: "2dsphere" });
+propertySchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: (_, ret) => {
@@ -122,6 +122,6 @@ lodgingSchema.set("toJSON", {
   },
 });
 
-const Lodging = model("Lodging", lodgingSchema);
+const Property = model("Property", propertySchema);
 
-export default Lodging;
+export default Property;

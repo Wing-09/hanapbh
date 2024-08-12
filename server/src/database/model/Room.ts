@@ -1,18 +1,22 @@
 import { model, Schema, Types } from "mongoose";
 
 export type RoomType = {
-  lodging: Types.ObjectId;
+  property: Types.ObjectId;
   description: string;
   bed_count: number;
-  occupants: Types.ObjectId;
-  max_occupant: number;
-  price?: {
-    type:
+  occupants: {
+    max: number;
+    occupying: Types.ObjectId[];
+    left: Types.ObjectId[];
+  };
+  price: {
+    per_time:
       | "PER_HOUR"
       | "PER_SIX_HOUR"
       | "PER_TWELVE_HOUR"
       | "PER_NIGHT"
       | "PER_MONTH";
+    type: "PER_PERSON" | "PER_ROOM";
     amount: number;
   };
   photos: Types.ObjectId[];
@@ -22,7 +26,7 @@ export type RoomType = {
 
 const roomSchema = new Schema<RoomType>(
   {
-    lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
+    property: { type: Schema.Types.ObjectId, ref: "Lodging" },
     description: { type: String, default: "" },
     bed_count: { type: Number, default: null },
     price: {
@@ -41,16 +45,25 @@ const roomSchema = new Schema<RoomType>(
         default: null,
       },
     },
-    occupants: [
-      {
-        type: Types.ObjectId,
-        ref: "User",
-        default: [],
+    occupants: {
+      max_occupant: {
+        type: Number,
+        required: true,
       },
-    ],
-    max_occupant: {
-      type: Number,
-      required: true,
+      in: [
+        {
+          type: Types.ObjectId,
+          ref: "Occupant",
+          default: [],
+        },
+      ],
+      out: [
+        {
+          type: Types.ObjectId,
+          ref: "Occupant",
+          default: [],
+        },
+      ],
     },
     photos: [{ type: Schema.Types.ObjectId, ref: "Photo", default: [] }],
     date_created: {

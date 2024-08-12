@@ -1,6 +1,6 @@
 import user_v1_router from "./user";
 import otp_v1_router from "./otp";
-import lodging_v1_router from "./lodging";
+import lodging_v1_router from "./property";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 export default function v1_router(
