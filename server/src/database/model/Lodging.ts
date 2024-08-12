@@ -26,8 +26,7 @@ export type LodgingType = {
   };
   provider: string;
   photos: Types.ObjectId[];
-  favored_by: Types.ObjectId[];
-  rated_by: Types.ObjectId[];
+  reviews: Types.ObjectId[];
   rooms: Types.ObjectId[];
   date_created: Date;
   last_updated: Date;
@@ -100,8 +99,7 @@ const lodgingSchema = new Schema<LodgingType>(
     },
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room", default: [] }],
     photos: [{ type: Schema.Types.ObjectId, ref: "Photo", default: [] }],
-    favored_by: [{ type: Schema.Types.ObjectId, ref: "Favorite", default: [] }],
-    rated_by: [{ type: Schema.Types.ObjectId, ref: "Rating", default: [] }],
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review", default: [] }],
     date_created: {
       type: Date,
       default: Date.now,
