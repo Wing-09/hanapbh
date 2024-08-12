@@ -1,10 +1,8 @@
 import Photo, { PhotoType } from "../../database/model/Photo";
 import Property, { PropertyType } from "../../database/model/Property";
-import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
 import JSONResponse from "../../lib/json-response";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { Document, startSession, Types } from "mongoose";
-import User from "../../database/model/User";
 import getDistance from "../../lib/distance";
 import exclude from "../../lib/exclude";
 
@@ -13,10 +11,6 @@ export default function property_v1_router(
   _: FastifyPluginOptions,
   done: () => void
 ) {
-  const places_api_key = process.env.GOOGLE_PLACES_API_KEY;
-  if (!places_api_key)
-    throw new Error("GOOGLE_PLACES_API_KEY is missing from your .env file");
-
   //create routes
   fastify.post<{
     Body: Omit<PropertyType, "photos"> & { photos: PhotoType[] };
@@ -69,152 +63,6 @@ export default function property_v1_router(
       return reply.code(500).send(JSONResponse("BAD_REQUEST"));
     }
   });
-
-  fastify.post<{ Body: { latitude: number; longitude: number } }>(
-    "/save",
-    async (request, reply) => {
-      try {
-        const session = await startSession();
-        session.startTransaction();
-
-        const { latitude, longitude } = request.body;
-
-        const places_api_response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=property&rankby=distance`
-        );
-
-        const places_api_response_json =
-          (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
-
-        let next_page_token = places_api_response_json.next_page_token;
-
-        const user = await User.findOne({ _id: "66ab0b4833f908410394cc7c" });
-
-        for (const place of places_api_response_json.results) {
-          const new_property = new Property({
-            owner: user!._id,
-            name: place.name,
-            type: "BOARDING_HOUSE",
-            description:
-              "Escape to comfort in our cozy retreat, where modern convenience meets homely charm. Enjoy fast, free Wi-Fi to stay connected, a fully-equipped kitchen area to whip up your favorite meals, and a convenient laundry area to keep everything fresh during your stay. Whether you're here for business or leisure, we've got all the essentials covered for a stress-free experience!",
-            offers: [
-              "COMFORT_ROOM",
-              "KITCHEN_AREA",
-              "LAUNDRY_AREA",
-              "WATER",
-              "WIFI",
-            ],
-            favored_by: [],
-            rated_by: [],
-            rooms: [],
-            location: {
-              type: "Point",
-              coordinates: [
-                place.geometry.location.lng,
-                place.geometry.location.lat,
-              ],
-            },
-            address: {
-              vicinity: place.vicinity,
-              street: "",
-              barangay: "",
-              municipality_city: "",
-              province: "",
-            },
-            last_updated: new Date(),
-          });
-          await new_property.save({ session });
-
-          if (place.photos) {
-            const new_photo = await Photo.insertMany(
-              place.photos.map((photo) => ({
-                type: "property",
-                url: photo.photo_reference,
-                height: photo.height,
-                width: photo.width,
-                property_id: null,
-                last_updated: new Date(),
-              })),
-              { session }
-            );
-            new_property.photos.push(...new_photo.map((photo) => photo._id));
-            await new_property.save({ session });
-          }
-        }
-
-        while (next_page_token) {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-          const next_page_response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&pagetoken=${next_page_token}`
-          );
-          const next_page_response_json =
-            (await next_page_response.json()) as GooglePlacesAPINearbyResponse;
-          console.log(next_page_response_json);
-
-          for (const place of next_page_response_json.results) {
-            const new_property = new Property({
-              owner: user?._id,
-              name: place.name,
-              offers: [
-                "COMFORT_ROOM",
-                "KITCHEN_AREA",
-                "LAUNDRY_AREA",
-                "WATER",
-                "WIFI",
-              ],
-              type: "BOARDING_HOUSE",
-              description:
-                "Escape to comfort in our cozy retreat, where modern convenience meets homely charm. Enjoy fast, free Wi-Fi to stay connected, a fully-equipped kitchen area to whip up your favorite meals, and a convenient laundry area to keep everything fresh during your stay. Whether you're here for business or leisure, we've got all the essentials covered for a stress-free experience!",
-              favored_by: [],
-              rated_by: [],
-              rooms: [],
-              location: {
-                type: "Point",
-                coordinates: [
-                  place.geometry.location.lng,
-                  place.geometry.location.lat,
-                ],
-              },
-              address: {
-                vicinity: place.vicinity,
-                street: "",
-                barangay: "",
-                municipality_city: "",
-                province: "",
-              },
-              last_updated: new Date(),
-            });
-            await new_property.save({ session });
-
-            if (place.photos) {
-              const new_photo = await Photo.insertMany(
-                place.photos.map((photo) => ({
-                  type: "property",
-                  url: photo.photo_reference,
-                  height: photo.height,
-                  width: photo.width,
-                  property_id: null,
-                  last_updated: new Date(),
-                })),
-                { session }
-              );
-              new_property.photos.push(...new_photo.map((photo) => photo._id));
-              await new_property.save({ session });
-            }
-
-            next_page_token = next_page_response_json.next_page_token;
-          }
-        }
-        await session.commitTransaction();
-        await session.endSession();
-
-        return reply.code(201).send(JSONResponse("CREATED", "property saved"));
-      } catch (error) {
-        fastify.log.error(error);
-        return reply.code(500).send(JSONResponse("BAD_REQUEST"));
-      }
-    }
-  );
 
   //read routes
 

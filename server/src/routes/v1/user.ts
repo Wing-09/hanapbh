@@ -8,7 +8,7 @@ import { startSession } from "mongoose";
 import Property from "../../database/model/Property";
 import Room from "../../database/model/Room";
 
-export default function user_v1_router(
+export default function userV1Router(
   fastify: FastifyInstance,
   _: FastifyPluginOptions,
   done: () => void
