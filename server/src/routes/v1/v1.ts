@@ -1,15 +1,15 @@
-import user_v1_router from "./user";
-import otp_v1_router from "./otp";
-import lodging_v1_router from "./lodging";
+import userV1Router from "./user";
+import otpV1Router from "./otp";
+import propertyV1Router from "./property";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
-export default function v1_router(
+export default function v1Router(
   fastify: FastifyInstance,
   _: FastifyPluginOptions,
   done: () => void
 ) {
-  fastify.register(user_v1_router, { prefix: "/user" });
-  fastify.register(otp_v1_router, { prefix: "/otp" });
-  fastify.register(lodging_v1_router, { prefix: "/lodging" });
+  fastify.register(userV1Router, { prefix: "/user" });
+  fastify.register(otpV1Router, { prefix: "/otp" });
+  fastify.register(propertyV1Router, { prefix: "/property" });
   done();
 }

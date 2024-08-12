@@ -1,6 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 
-export type LodgingType = {
+export type PropertyType = {
   owner?: Types.ObjectId;
   name: string;
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
@@ -26,14 +26,13 @@ export type LodgingType = {
   };
   provider: string;
   photos: Types.ObjectId[];
-  favored_by: Types.ObjectId[];
-  rated_by: Types.ObjectId[];
+  reviews: Types.ObjectId[];
   rooms: Types.ObjectId[];
   date_created: Date;
   last_updated: Date;
 };
 
-const lodgingSchema = new Schema<LodgingType>(
+const propertySchema = new Schema<PropertyType>(
   {
     owner: {
       type: Schema.Types.ObjectId,
@@ -100,8 +99,7 @@ const lodgingSchema = new Schema<LodgingType>(
     },
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room", default: [] }],
     photos: [{ type: Schema.Types.ObjectId, ref: "Photo", default: [] }],
-    favored_by: [{ type: Schema.Types.ObjectId, ref: "Favorite", default: [] }],
-    rated_by: [{ type: Schema.Types.ObjectId, ref: "Rating", default: [] }],
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review", default: [] }],
     date_created: {
       type: Date,
       default: Date.now,
@@ -114,8 +112,8 @@ const lodgingSchema = new Schema<LodgingType>(
   { versionKey: false }
 );
 
-lodgingSchema.index({ location: "2dsphere" });
-lodgingSchema.set("toJSON", {
+propertySchema.index({ location: "2dsphere" });
+propertySchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: (_, ret) => {
@@ -124,6 +122,6 @@ lodgingSchema.set("toJSON", {
   },
 });
 
-const Lodging = model("Lodging", lodgingSchema);
+const Property = model("Property", propertySchema);
 
-export default Lodging;
+export default Property;
