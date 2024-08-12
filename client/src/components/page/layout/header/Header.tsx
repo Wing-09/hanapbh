@@ -11,7 +11,7 @@ export default function Header() {
     <header className="w-screen flex border-b shadow-sm items-center sticky top-0 z-10 bg-background">
       {/* MOBILE */}
       <span className="sm:hidden grow space-y-2">
-        <div className="flex justify-between grow px-5 py-4">
+        <div className="flex justify-between grow px-4 py-3">
           <Link
             href="/"
             as="/"
