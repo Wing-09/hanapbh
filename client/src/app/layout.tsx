@@ -27,6 +27,7 @@ export default function RootLayout({
       <body
         className={cn(
           // "grid grid-rows-[auto_1fr] w-screen h-dvh overflow-x-hidden",
+          "antialiased",
           manrope.className
         )}
       >
