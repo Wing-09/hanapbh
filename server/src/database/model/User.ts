@@ -12,7 +12,7 @@ export type UserType = {
     other: string;
   };
   photo?: Types.ObjectId;
-  lodgings?: Types.ObjectId[];
+  properties?: Types.ObjectId[];
   reviewed?: Types.ObjectId[];
   favorites?: Types.ObjectId[];
   contact?: {
@@ -83,7 +83,7 @@ const userSchema = new Schema<UserType>(
         default: "",
       },
     },
-    lodgings: [
+    properties: [
       {
         type: Schema.Types.ObjectId,
         ref: "Lodging",

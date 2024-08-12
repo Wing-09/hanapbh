@@ -145,7 +145,6 @@ export default function lodging_v1_router(
 
         while (next_page_token) {
           await new Promise((resolve) => setTimeout(resolve, 5000));
-          console.log(next_page_token);
           const next_page_response = await fetch(
             `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&pagetoken=${next_page_token}`
           );

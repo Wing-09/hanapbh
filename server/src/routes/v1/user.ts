@@ -202,6 +202,84 @@ export default function user_v1_router(
       }
     }
   );
+
+  fastify.get<{ Params: { id: string } }>(
+    "/:id/lodging/occupancy-rate",
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
+
+        const found_user = await User.exists({ _id: id });
+
+        if (!found_user)
+          return reply
+            .code(400)
+            .send(JSONResponse("NOT_FOUND", "user does not exist"));
+
+        const occupant = await User.aggregate([
+          {
+            $match: { _id: id },
+          },
+          {
+            $lookup: {
+              from: "lodgings",
+              as: "properties",
+              localField: "properties",
+              foreignField: "_id",
+            },
+          },
+          {
+            $unwind: "$properties",
+          },
+          {
+            $unwind: "$properties.rooms",
+          },
+          {
+            $lookup: {
+              from: "rooms",
+              localField: "properties.rooms",
+              as: "rooms",
+              foreignField: "_id",
+            },
+          },
+          {
+            $unwind: "$rooms",
+          },
+          {
+            $group: {
+              max_occupant: { $sum: "$rooms.max_occupant" },
+              occupants: { $sum: { $size: "rooms.occupants" } },
+            },
+          },
+          {
+            $project: {
+              max_occupant: { $ifnull: ["$max_occupant", 0] },
+              occupants: { $ifnull: ["$occupants", 0] },
+              occupancy_rate: {
+                $cond: {
+                  if: { $eq: ["max_occupants", 0] },
+                  then: 0,
+                  else: {
+                    $multiply: [
+                      { divide: ["occupants", "max_occupants"] },
+                      100,
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        ]);
+
+        return reply
+          .code(200)
+          .send(JSONResponse("OK", "request successful", occupant));
+      } catch (error) {
+        fastify.log.error(error);
+        return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+      }
+    }
+  );
   //update route
   //delete route
   fastify.delete<{ Body: { id: string } }>("/", async (request, reply) => {
