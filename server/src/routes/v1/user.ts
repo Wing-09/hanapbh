@@ -5,6 +5,7 @@ import exclude from "../../lib/exclude";
 import { compare, hash } from "bcrypt";
 import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
+import Lodging from "../../database/model/Lodging";
 
 export default function user_v1_router(
   fastify: FastifyInstance,
@@ -257,7 +258,7 @@ export default function user_v1_router(
               occupants: { $ifnull: ["$occupants", 0] },
               occupancy_rate: {
                 $cond: {
-                  if: { $eq: ["max_occupants", 0] },
+                  if: { $eq: ["max_occupant", 0] },
                   then: 0,
                   else: {
                     $multiply: [
@@ -271,9 +272,19 @@ export default function user_v1_router(
           },
         ]);
 
-        return reply
-          .code(200)
-          .send(JSONResponse("OK", "request successful", occupant));
+        return reply.code(200).send(
+          JSONResponse(
+            "OK",
+            "request successful",
+            occupant.length > 0
+              ? occupant[0]
+              : {
+                  max_occupant: 0,
+                  occupants: 0,
+                  occupancy_rate: 0,
+                }
+          )
+        );
       } catch (error) {
         fastify.log.error(error);
         return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
