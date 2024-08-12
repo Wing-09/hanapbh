@@ -1,10 +1,11 @@
-import { Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 export type RoomType = {
   lodging: Types.ObjectId;
   description: string;
   bed_count: number;
-  occupant_count: number;
+  occupants: Types.ObjectId;
+  max_occupant: number;
   price?: {
     type:
       | "PER_HOUR"
@@ -34,18 +35,24 @@ const roomSchema = new Schema<RoomType>(
           "PER_NIGHT",
           "PER_MONTH",
         ],
-        default: "",
       },
       amount: {
         type: Number,
         default: null,
       },
     },
-    occupant_count: {
+    occupants: [
+      {
+        type: Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+    max_occupant: {
       type: Number,
-      default: null,
+      required: true,
     },
-    photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
+    photos: [{ type: Schema.Types.ObjectId, ref: "Photo", default: [] }],
     date_created: {
       type: Date,
       default: Date.now,
