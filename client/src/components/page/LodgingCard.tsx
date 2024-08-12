@@ -41,8 +41,8 @@ export default function LodgingCard({ lodging }: { lodging: Lodging }) {
         )}
       </span>
       <div className="px-1 space-y-5">
-        <span>
-          <h1 className="font-bold">{lodging.name}</h1>
+        <span className="space-y-1">
+          <h1 className="font-bold truncate">{lodging.name}</h1>
           <h2 className="truncate text-xs text-muted-foreground">
             {lodging.address.vicinity}
           </h2>

@@ -2,7 +2,7 @@ import { model, Schema, Types } from "mongoose";
 
 export type PhotoType = {
   url: string;
-  type?: "PROFILE" | "LODGING" | "ROOM";
+  type?: "PROFILE" | "PROPERTY" | "ROOM";
   width: number;
   height: number;
   user?: Types.ObjectId;
@@ -17,7 +17,7 @@ const photoSchema = new Schema<PhotoType>(
     url: { type: String, required: true },
     type: {
       type: String,
-      enum: ["PROFILE", "LODGING", "ROOM"],
+      enum: ["PROFILE", "PROPERTY", "ROOM"],
     },
     width: { type: Number, required: true },
     height: { type: Number, required: true },

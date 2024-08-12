@@ -95,7 +95,7 @@ export default function property_v1_router(
 
         const skip = 20 * (Number(page) - 1);
 
-        const database_propertys = (await Property.aggregate([
+        const database_properties = (await Property.aggregate([
           {
             $geoNear: {
               near: {
@@ -130,7 +130,7 @@ export default function property_v1_router(
 
         return reply.code(200).send(
           JSONResponse("OK", "request successful", {
-            result: database_propertys!.map((l) => ({
+            result: database_properties!.map((l) => ({
               ...exclude({ id: l._id, ...l }, ["_id"]),
               distance: getDistance(
                 { latitude: Number(latitude), longitude: Number(longitude) },

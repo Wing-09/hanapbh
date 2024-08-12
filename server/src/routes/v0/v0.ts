@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import propertyV0Router from "./lodging";
+import propertyV0Router from "./property";
 
 export default function v0Router(
   fastify: FastifyInstance,

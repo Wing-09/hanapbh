@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LodgingCardsSkeleton from "@/components/page/loading-skeleton/LodgingCardsSkeleton";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import LodgingCard from "@/components/page/LodgingCard";
 import { NearbyLodgingResponse } from "@/lib/types/server-response";
 
@@ -25,7 +24,7 @@ export default function Page() {
     async function getNearbyLodgings() {
       try {
         setLoading(true);
-        const { data } = await http_request.GET("/v1/lodging/nearby", {
+        const { data } = await http_request.GET("/v1/property/nearby", {
           latitude: lat,
           longitude: lng,
           page,

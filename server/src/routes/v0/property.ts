@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { startSession } from "mongoose";
-import Photo from "src/database/model/Photo";
-import Property from "src/database/model/Property";
-import User from "src/database/model/User";
-import JSONResponse from "src/lib/json-response";
-import { GooglePlacesAPINearbyResponse } from "src/lib/types/google-places-api-types";
+import Photo from "../../database/model/Photo";
+import Property from "../../database/model/Property";
+import User from "../../database/model/User";
+import JSONResponse from "../../lib/json-response";
+import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
 
 export default function propertyV0Router(
   fastify: FastifyInstance,
@@ -75,7 +75,7 @@ export default function propertyV0Router(
           if (place.photos) {
             const new_photo = await Photo.insertMany(
               place.photos.map((photo) => ({
-                type: "property",
+                type: "PROPERTY",
                 url: photo.photo_reference,
                 height: photo.height,
                 width: photo.width,
@@ -96,7 +96,6 @@ export default function propertyV0Router(
           );
           const next_page_response_json =
             (await next_page_response.json()) as GooglePlacesAPINearbyResponse;
-          console.log(next_page_response_json);
 
           for (const place of next_page_response_json.results) {
             const new_property = new Property({
@@ -136,7 +135,7 @@ export default function propertyV0Router(
             if (place.photos) {
               const new_photo = await Photo.insertMany(
                 place.photos.map((photo) => ({
-                  type: "property",
+                  type: "PROPERTY",
                   url: photo.photo_reference,
                   height: photo.height,
                   width: photo.width,
@@ -195,7 +194,7 @@ export default function propertyV0Router(
           rooms: [],
           photos: place.photos
             ? place.photos.map((photo) => ({
-                type: "property",
+                type: "PROPERTY",
                 url: photo.photo_reference,
                 height: photo.height,
                 width: photo.width,
@@ -228,7 +227,6 @@ export default function propertyV0Router(
         );
         const next_page_response_json =
           (await next_page_response.json()) as GooglePlacesAPINearbyResponse;
-        console.log(next_page_response_json);
 
         for (const place of next_page_response_json.results) {
           result.push({
@@ -241,7 +239,7 @@ export default function propertyV0Router(
             rooms: [],
             photos: place.photos
               ? place.photos.map((photo) => ({
-                  type: "property",
+                  type: "PROPERTY",
                   url: photo.photo_reference,
                   height: photo.height,
                   width: photo.width,
