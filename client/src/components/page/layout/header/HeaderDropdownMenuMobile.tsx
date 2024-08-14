@@ -103,6 +103,7 @@ export default function HeaderDropdownMenuMobile() {
         )}
         {items.map((item) => (
           <Link
+            key={item.name}
             href={item.link}
             className={cn(
               "flex items-center gap-4 text-muted-foreground hover:text-foreground",

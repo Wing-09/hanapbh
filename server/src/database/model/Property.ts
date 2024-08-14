@@ -6,11 +6,18 @@ export type PropertyType = {
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
   description: string;
   offers: (
-    | "WATER"
-    | "WIFI"
-    | "COMFORT_ROOM"
+    | "FREE_WATER"
+    | "FREE_WIFI"
+    | "FREE_ELECTRICITY"
     | "LAUNDRY_AREA"
     | "KITCHEN_AREA"
+    | "AIR_CONDITION"
+    | "PRIVATE_BATHROOM"
+    | "COMMON_BATHROOM"
+    | "TELEVISION"
+    | "LOCKERS"
+    | "CCTV"
+    | "PARKING_LOT"
   )[];
   location: {
     type: "Point";

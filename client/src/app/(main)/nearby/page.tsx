@@ -5,9 +5,9 @@ import { Lodging } from "@/lib/types/data-type";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LodgingCardsSkeleton from "@/components/page/loading-skeleton/LodgingCardsSkeleton";
-import { Input } from "@/components/ui/input";
 import LodgingCard from "@/components/page/LodgingCard";
 import { NearbyLodgingResponse } from "@/lib/types/server-response";
+import Filter from "@/components/page/SearchBar";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
@@ -41,10 +41,10 @@ export default function Page() {
   }, [lat, lng, page, max_distance]);
 
   return (
-    <main className="grid grid-rows-[auto_1fr] sm:px-[10vw] py-[5dvh] space-y-10">
-      <Input />
+    <main className="grid grid-rows-[auto_1fr] sm:px-[10vw] py-8 space-y-8 scroll-smooth">
+      <Filter />
       <UserLocation>
-        <section className="grid grid-cols-1 gap-10 sm:grid-cols-4">
+        <section className="grid grid-cols-1 gap-10 sm:grid-cols-4 scroll-smooth">
           {loading ? (
             <LodgingCardsSkeleton />
           ) : (
