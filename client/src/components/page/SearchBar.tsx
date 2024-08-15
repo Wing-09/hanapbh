@@ -5,6 +5,7 @@ import useMediaQuery from "../hooks/useMediaQuery";
 import { useState } from "react";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
@@ -12,12 +13,13 @@ import {
 } from "../ui/drawer";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { ScrollArea } from "../ui/scroll-area";
 
-export default function SortAndFilter() {
+export default function FilterDrawer() {
   const [filter, setFilter] = useState({
-    distance: 1000,
-    property_type: new Map(),
-    amenities: new Map(),
+    distance: 5000,
+    property_type: new Map([["Any", "ANY"]]),
+    amenities: new Map([["Any", "ANY"]]),
   });
 
   const [custom_distance, setCustomDistance] = useState({
@@ -29,11 +31,11 @@ export default function SortAndFilter() {
   const on_desktop = useMediaQuery();
 
   const distance_items = [
-    { name: "Under 1km", value: 10000 },
-    { name: "Under 2km", value: 20000 },
-    { name: "Under 3km", value: 30000 },
-    { name: "Under 4km", value: 40000 },
-    { name: "Under 5km", value: 50000 },
+    { name: "Under 1km", value: 1000 },
+    { name: "Under 2km", value: 2000 },
+    { name: "Under 3km", value: 3000 },
+    { name: "Under 4km", value: 4000 },
+    { name: "Under 5km", value: 5000 },
   ];
 
   const property_type_items = [
@@ -41,6 +43,7 @@ export default function SortAndFilter() {
     { name: "Bed Spacer", value: "BED_SPACER" },
     { name: "Apartment", value: "APARTMENT" },
     { name: "Pad", value: "PAD" },
+    { name: "Any", value: "ANY" },
   ];
 
   const amenities_items = [
@@ -56,6 +59,7 @@ export default function SortAndFilter() {
     { name: "Lockers", value: "LOCKERS" },
     { name: "CCTV", value: "CCTV" },
     { name: "Parking Lot", value: "PARKING_LOT" },
+    { name: "Any", value: "ANY" },
   ];
   return (
     <div className="flex items-center mx-5 space-x-1">
@@ -70,157 +74,194 @@ export default function SortAndFilter() {
             <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle>Filter by</DrawerTitle>
+                <DrawerClose className="absolute top-0 right-0 w-full flex justify-end h-8"></DrawerClose>
               </DrawerHeader>
-              <div className="p-5 space-y-8">
-                <div className="space-y-5">
-                  <h1 className="text-lg font-bold">Distance</h1>
-                  <div className="flex gap-3 flex-wrap">
-                    {distance_items.map((item) => (
-                      <Button
-                        onClick={() =>
-                          setFilter((prev) => ({
-                            ...prev,
-                            distance: item.value,
-                          }))
-                        }
-                        key={item.name}
-                        className="rounded-full"
-                        variant={
-                          filter.distance === item.value ? "default" : "outline"
-                        }
-                      >
-                        {item.name}
-                      </Button>
-                    ))}
-
-                    <Button
-                      variant="outline"
-                      className="rounded-full"
-                      onClick={() => {
-                        setFilter((prev) => ({ ...prev, distance: 0 }));
-                        setCustomDistance((prev) => ({
-                          ...prev,
-                          display: !prev.display,
-                        }));
-                      }}
-                    >
-                      Custom
-                    </Button>
-                    {custom_distance.items.length > 0 &&
-                      custom_distance.items.map((item, index) => (
-                        <div key={item.name} className="relative">
-                          <Button
-                            onClick={() =>
-                              setFilter((prev) => ({
-                                ...prev,
-                                distance: item.value,
-                              }))
-                            }
-                            key={item.name}
-                            className="rounded-full"
-                            variant={
-                              filter.distance === item.value
-                                ? "default"
-                                : "outline"
-                            }
-                          >
-                            {item.name}
-                          </Button>
-                          <X
-                            className="h-6 absolute -top-2 -right-3 bg-primary rounded-full stroke-2 stroke-background p-1"
-                            onClick={() =>
-                              setCustomDistance((prev) => ({
-                                ...prev,
-                                items: prev.items.toSpliced(index, 1),
-                              }))
-                            }
-                          />
-                        </div>
-                      ))}
-                  </div>
-
-                  {custom_distance.display && (
-                    <form
-                      autoComplete="off"
-                      className="space-y-3"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-
-                        setCustomDistance((prev) => ({
-                          ...prev,
-                          items: [
-                            ...prev.items,
-                            {
-                              name: "under " + custom_distance.value + "m",
-                              value: Number(custom_distance.value),
-                            },
-                          ],
-                        }));
-
-                        setFilter((prev) => ({
-                          ...prev,
-                          distance: Number(custom_distance.value),
-                        }));
-                        setCustomDistance((prev) => ({ ...prev, value: "" }));
-                      }}
-                    >
-                      <Label htmlFor="custom" className="font-bold">
-                        Input Custom distance by meter
-                      </Label>
-                      <div className="flex items-center space-x-5">
-                        <Input
-                          type="text"
-                          inputMode="numeric"
-                          id="custom"
-                          className="rounded-full"
-                          max={50000}
-                          value={custom_distance.value}
-                          onChange={(e) =>
-                            setCustomDistance((prev) => ({
+              <ScrollArea className="h-[80dvh]">
+                <div className="p-5 space-y-8 pb-10">
+                  <div className="space-y-5">
+                    <h1 className="text-lg font-bold">Distance</h1>
+                    <div className="flex gap-3 flex-wrap">
+                      {distance_items.map((item) => (
+                        <Button
+                          onClick={() =>
+                            setFilter((prev) => ({
                               ...prev,
-                              value: e.target.value,
+                              distance: item.value,
                             }))
                           }
-                          placeholder="Up to 50000 meters"
-                          pattern="^[0-4]?\d{0,4}$|50000"
-                          title="Give a valid number"
-                        />
-                        <Button type="submit">Confirm</Button>
-                      </div>
-                    </form>
-                  )}
-                </div>
-                <div className="space-y-5">
-                  <h1 className="text-lg font-bold">Property Type</h1>
-                  <div className="flex gap-3 flex-wrap">
-                    {property_type_items.map((item) => (
-                      <Button
-                        onClick={() => {
-                          const new_map = filter.property_type;
-                          if (new_map.has(item.name)) {
-                            new_map.delete(item.name);
-                          } else {
-                            new_map.set(item.name, item.value);
+                          key={item.name}
+                          className="rounded-full"
+                          variant={
+                            filter.distance === item.value
+                              ? "default"
+                              : "outline"
                           }
-                          setFilter((prev) => ({
+                        >
+                          {item.name}
+                        </Button>
+                      ))}
+
+                      <Button
+                        variant="outline"
+                        className="rounded-full"
+                        onClick={() => {
+                          setFilter((prev) => ({ ...prev, distance: 0 }));
+                          setCustomDistance((prev) => ({
                             ...prev,
-                            property_type: new_map,
+                            display: !prev.display,
                           }));
                         }}
-                        key={item.name}
-                        className="rounded-full"
-                        variant={
-                          filter.property_type.has(item.name)
-                            ? "default"
-                            : "outline"
-                        }
                       >
-                        {item.name}
+                        Custom
                       </Button>
-                    ))}
+                      {custom_distance.items.length > 0 &&
+                        custom_distance.items.map((item, index) => (
+                          <div key={item.name} className="relative">
+                            <Button
+                              onClick={() =>
+                                setFilter((prev) => ({
+                                  ...prev,
+                                  distance: item.value,
+                                }))
+                              }
+                              key={item.name}
+                              className="rounded-full"
+                              variant={
+                                filter.distance === item.value
+                                  ? "default"
+                                  : "outline"
+                              }
+                            >
+                              {item.name}
+                            </Button>
+                            <X
+                              className="h-6 absolute -top-2 -right-3 bg-primary rounded-full stroke-2 stroke-background p-1"
+                              onClick={() =>
+                                setCustomDistance((prev) => ({
+                                  ...prev,
+                                  items: prev.items.toSpliced(index, 1),
+                                }))
+                              }
+                            />
+                          </div>
+                        ))}
+                    </div>
+
+                    {custom_distance.display && (
+                      <form
+                        autoComplete="off"
+                        className="space-y-3"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+
+                          setCustomDistance((prev) => ({
+                            ...prev,
+                            items: [
+                              ...prev.items,
+                              {
+                                name: "under " + custom_distance.value + "m",
+                                value: Number(custom_distance.value),
+                              },
+                            ],
+                          }));
+
+                          setFilter((prev) => ({
+                            ...prev,
+                            distance: Number(custom_distance.value),
+                          }));
+                          setCustomDistance((prev) => ({ ...prev, value: "" }));
+                        }}
+                      >
+                        <Label htmlFor="custom" className="font-bold">
+                          Input Custom distance by meter
+                        </Label>
+                        <div className="flex items-center space-x-5">
+                          <Input
+                            type="text"
+                            inputMode="numeric"
+                            id="custom"
+                            className="rounded-full"
+                            max={50000}
+                            value={custom_distance.value}
+                            onChange={(e) =>
+                              setCustomDistance((prev) => ({
+                                ...prev,
+                                value: e.target.value,
+                              }))
+                            }
+                            placeholder="Up to 50000 meters"
+                            pattern="^[0-4]?\d{0,4}$|50000"
+                            title="Give a valid number"
+                          />
+                          <Button type="submit" className="rounded-full">
+                            Confirm
+                          </Button>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                  <div className="space-y-5">
+                    <h1 className="text-lg font-bold">Property Type</h1>
+                    <div className="flex gap-3 flex-wrap">
+                      {property_type_items.map((item) => (
+                        <Button
+                          onClick={() => {
+                            const new_map = filter.property_type;
+                            if (new_map.has(item.name)) {
+                              new_map.delete(item.name);
+                            } else {
+                              new_map.set(item.name, item.value);
+                            }
+                            setFilter((prev) => ({
+                              ...prev,
+                              property_type: new_map,
+                            }));
+                          }}
+                          key={item.name}
+                          className="rounded-full"
+                          variant={
+                            filter.property_type.has(item.name)
+                              ? "default"
+                              : "outline"
+                          }
+                        >
+                          {item.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-5">
+                    <h1 className="text-lg font-bold">Amenities</h1>
+                    <div className="flex gap-3 flex-wrap">
+                      {amenities_items.map((item) => (
+                        <Button
+                          onClick={() => {
+                            const new_map = filter.amenities;
+                            if (new_map.has(item.name)) {
+                              new_map.delete(item.name);
+                            } else {
+                              new_map.set(item.name, item.value);
+                            }
+                            setFilter((prev) => ({
+                              ...prev,
+                              amenities: new_map,
+                            }));
+                          }}
+                          key={item.name}
+                          className="rounded-full"
+                          variant={
+                            filter.amenities.has(item.name)
+                              ? "default"
+                              : "outline"
+                          }
+                        >
+                          {item.name}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollArea>
             </DrawerContent>
           </Drawer>
           <Drawer>
