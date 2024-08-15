@@ -1,9 +1,9 @@
-import { Lodging } from "@/lib/types/data-type";
+import { Property } from "@/lib/types/data-type";
 import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 
-export default function LodgingCard({ lodging }: { lodging: Lodging }) {
+export default function LodgingCard({ lodging }: { lodging: Property }) {
   const places_api_key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
   if (!places_api_key)
     throw new Error(

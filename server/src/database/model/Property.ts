@@ -5,7 +5,7 @@ export type PropertyType = {
   name: string;
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
   description: string;
-  offers: (
+  amenities: (
     | "FREE_WATER"
     | "FREE_WIFI"
     | "FREE_ELECTRICITY"
@@ -59,7 +59,7 @@ const propertySchema = new Schema<PropertyType>(
       type: String,
       default: "",
     },
-    offers: [
+    amenities: [
       {
         type: String,
         enum: ["WATER", "WIFI", "COMFORT_ROOM", "LAUNDRY_AREA", "KITCHEN_AREA"],

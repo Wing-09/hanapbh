@@ -160,8 +160,16 @@ export default function property_v1_router(
   }>("/:key", async (request, reply) => {
     try {
       const { key } = request.params;
-      const { id, name, photos, address, location, offers, description, type } =
-        request.body;
+      const {
+        id,
+        name,
+        photos,
+        address,
+        location,
+        amenities,
+        description,
+        type,
+      } = request.body;
 
       if (!id)
         return reply
@@ -258,19 +266,19 @@ export default function property_v1_router(
           );
           break;
         }
-        case "offers": {
-          if (!offers)
+        case "amenities": {
+          if (!amenities)
             return reply
               .code(400)
               .send(
                 JSONResponse(
                   "BAD_REQUEST",
-                  "offers field is required on request body"
+                  "amenities field is required on request body"
                 )
               );
           await Property.updateOne(
             { _id: id },
-            { $set: { offers, last_updated: new Date() } }
+            { $set: { amenities, last_updated: new Date() } }
           );
           break;
         }

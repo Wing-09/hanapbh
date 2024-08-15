@@ -7,11 +7,23 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from "../ui/drawer";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export default function ListSort() {
-  const [sort, setSort] = useState({ name: "", distance: "ascend" });
-
+export default function ListSort({
+  sort,
+  setSort,
+}: {
+  sort: {
+    name: string;
+    distance: string;
+  };
+  setSort: Dispatch<
+    SetStateAction<{
+      name: string;
+      distance: string;
+    }>
+  >;
+}) {
   const name_sort_items = [
     { name: "Ascend", value: "ascend" },
     { name: "Descend", value: "descend" },
@@ -41,7 +53,7 @@ export default function ListSort() {
                   onClick={() =>
                     setSort((prev) => ({
                       ...prev,
-                      name: item.value,
+                      name: item.value === prev.name ? "" : item.value,
                     }))
                   }
                   key={item.name}
@@ -61,7 +73,7 @@ export default function ListSort() {
                   onClick={() =>
                     setSort((prev) => ({
                       ...prev,
-                      distance: item.value === prev.distance ? "" : item.value,
+                      distance: item.value,
                     }))
                   }
                   key={item.name}

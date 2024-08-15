@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Lodging } from "@/lib/types/data-type";
+import { Property } from "@/lib/types/data-type";
 import { Filter, HousePlus, ListOrdered, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -33,7 +33,7 @@ export default function Properties() {
       "NEXT_PUBLIC_GOOGLE_PLACES_API_KEY is missing from your .env.local file"
     );
 
-  const [lodgings, setLodgings] = useState<Lodging[]>([]);
+  const [lodgings, setLodgings] = useState<Property[]>([]);
 
   const http_request = useHTTPRequest();
   const { data } = useSession();
@@ -45,7 +45,7 @@ export default function Properties() {
         "/v1/user/" + data?.user.id + "/lodging"
       );
 
-      setLodgings(lodging_data as Lodging[]);
+      setLodgings(lodging_data as Property[]);
     }
     getLodging();
   }, [data]);

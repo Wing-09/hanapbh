@@ -1,4 +1,4 @@
-import { Lodging } from "./data-type";
+import { Property } from "./data-type";
 
 export type ServerResponse = {
   status:
@@ -17,6 +17,6 @@ export type ServerResponse = {
 };
 
 export type NearbyLodgingResponse = {
-  result: Lodging[];
+  result: Property[];
   google_next_page_token: string;
 };

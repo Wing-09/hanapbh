@@ -2,7 +2,7 @@ import { Filter, ListOrdered, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import useMediaQuery from "../hooks/useMediaQuery";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -15,13 +15,23 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
 
-export default function ListFilter() {
-  const [filter, setFilter] = useState({
-    distance: 5000,
-    property_type: new Map([["Any", "ANY"]]),
-    amenities: new Map([["Any", "ANY"]]),
-  });
-
+export default function ListFilter({
+  filter,
+  setFilter,
+}: {
+  filter: {
+    distance: number;
+    property_type: Map<string, string>;
+    amenities: Map<string, string>;
+  };
+  setFilter: Dispatch<
+    SetStateAction<{
+      distance: number;
+      property_type: Map<string, string>;
+      amenities: Map<string, string>;
+    }>
+  >;
+}) {
   const [custom_distance, setCustomDistance] = useState({
     display: false,
     value: "",
@@ -200,10 +210,10 @@ export default function ListFilter() {
                   <Button
                     onClick={() => {
                       const new_map = filter.property_type;
-                      if (new_map.has(item.name)) {
-                        new_map.delete(item.name);
+                      if (new_map.has(item.value)) {
+                        new_map.delete(item.value);
                       } else {
-                        new_map.set(item.name, item.value);
+                        new_map.set(item.value, item.value);
                       }
                       setFilter((prev) => ({
                         ...prev,
@@ -213,7 +223,7 @@ export default function ListFilter() {
                     key={item.name}
                     className="rounded-full"
                     variant={
-                      filter.property_type.has(item.name)
+                      filter.property_type.has(item.value)
                         ? "default"
                         : "outline"
                     }
@@ -230,10 +240,10 @@ export default function ListFilter() {
                   <Button
                     onClick={() => {
                       const new_map = filter.amenities;
-                      if (new_map.has(item.name)) {
-                        new_map.delete(item.name);
+                      if (new_map.has(item.value)) {
+                        new_map.delete(item.value);
                       } else {
-                        new_map.set(item.name, item.value);
+                        new_map.set(item.value, item.value);
                       }
                       setFilter((prev) => ({
                         ...prev,
@@ -243,7 +253,7 @@ export default function ListFilter() {
                     key={item.name}
                     className="rounded-full"
                     variant={
-                      filter.amenities.has(item.name) ? "default" : "outline"
+                      filter.amenities.has(item.value) ? "default" : "outline"
                     }
                   >
                     {item.name}
