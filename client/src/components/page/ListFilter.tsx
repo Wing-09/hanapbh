@@ -14,6 +14,13 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 export default function ListFilter({
   filter,
@@ -71,7 +78,155 @@ export default function ListFilter({
     { name: "Parking Lot", value: "PARKING_LOT" },
     { name: "Any", value: "ANY" },
   ];
-  return on_desktop ? null : (
+  return on_desktop ? (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="ghost" className="p-1">
+          <Filter className="h-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Filter By</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-8">
+          <div className="space-y-5">
+            <h1 className="text-lg font-bold">Distance</h1>
+            <div className="flex gap-4 flex-wrap">
+              {distance_items.map((item) => (
+                <Button
+                  onClick={() =>
+                    setFilter((prev) => ({
+                      ...prev,
+                      distance: item.value,
+                    }))
+                  }
+                  key={item.name}
+                  className="rounded-full"
+                  variant={
+                    filter.distance === item.value ? "default" : "outline"
+                  }
+                >
+                  {item.name}
+                </Button>
+              ))}
+              <Button
+                variant={custom_distance.display ? "default" : "outline"}
+                className="rounded-full"
+                onClick={() => {
+                  setFilter((prev) => ({ ...prev, distance: 0 }));
+                  setCustomDistance((prev) => ({
+                    ...prev,
+                    display: !prev.display,
+                  }));
+                }}
+              >
+                Custom
+              </Button>
+              {!!custom_distance.items.length &&
+                custom_distance.items.map((item, index) => (
+                  <div key={item.name} className="relative">
+                    <Button
+                      onClick={() =>
+                        setFilter((prev) => ({
+                          ...prev,
+                          distance: item.value,
+                        }))
+                      }
+                      key={item.name}
+                      className="rounded-full"
+                      variant={
+                        filter.distance === item.value ? "default" : "outline"
+                      }
+                    >
+                      {item.name}
+                    </Button>
+                    <X
+                      className="h-6 absolute -top-2 -right-3 bg-primary rounded-full stroke-2 stroke-background p-1 cursor-pointer"
+                      onClick={() => {
+                        setCustomDistance((prev) => ({
+                          ...prev,
+                          display: !(prev.items.length === 1),
+                          items: prev.items.toSpliced(index, 1),
+                        }));
+
+                        if (custom_distance.items.length === 1)
+                          setFilter((prev) => ({ ...prev, distance: 500 }));
+                      }}
+                    />
+                  </div>
+                ))}
+            </div>
+            {custom_distance.display && (
+              <form
+                autoComplete="off"
+                className="space-y-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setFilter((prev) => ({
+                    ...prev,
+                    distance: Number(custom_distance.value),
+                  }));
+
+                  if (
+                    custom_distance.value === "1000" ||
+                    custom_distance.value === "2000" ||
+                    custom_distance.value === "3000" ||
+                    custom_distance.value === "4000" ||
+                    custom_distance.value === "5000"
+                  )
+                    return;
+
+                  setCustomDistance((prev) => ({
+                    ...prev,
+                    items: [
+                      ...prev.items,
+                      {
+                        name: "under " + custom_distance.value + "m",
+                        value: Number(custom_distance.value),
+                      },
+                    ],
+                  }));
+
+                  setCustomDistance((prev) => ({ ...prev, value: "" }));
+                }}
+              >
+                <Label htmlFor="custom" className="font-bold">
+                  Input Custom distance by meter
+                </Label>
+                <div className="flex items-center space-x-5">
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    id="custom"
+                    className="rounded-full"
+                    max={50000}
+                    value={custom_distance.value}
+                    onChange={(e) =>
+                      setCustomDistance((prev) => ({
+                        ...prev,
+                        value: e.target.value,
+                      }))
+                    }
+                    placeholder="Up to 50000 meters"
+                    pattern="^[0-4]?\d{0,4}$|50000"
+                    title="Give a valid number"
+                  />
+                  <Button
+                    type="submit"
+                    className="rounded-full"
+                    disabled={!custom_distance.value}
+                  >
+                    Confirm
+                  </Button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  ) : (
     <Drawer>
       <DrawerTrigger asChild>
         <Button variant="ghost" className="p-1">
@@ -107,7 +262,7 @@ export default function ListFilter({
                 ))}
 
                 <Button
-                  variant="outline"
+                  variant={custom_distance.display ? "default" : "outline"}
                   className="rounded-full"
                   onClick={() => {
                     setFilter((prev) => ({ ...prev, distance: 0 }));
@@ -119,7 +274,7 @@ export default function ListFilter({
                 >
                   Custom
                 </Button>
-                {!!custom_distance.items.length  &&
+                {!!custom_distance.items.length &&
                   custom_distance.items.map((item, index) => (
                     <div key={item.name} className="relative">
                       <Button
@@ -138,18 +293,21 @@ export default function ListFilter({
                         {item.name}
                       </Button>
                       <X
-                        className="h-6 absolute -top-2 -right-3 bg-primary rounded-full stroke-2 stroke-background p-1"
-                        onClick={() =>
+                        className="h-6 absolute -top-2 -right-3 bg-primary rounded-full stroke-2 stroke-background p-1 cursor-pointer"
+                        onClick={() => {
                           setCustomDistance((prev) => ({
                             ...prev,
+                            display: !(prev.items.length === 1),
                             items: prev.items.toSpliced(index, 1),
-                          }))
-                        }
+                          }));
+
+                          if (custom_distance.items.length === 1)
+                            setFilter((prev) => ({ ...prev, distance: 500 }));
+                        }}
                       />
                     </div>
                   ))}
               </div>
-
               {custom_distance.display && (
                 <form
                   autoComplete="off"
@@ -208,7 +366,7 @@ export default function ListFilter({
                     <Button
                       type="submit"
                       className="rounded-full"
-                      disabled={!!filter.distance}
+                      disabled={!custom_distance.value}
                     >
                       Confirm
                     </Button>

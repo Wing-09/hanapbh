@@ -135,7 +135,7 @@ export default function Page() {
         <ListSort sort={sort} setSort={setSort} />
       </div>
       <UserLocation>
-        <section className="grid grid-cols-1 gap-10 sm:grid-cols-4 scroll-smooth">
+        <section className="grid grid-cols-1 gap-10 sm:grid-cols-4 sm:gap-4 scroll-smooth">
           {loading ? (
             <LodgingCardsSkeleton />
           ) : (

@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <header className="w-screen flex border-b shadow-sm items-center sticky top-0 z-10 bg-background">
       {on_desktop ? (
-        <span className="hidden sm:flex grow px-10 py-2 items-center">
+        <span className="hidden sm:flex grow px-10 py-1 items-center">
           <Link
             href="/"
             as="/"
