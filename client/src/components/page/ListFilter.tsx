@@ -41,11 +41,11 @@ export default function ListFilter({
   const on_desktop = useMediaQuery();
 
   const distance_items = [
-    { name: "Under 1km", value: 1000 },
-    { name: "Under 2km", value: 2000 },
-    { name: "Under 3km", value: 3000 },
-    { name: "Under 4km", value: 4000 },
-    { name: "Under 5km", value: 5000 },
+    { name: "Under 100m", value: 100 },
+    { name: "Under 200m", value: 200 },
+    { name: "Under 300m", value: 300 },
+    { name: "Under 400m", value: 400 },
+    { name: "Under 500m", value: 500 },
   ];
 
   const property_type_items = [
@@ -119,7 +119,7 @@ export default function ListFilter({
                 >
                   Custom
                 </Button>
-                {custom_distance.items.length > 0 &&
+                {!!custom_distance.items.length  &&
                   custom_distance.items.map((item, index) => (
                     <div key={item.name} className="relative">
                       <Button
@@ -156,6 +156,19 @@ export default function ListFilter({
                   className="space-y-3"
                   onSubmit={(e) => {
                     e.preventDefault();
+                    setFilter((prev) => ({
+                      ...prev,
+                      distance: Number(custom_distance.value),
+                    }));
+
+                    if (
+                      custom_distance.value === "1000" ||
+                      custom_distance.value === "2000" ||
+                      custom_distance.value === "3000" ||
+                      custom_distance.value === "4000" ||
+                      custom_distance.value === "5000"
+                    )
+                      return;
 
                     setCustomDistance((prev) => ({
                       ...prev,
@@ -168,10 +181,6 @@ export default function ListFilter({
                       ],
                     }));
 
-                    setFilter((prev) => ({
-                      ...prev,
-                      distance: Number(custom_distance.value),
-                    }));
                     setCustomDistance((prev) => ({ ...prev, value: "" }));
                   }}
                 >
@@ -196,7 +205,11 @@ export default function ListFilter({
                       pattern="^[0-4]?\d{0,4}$|50000"
                       title="Give a valid number"
                     />
-                    <Button type="submit" className="rounded-full">
+                    <Button
+                      type="submit"
+                      className="rounded-full"
+                      disabled={!!filter.distance}
+                    >
                       Confirm
                     </Button>
                   </div>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 
-export default function LodgingCard({ lodging }: { lodging: Property }) {
+export default function PropertyCard({ property }: { property: Property }) {
   const places_api_key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
   if (!places_api_key)
     throw new Error(
@@ -16,21 +16,21 @@ export default function LodgingCard({ lodging }: { lodging: Property }) {
       className="space-y-2 cursor-pointer pb-10 px-4"
     >
       <span className="aspect-square w-full h-auto relative">
-        {lodging.photos.length > 0 ? (
+        {property.photos.length > 0 ? (
           <Image
             src={
               "https://maps.googleapis.com/maps/api/place/photo?key=" +
               places_api_key +
               "&photo_reference=" +
-              lodging.photos[0].url +
+              property.photos[0].url +
               "&maxwidth=" +
-              lodging.photos[0].width +
+              property.photos[0].width +
               "&maxheight" +
-              lodging.photos[0].height
+              property.photos[0].height
             }
-            alt={lodging.name}
-            width={lodging.photos[0].width}
-            height={lodging.photos[0].height}
+            alt={property.name}
+            width={property.photos[0].width}
+            height={property.photos[0].height}
             className="aspect-square w-full h-auto object-cover rounded-xl"
             priority
           />
@@ -42,15 +42,15 @@ export default function LodgingCard({ lodging }: { lodging: Property }) {
       </span>
       <div className="px-1 space-y-5">
         <span className="space-y-1">
-          <h1 className="font-bold truncate">{lodging.name}</h1>
+          <h1 className="font-bold truncate">{property.name}</h1>
           <h2 className="truncate text-xs text-muted-foreground">
-            {lodging.address.vicinity}
+            {property.address.vicinity}
           </h2>
         </span>
         <div className="text-sm font-semibold flex items-center justify-between">
           <span className="flex items-center space-x-1">
             <MapPin className="h-4" />
-            <p>{lodging.distance.toFixed(2)} KM</p>
+            <p>{property.distance.toFixed(2)} m</p>
           </span>
           <span className="flex items-center space-x-1">
             <Star className="h-4 fill-primary" />

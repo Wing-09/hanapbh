@@ -129,18 +129,25 @@ export default function property_v1_router(
           | null;
 
         return reply.code(200).send(
-          JSONResponse("OK", "request successful", {
-            result: database_properties!.map((l) => ({
-              ...exclude({ id: l._id, ...l }, ["_id"]),
-              distance: getDistance(
-                { latitude: Number(latitude), longitude: Number(longitude) },
-                {
-                  latitude: l.location.coordinates[1],
-                  longitude: l.location.coordinates[0],
-                }
-              ),
-            })),
-          })
+          JSONResponse(
+            "OK",
+            "request successful",
+            database_properties
+              ? database_properties.map((l) => ({
+                  ...exclude({ id: l._id, ...l }, ["_id"]),
+                  distance: getDistance(
+                    {
+                      latitude: Number(latitude),
+                      longitude: Number(longitude),
+                    },
+                    {
+                      latitude: l.location.coordinates[1],
+                      longitude: l.location.coordinates[0],
+                    }
+                  ),
+                }))
+              : []
+          )
         );
       } catch (error) {
         fastify.log.error(error);

@@ -5,17 +5,18 @@ import { Property } from "@/lib/types/data-type";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LodgingCardsSkeleton from "@/components/page/loading-skeleton/LodgingCardsSkeleton";
-import LodgingCard from "@/components/page/LodgingCard";
-import { NearbyLodgingResponse } from "@/lib/types/server-response";
+import PropertyCard from "@/components/page/LodgingCard";
 import ListFilter from "@/components/page/ListFilter";
 import ListSort from "@/components/page/ListSort";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<Property[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number | null>(1);
   const [filter, setFilter] = useState({
-    distance: 5000,
+    distance: 500,
     property_type: new Map(),
     amenities: new Map(),
   });
@@ -26,26 +27,46 @@ export default function Page() {
 
   const http_request = useHTTPRequest();
 
+  async function getNearbyProperties() {
+    try {
+      setLoading(true);
+      const { data } = await http_request.GET("/v1/property/nearby", {
+        latitude: lat,
+        longitude: lng,
+        page,
+        max_distance: filter.distance,
+      });
+      setProperties((prev) => [...prev, ...(data as Property[])]);
+      if (!(data as Property[]).length) setPage(null);
+      setLoading(false);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   useEffect(() => {
     if (!lat || !lng) return;
-    async function getNearbyProperties() {
-      try {
-        setLoading(true);
-        const { data } = await http_request.GET("/v1/property/nearby", {
-          latitude: lat,
-          longitude: lng,
-          page,
-          max_distance: filter.distance,
-        });
-        setProperties((data as NearbyLodgingResponse).result);
-        setLoading(false);
-      } catch (error) {
-        throw error;
-      }
-    }
 
     getNearbyProperties();
-  }, [lat, lng, page, filter.distance]);
+  }, [lat, lng, page]);
+
+  useEffect(() => {
+    if (!properties.length) return;
+    if (!filter.distance) return;
+    if (
+      filter.distance === 100 ||
+      filter.distance === 200 ||
+      filter.distance === 300 ||
+      filter.distance === 400 ||
+      filter.distance === 500
+    ) {
+      setProperties((prev) =>
+        prev.filter((p) => p.distance <= filter.distance)
+      );
+      return;
+    }
+    getNearbyProperties();
+  }, [filter.distance]);
 
   useEffect(() => {
     if (filter.property_type.size > 0) {
@@ -118,9 +139,18 @@ export default function Page() {
           {loading ? (
             <LodgingCardsSkeleton />
           ) : (
-            properties.map((lodging) => (
-              <LodgingCard key={lodging.id} lodging={lodging} />
-            ))
+            <>
+              {properties.map((property) => (
+                <PropertyCard key={property.name} property={property} />
+              ))}
+              <Button
+                className={cn(!page && "hidden")}
+                variant="ghost"
+                onClick={() => setPage((prev) => prev! + 1)}
+              >
+                Load More
+              </Button>
+            </>
           )}
         </section>
       </UserLocation>

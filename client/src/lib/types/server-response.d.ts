@@ -16,7 +16,7 @@ export type ServerResponse = {
   data: unknown;
 };
 
-export type NearbyLodgingResponse = {
+export type GOOGLENearbyPropertyResponse = {
   result: Property[];
   google_next_page_token: string;
 };
