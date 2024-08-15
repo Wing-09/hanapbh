@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import LodgingCardsSkeleton from "@/components/page/loading-skeleton/LodgingCardsSkeleton";
 import LodgingCard from "@/components/page/LodgingCard";
 import { NearbyLodgingResponse } from "@/lib/types/server-response";
-import FilterDrawer from "@/components/page/SearchBar";
+import ListFilter from "@/components/page/ListFilter";
+import ListSort from "@/components/page/ListSort";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
@@ -42,7 +43,10 @@ export default function Page() {
 
   return (
     <main className="grid grid-rows-[auto_1fr] sm:px-[10vw] py-8 space-y-8 scroll-smooth">
-      <FilterDrawer />
+      <div className="flex items-center mx-5 space-x-1">
+        <ListFilter />
+        <ListSort />
+      </div>
       <UserLocation>
         <section className="grid grid-cols-1 gap-10 sm:grid-cols-4 scroll-smooth">
           {loading ? (
