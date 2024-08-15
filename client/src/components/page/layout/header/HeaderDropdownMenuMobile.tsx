@@ -54,7 +54,7 @@ export default function HeaderDropdownMenuMobile() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Avatar>
+        <Avatar className="h-8 w-8">
           <AvatarImage src={data?.user.photo?.url} />
           <AvatarFallback className="p-2">
             {status === "authenticated" ? (
