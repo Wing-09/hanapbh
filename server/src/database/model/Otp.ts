@@ -1,9 +1,21 @@
 import { Model, model, Schema } from "mongoose";
 
-const otpSchema = new Schema(
+export type OTPType = {
+  email: string;
+  type: "CREATE_USER" | "CHANGE_PASSWORD";
+  pin: string;
+  date_created: Date;
+};
+
+const otpSchema = new Schema<OTPType>(
   {
     email: {
       type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ["CREATE_USER", "CHANGE_PASSWORD"],
       required: true,
     },
     pin: {
@@ -21,5 +33,4 @@ const otpSchema = new Schema(
 
 const Otp = model("OTP", otpSchema);
 
-export type OTPType = typeof Otp extends Model<infer D, any, any> ? D : never;
 export default Otp;

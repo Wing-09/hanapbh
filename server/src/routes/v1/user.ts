@@ -7,6 +7,7 @@ import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
 import Property from "../../database/model/Property";
 import Room from "../../database/model/Room";
+import Otp from "src/database/model/Otp";
 
 export default function userV1Router(
   fastify: FastifyInstance,
@@ -362,6 +363,253 @@ export default function userV1Router(
     }
   );
   //update route
+  fastify.get<{
+    Params: { key: keyof UserType };
+    Body: Omit<UserType, "photo"> & {
+      pin: string;
+      id: string;
+      photo: PhotoType;
+    };
+  }>("/key", async (request, reply) => {
+    try {
+      const { key } = request.params;
+      const {
+        id,
+        email,
+        first_name,
+        middle_name,
+        last_name,
+        password,
+        photo,
+        birthday,
+        contact,
+        gender,
+        pin,
+      } = request.body;
+
+      if (!id)
+        return reply
+          .code(400)
+          .send(
+            JSONResponse("BAD_REQUEST", "id is required on the request body")
+          );
+
+      const found_user = await User.findOne({ _id: id });
+
+      if (!found_user)
+        return reply
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "user not found"));
+
+      switch (key) {
+        case "email": {
+          if (!email)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "email is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { email, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "first_name": {
+          if (!first_name)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "first_name is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { first_name, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "middle_name": {
+          if (!middle_name)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "middle_name is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { middle_name, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "last_name": {
+          if (!last_name)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "last_name is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { last_name, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "password": {
+          if (found_user.password && !password)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "email is required on the request body"
+                )
+              );
+
+          if (!found_user.password) {
+            if (!pin)
+              return reply
+                .code(400)
+                .send(
+                  JSONResponse(
+                    "BAD_REQUEST",
+                    "otp is required when the user does not have a password"
+                  )
+                );
+            const found_otp = await Otp.findOne({
+              email,
+              type: "CHANGE_PASSWORD",
+              pin,
+            });
+            if (!found_otp)
+              return reply
+                .code(401)
+                .send(JSONResponse("UNAUTHORIZED", "pin is incorrect"));
+          } else {
+            if (!(await compare(found_user.password!, password!)))
+              return reply
+                .code(401)
+                .send(JSONResponse("UNAUTHORIZED", "incorrect password"));
+          }
+          await User.updateOne(
+            { _id: id },
+            {
+              $set: {
+                password: await hash(password!, 14),
+                last_updated: new Date(),
+              },
+            }
+          );
+          break;
+        }
+        case "birthday": {
+          if (!birthday)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "birthday is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { birthday, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "contact": {
+          if (!email)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "contact is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { contact, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "gender": {
+          if (!email)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "gender is required on the request body"
+                )
+              );
+
+          await User.updateOne(
+            { _id: id },
+            { $set: { gender, last_updated: new Date() } }
+          );
+          break;
+        }
+        case "photo": {
+          if (!photo)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "photo is required on the request body"
+                )
+              );
+
+          const new_photo = new Photo(photo);
+          await User.updateOne(
+            { _id: id },
+            { $set: { photo: new_photo, last_updated: new Date() } }
+          );
+          await Photo.deleteOne({ _id: found_user.photo });
+          break;
+        }
+        default:
+          return reply
+            .code(400)
+            .send(
+              JSONResponse(
+                "BAD_REQUEST",
+                "only keys of model User is valid as a request parameter"
+              )
+            );
+      }
+
+      const new_user = User.findOne({ _id: id })
+        .select("-password")
+        .populate("photos");
+
+      return reply
+        .code(200)
+        .send(JSONResponse("OK", "user " + key + "has been updated", new_user));
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+    }
+  });
   //delete route
   fastify.delete<{ Body: { id: string } }>("/", async (request, reply) => {
     try {
