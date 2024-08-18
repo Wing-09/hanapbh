@@ -137,6 +137,7 @@ export default function userV1Router(
       }
     }
   );
+  
   //read route
   fastify.get<{ Params: { id: string } }>("/:id", async (request, reply) => {
     try {
@@ -477,7 +478,7 @@ export default function userV1Router(
               .send(
                 JSONResponse(
                   "BAD_REQUEST",
-                  "email is required on the request body"
+                  "password is required on the request body"
                 )
               );
 
@@ -492,7 +493,7 @@ export default function userV1Router(
                   )
                 );
             const found_otp = await Otp.findOne({
-              email,
+              email: found_user.email,
               type: "CHANGE_PASSWORD",
               pin,
             });
@@ -500,6 +501,10 @@ export default function userV1Router(
               return reply
                 .code(401)
                 .send(JSONResponse("UNAUTHORIZED", "pin is incorrect"));
+            await Otp.deleteMany({
+              email,
+              type: "CHANGE_PASSWORD",
+            });
           } else {
             if (!(await compare(found_user.password!, password!)))
               return reply
@@ -611,38 +616,70 @@ export default function userV1Router(
     }
   });
   //delete route
-  fastify.delete<{ Body: { id: string } }>("/", async (request, reply) => {
-    try {
-      const { id } = request.body;
+  fastify.delete<{ Body: { id: string; password: string; pin: string } }>(
+    "/",
+    async (request, reply) => {
+      try {
+        const { id, password, pin } = request.body;
 
-      if (!id)
+        if (!id)
+          return reply
+            .code(400)
+            .send(
+              JSONResponse(
+                "BAD_REQUEST",
+                "id field is required on the request body"
+              )
+            );
+
+        const found_user = await User.findOne({ _id: id });
+
+        if (!found_user)
+          return reply
+            .code(404)
+            .send(JSONResponse("NOT_FOUND", "user not found"));
+
+        if (!found_user.password) {
+          if (!pin)
+            return reply
+              .code(403)
+              .send(
+                JSONResponse("FORBIDDEN", "pin is required in the request body")
+              );
+
+          const found_otp = await Otp.findOne({
+            email: found_user.email,
+            type: "DELETE_USER",
+            pin,
+          });
+          if (!found_otp)
+            return reply
+              .code(401)
+              .send(JSONResponse("UNAUTHORIZED", "pin is incorrect"));
+
+          await Otp.deleteMany({
+            email: found_user.email,
+            type: "DELETE_USER",
+          });
+        } else {
+          if (!(await compare(found_user.password, password)))
+            return reply
+              .code(401)
+              .send(JSONResponse("UNAUTHORIZED", "password incorrect"));
+        }
+
+        await User.deleteOne({ _id: id });
+
+        return reply.code(200).send(JSONResponse("OK", "user deleted"));
+      } catch (error) {
+        fastify.log.error(error);
         return reply
-          .code(400)
+          .code(500)
           .send(
-            JSONResponse(
-              "BAD_REQUEST",
-              "id field is required on the request body"
-            )
+            JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
           );
-
-      const found_user = await User.findOne({ _id: id });
-
-      if (!found_user)
-        return reply
-          .code(404)
-          .send(JSONResponse("NOT_FOUND", "user not found"));
-
-      await User.deleteOne({ _id: id });
-
-      return reply.code(200).send(JSONResponse("OK", "user deleted"));
-    } catch (error) {
-      fastify.log.error(error);
-      return reply
-        .code(500)
-        .send(
-          JSONResponse("INTERNAL_SERVER_ERROR", "oops! something went wrong")
-        );
+      }
     }
-  });
+  );
   done();
 }

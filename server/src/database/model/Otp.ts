@@ -2,7 +2,7 @@ import { Model, model, Schema } from "mongoose";
 
 export type OTPType = {
   email: string;
-  type: "CREATE_USER" | "CHANGE_PASSWORD";
+  type: "CREATE_USER" | "CHANGE_PASSWORD" | "DELETE_USER";
   pin: string;
   date_created: Date;
 };
@@ -15,7 +15,7 @@ const otpSchema = new Schema<OTPType>(
     },
     type: {
       type: String,
-      enum: ["CREATE_USER", "CHANGE_PASSWORD"],
+      enum: ["CREATE_USER", "CHANGE_PASSWORD", "DELETE_USER"],
       required: true,
     },
     pin: {
