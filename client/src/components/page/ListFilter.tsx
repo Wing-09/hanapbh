@@ -223,6 +223,45 @@ export default function ListFilter({
               </form>
             )}
           </div>
+
+          <div className="space-y-5">
+            <h1 className="text-lg font-bold">Property Type</h1>
+            <div className="flex gap-4 flex-wrap">
+              {property_type_items.map((item) => (
+                <Button
+                  onClick={() => {
+                    const new_map = filter.property_type;
+
+                    if (item.value === "ANY") {
+                      setFilter((prev) => ({
+                        ...prev,
+                        property_type: new Map(),
+                      }));
+
+                      return;
+                    }
+
+                    if (new_map.has(item.value)) {
+                      new_map.delete(item.value);
+                    } else {
+                      new_map.set(item.value, item.value);
+                    }
+                    setFilter((prev) => ({
+                      ...prev,
+                      property_type: new_map,
+                    }));
+                  }}
+                  key={item.name}
+                  className="rounded-full"
+                  variant={
+                    filter.property_type.has(item.value) ? "default" : "outline"
+                  }
+                >
+                  {item.name}
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+/**
+ *
+ * A Custom hook that returns a `boolean` to determine if the app is being viewed on desktop
+ *
+ * @returns {boolean} `true` if the app is viewed on desktop and `false` if on mobile
+ *
+ */
+
 export default function useMediaQuery() {
   const [on_desktop, setOnDesktop] = useState(false);
 
@@ -15,5 +23,5 @@ export default function useMediaQuery() {
 
     return () => media_query.removeEventListener("change", handleChange);
   }, []);
-  return on_desktop
+  return on_desktop;
 }

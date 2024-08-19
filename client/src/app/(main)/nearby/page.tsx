@@ -10,10 +10,12 @@ import ListFilter from "@/components/page/ListFilter";
 import ListSort from "@/components/page/ListSort";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import LoadingSvg from "@/components/svg/LoadingSvg";
 
 export default function Page() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState({ initial: true, refetching: false });
   const [properties, setProperties] = useState<Property[]>([]);
+  const [modified_list, setModifiedList] = useState<Property[]>([]);
   const [page, setPage] = useState<number | null>(1);
   const [filter, setFilter] = useState({
     distance: 500,
@@ -29,7 +31,6 @@ export default function Page() {
 
   async function getNearbyProperties() {
     try {
-      setLoading(true);
       const { data } = await http_request.GET("/v1/property/nearby", {
         latitude: lat,
         longitude: lng,
@@ -38,7 +39,6 @@ export default function Page() {
       });
       setProperties((prev) => [...prev, ...(data as Property[])]);
       if (!(data as Property[]).length) setPage(null);
-      setLoading(false);
     } catch (error) {
       throw error;
     }
@@ -46,9 +46,24 @@ export default function Page() {
 
   useEffect(() => {
     if (!lat || !lng) return;
+    async function initialFetch() {
+      setLoading((prev) => ({ ...prev, initial: true }));
 
-    getNearbyProperties();
-  }, [lat, lng, page]);
+      await getNearbyProperties();
+      setLoading((prev) => ({ ...prev, initial: false }));
+    }
+    initialFetch();
+  }, [lat, lng]);
+
+  useEffect(() => {
+    if (page === 1) return;
+    async function reFetch() {
+      setLoading((prev) => ({ ...prev, refetching: true }));
+      await getNearbyProperties();
+      setLoading((prev) => ({ ...prev, refetching: false }));
+    }
+    reFetch();
+  }, [page]);
 
   useEffect(() => {
     if (!properties.length) return;
@@ -60,22 +75,21 @@ export default function Page() {
       filter.distance === 400 ||
       filter.distance === 500
     ) {
-      setProperties((prev) =>
-        prev.filter((p) => p.distance <= filter.distance)
-      );
+      setModifiedList(properties.filter((p) => p.distance <= filter.distance));
       return;
     }
     getNearbyProperties();
-  }, [filter.distance]);
+  }, [filter.distance, properties]);
 
   useEffect(() => {
-    if (filter.property_type.size > 0) {
-      setProperties((prev) =>
+    if (!properties.length) return;
+
+    if (filter.property_type.size)
+      setModifiedList((prev) =>
         prev.filter((property) => filter.property_type.has(property.type!))
       );
-    }
-    if (filter.amenities.size > 0) {
-      setProperties((prev) =>
+    if (filter.amenities.size) {
+      setModifiedList((prev) =>
         prev.filter((property) => {
           const l = [];
           filter.amenities.forEach((value) => {
@@ -86,22 +100,35 @@ export default function Page() {
         })
       );
     }
-  }, [filter.amenities, filter.property_type]);
+
+    if (!filter.property_type.size && !filter.amenities.size)
+      setModifiedList([]);
+  }, [filter.amenities, filter.property_type, properties]);
 
   useEffect(() => {
+    if (!properties.length) return;
+
     if (!sort.name) return;
 
     switch (sort.name) {
       case "ascend": {
-        setProperties((prev) =>
-          prev.toSorted((a, b) => a.name.localeCompare(b.name))
-        );
+        modified_list.length
+          ? setModifiedList((prev) =>
+              prev.toSorted((a, b) => a.name.localeCompare(b.name))
+            )
+          : setProperties((prev) =>
+              prev.toSorted((a, b) => a.name.localeCompare(b.name))
+            );
         break;
       }
       case "descend": {
-        setProperties((prev) =>
-          prev.toSorted((a, b) => b.name.localeCompare(a.name))
-        );
+        modified_list.length
+          ? setModifiedList((prev) =>
+              prev.toSorted((a, b) => b.name.localeCompare(a.name))
+            )
+          : setProperties((prev) =>
+              prev.toSorted((a, b) => b.name.localeCompare(a.name))
+            );
         break;
       }
       default:
@@ -110,17 +137,27 @@ export default function Page() {
   }, [sort.name]);
 
   useEffect(() => {
+    if (!properties.length) return;
+
     switch (sort.distance) {
       case "ascend": {
-        setProperties((prev) =>
-          prev.toSorted((a, b) => a.distance - b.distance)
-        );
+        modified_list.length
+          ? setModifiedList((prev) =>
+              prev.toSorted((a, b) => a.distance - b.distance)
+            )
+          : setProperties((prev) =>
+              prev.toSorted((a, b) => a.distance - b.distance)
+            );
         break;
       }
       case "descend": {
-        setProperties((prev) =>
-          prev.toSorted((a, b) => b.distance - a.distance)
-        );
+        modified_list.length
+          ? setModifiedList((prev) =>
+              prev.toSorted((a, b) => b.distance - a.distance)
+            )
+          : setProperties((prev) =>
+              prev.toSorted((a, b) => b.distance - a.distance)
+            );
         break;
       }
       default:
@@ -129,31 +166,40 @@ export default function Page() {
   }, [sort.distance]);
 
   return (
-    <main className="grid grid-rows-[auto_1fr] sm:px-[10vw] py-8 space-y-8 scroll-smooth">
+    <main className="grid grid-rows-[auto_1fr_auto] sm:px-[10vw] py-8 space-y-8 scroll-smooth">
       <div className="flex items-center mx-5 space-x-1">
         <ListFilter filter={filter} setFilter={setFilter} />
         <ListSort sort={sort} setSort={setSort} />
       </div>
       <UserLocation>
         <section className="grid grid-cols-1 gap-10 sm:grid-cols-4 sm:gap-4 scroll-smooth">
-          {loading ? (
+          {loading.initial ? (
             <LodgingCardsSkeleton />
+          ) : modified_list.length ? (
+            modified_list.map((property) => (
+              <PropertyCard key={property.name} property={property} />
+            ))
           ) : (
-            <>
-              {properties.map((property) => (
-                <PropertyCard key={property.name} property={property} />
-              ))}
-              <Button
-                className={cn(!page && "hidden")}
-                variant="ghost"
-                onClick={() => setPage((prev) => prev! + 1)}
-              >
-                Load More
-              </Button>
-            </>
+            properties.map((property) => (
+              <PropertyCard key={property.id} property={property} />
+            ))
           )}
         </section>
       </UserLocation>
+      <Button
+        className={cn(
+          "w-fit justify-self-center rounded-full",
+          !page || (loading.initial && "hidden")
+        )}
+        variant="ghost"
+        onClick={() => setPage((prev) => prev! + 1)}
+      >
+        {loading.refetching ? (
+          <LoadingSvg className="h-8 w-auto fill-primary" />
+        ) : (
+          "Load More"
+        )}
+      </Button>
     </main>
   );
 }

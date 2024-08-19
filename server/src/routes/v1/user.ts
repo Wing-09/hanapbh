@@ -7,7 +7,7 @@ import JSONResponse from "../../lib/json-response";
 import { startSession } from "mongoose";
 import Property from "../../database/model/Property";
 import Room from "../../database/model/Room";
-import Otp from "src/database/model/Otp";
+import Otp from "../../database/model/Otp";
 
 export default function userV1Router(
   fastify: FastifyInstance,
