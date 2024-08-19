@@ -137,7 +137,6 @@ export default function userV1Router(
       }
     }
   );
-  
   //read route
   fastify.get<{ Params: { id: string } }>("/:id", async (request, reply) => {
     try {
