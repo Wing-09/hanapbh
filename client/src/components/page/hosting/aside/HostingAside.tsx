@@ -72,7 +72,7 @@ export default function HostingAside() {
             <TooltipContent side="right">hanap bh</TooltipContent>
           </Tooltip>
           {items.map((item) => (
-            <Tooltip>
+            <Tooltip key={item.name}>
               <TooltipTrigger asChild>
                 <Link
                   href={item.link}

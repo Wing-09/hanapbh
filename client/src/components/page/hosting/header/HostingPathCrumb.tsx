@@ -13,7 +13,6 @@ import Link from "next/link";
 export default function HostingPathCrumb() {
   const pathname = usePathname();
   const pathname_list = pathname.split("/").filter((path) => path);
-  console.log(pathname_list);
 
   return (
     <Breadcrumb className="hidden md:flex">

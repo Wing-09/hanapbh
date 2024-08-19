@@ -40,13 +40,13 @@ export default function PropertyCard({ property }: { property: Property }) {
           </div>
         )}
       </span>
-      <div className="px-1 space-y-5">
-        <span className="space-y-1">
+      <div className="px-1 space-y-16">
+        <div className="space-y-1">
           <h1 className="font-bold truncate">{property.name}</h1>
           <h2 className="truncate text-xs text-muted-foreground">
             {property.address.vicinity}
           </h2>
-        </span>
+        </div>
         <div className="text-sm font-semibold flex items-center justify-between">
           <span className="flex items-center space-x-1">
             <MapPin className="h-4" />
