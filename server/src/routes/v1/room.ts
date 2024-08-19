@@ -84,7 +84,36 @@ export default function room_v1_router(
     }
   );
   // read route
+
+  fastify.get<{ Params: { id: string } }>(
+    "/room/:id",
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
+
+        const found_room = await Room.findOne({ _id: id }).populate([
+          "photos",
+          "occupants.in",
+          "occupants.out",
+        ]);
+
+        if (!found_room)
+          return reply
+            .code(404)
+            .send(JSONResponse("NOT_FOUND", "room not found"));
+
+        return reply
+          .code(200)
+          .send(JSONResponse("OK", "request successful", found_room.toJSON()));
+      } catch (error) {
+        fastify.log.error(error);
+        return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+      }
+    }
+  );
   // update route
+
+
   // delete route
   done();
 }

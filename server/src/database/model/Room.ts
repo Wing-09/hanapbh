@@ -6,8 +6,8 @@ export type RoomType = {
   bed_count: number;
   occupants: {
     max: number;
-    occupying: Types.ObjectId[];
-    left: Types.ObjectId[];
+    in: Types.ObjectId[];
+    out: Types.ObjectId[];
   };
   price: {
     per_time:
@@ -46,7 +46,7 @@ const roomSchema = new Schema<RoomType>(
       },
     },
     occupants: {
-      max_occupant: {
+      max: {
         type: Number,
         required: true,
       },
