@@ -347,7 +347,7 @@ export default function userV1Router(
             }
 
             if (room.price.type === "PER_PERSON") {
-              revenue += room_revenue * room.occupants.occupying.length;
+              revenue += room_revenue * room.occupants.in.length;
             }
           }
         }

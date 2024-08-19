@@ -112,7 +112,147 @@ export default function room_v1_router(
     }
   );
   // update route
+  fastify.patch<{
+    Params: { key: keyof RoomType };
+    Body: Omit<RoomType, "photos"> & {
+      photos: (PhotoType & { id: string })[];
+      id: string;
+    };
+  }>("/:key", async (request, reply) => {
+    try {
+      const { key } = request.params;
+      const room = request.body;
 
+      const found_room = await Room.findOne({ _id: room.id });
+
+      if (!found_room)
+        return reply
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "room does not exist"));
+
+      switch (key) {
+        case "bed_count": {
+          if (!room.bed_count)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "bed_count field is required on the request body"
+                )
+              );
+
+          await Room.updateOne(
+            { _id: room.id },
+            { $set: { bed_count: room.bed_count, last_updated: new Date() } }
+          );
+
+          break;
+        }
+        case "description": {
+          if (!room.description)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "description field is required on the request body"
+                )
+              );
+          await Room.updateOne(
+            { _id: room.id },
+            {
+              $set: { description: room.description, last_updated: new Date() },
+            }
+          );
+
+          break;
+        }
+        case "price": {
+          if (!room.price)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "price field is required on the request body"
+                )
+              );
+          await Room.updateOne(
+            { _id: room.id },
+            { $set: { price: room.price, last_updated: new Date() } }
+          );
+
+          break;
+        }
+        case "photos": {
+          if (!room.bed_count)
+            return reply
+              .code(400)
+              .send(
+                JSONResponse(
+                  "BAD_REQUEST",
+                  "bed_count field is required on the request body"
+                )
+              );
+
+          let new_photos = [];
+          for (const photo of room.photos) {
+            const found_photo = await Photo.exists({ _id: photo.id });
+            if (found_photo) continue;
+            new_photos.push(
+              new Photo({
+                type: "ROOM",
+                url: photo.url,
+                room: found_room._id,
+                width: photo.width,
+                height: photo.height,
+                last_updated: new Date(),
+              })
+            );
+          }
+
+          await Room.updateOne(
+            { _id: found_room._id },
+            {
+              $push: {
+                photos: { $each: new_photos.map((photo) => photo._id) },
+              },
+              $set: { last_updated: new Date() },
+            }
+          );
+
+          break;
+        }
+        default:
+          return reply
+            .code(400)
+            .send(
+              JSONResponse(
+                "BAD_REQUEST",
+                "key of object Room is required as a request parameter"
+              )
+            );
+      }
+
+      const updated_room = await Room.findOne({ _id: room.id }).populate(
+        "photos"
+      );
+
+      return reply
+        .code(200)
+        .send(
+          JSONResponse(
+            "OK",
+            "room's " + key + " is updated",
+            updated_room?.toJSON()
+          )
+        );
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
+    }
+  });
 
   // delete route
   done();
