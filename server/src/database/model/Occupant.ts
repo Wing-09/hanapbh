@@ -20,7 +20,7 @@ const occupantSchema = new Schema<OccupantType>({
   status: {
     type: String,
     enum: ["OCCUPYING", "LEFT"],
-    required: true,
+    default: "OCCUPYING",
   },
   joined: {
     type: Date,
