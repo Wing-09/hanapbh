@@ -323,7 +323,7 @@ export default function property_v1_router(
             if (found_photo) continue;
             new_photos.push(
               new Photo({
-                type: "property",
+                type: "PROPERTY",
                 url: photo.url,
                 property: found_property._id,
                 width: photo.width,
