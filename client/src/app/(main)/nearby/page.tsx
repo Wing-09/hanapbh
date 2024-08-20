@@ -5,7 +5,7 @@ import { Property } from "@/lib/types/data-type";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LodgingCardsSkeleton from "@/components/page/loading-skeleton/LodgingCardsSkeleton";
-import PropertyCard from "@/components/page/LodgingCard";
+import PropertyCard from "@/components/page/PropertyCard";
 import ListFilter from "@/components/page/ListFilter";
 import ListSort from "@/components/page/ListSort";
 import { Button } from "@/components/ui/button";
