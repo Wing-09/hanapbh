@@ -31,7 +31,7 @@ export type PropertyType = {
     municipality_city: string;
     barangay: string;
   };
-  provider: string;
+  provider: "GOOGLE" | "DB";
   photos: Types.ObjectId[];
   reviews: Types.ObjectId[];
   rooms: Types.ObjectId[];
@@ -102,6 +102,7 @@ const propertySchema = new Schema<PropertyType>(
     },
     provider: {
       type: String,
+      enum: ["GOOGLE", "DB"],
       default: "DB",
     },
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room", default: [] }],

@@ -34,7 +34,7 @@ export default function HeaderDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        alignOffset={-30}
+        alignOffset={-15}
         sideOffset={8}
         className="w-[clamp(18rem,_18rem,_95vw)] "
       >
