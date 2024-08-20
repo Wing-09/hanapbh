@@ -12,8 +12,8 @@ export type UserType = {
     other: string;
   };
   photo?: Types.ObjectId;
-  lodgings?: Types.ObjectId[];
-  rated?: Types.ObjectId[];
+  properties?: Types.ObjectId[];
+  reviewed?: Types.ObjectId[];
   favorites?: Types.ObjectId[];
   contact?: {
     phone_number: string;
@@ -83,13 +83,14 @@ const userSchema = new Schema<UserType>(
         default: "",
       },
     },
-    lodgings: [
+    properties: [
       {
         type: Schema.Types.ObjectId,
         ref: "Lodging",
+        default: [],
       },
     ],
-    rated: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
+    reviewed: [{ type: Schema.Types.ObjectId, ref: "Review", default: [] }],
 
     photo: {
       type: Schema.Types.ObjectId,
@@ -99,6 +100,7 @@ const userSchema = new Schema<UserType>(
       {
         type: Schema.Types.ObjectId,
         ref: "Favorite",
+        default: [],
       },
     ],
     date_created: {

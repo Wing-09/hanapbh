@@ -1,17 +1,58 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Home,
+  LayoutDashboard,
   LineChart,
-  Package,
-  Package2,
+  MessageCircleMore,
   PanelLeft,
-  ShoppingCart,
-  Users2,
+  Settings,
+  MapPinHouse,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import HanapBHLogo from "@/components/svg/HanapBHLogo";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export default function HostingAsideMobile() {
+  const pathname = usePathname();
+  const items = [
+    {
+      name: "Dashboard",
+      link: "/dashboard",
+      icon: (
+        <LayoutDashboard className="h-5 w-5 transition-all group-hover:scale-110" />
+      ),
+    },
+    {
+      name: "Owned",
+      link: "/owned",
+      icon: (
+        <MapPinHouse className="h-5 w-5 transition-all group-hover:scale-110" />
+      ),
+    },
+    {
+      name: "Direct Message",
+      link: "/dm",
+      icon: (
+        <MessageCircleMore className="h-5 w-5 transition-all group-hover:scale-110" />
+      ),
+    },
+    {
+      name: "Activity",
+      link: "/activity",
+      icon: (
+        <LineChart className="h-5 w-5 transition-all group-hover:scale-110" />
+      ),
+    },
+    {
+      name: "Settings",
+      link: "/settings",
+      icon: (
+        <Settings className="h-5 w-5 transition-all group-hover:scale-110" />
+      ),
+    },
+  ];
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -23,47 +64,28 @@ export default function HostingAsideMobile() {
       <SheetContent side="left" className="sm:max-w-xs">
         <nav className="grid gap-6 text-lg font-medium">
           <Link
-            href="#"
-            className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
+            href="/"
+            as="/"
+            className="h-8 w-8 p-2 bg-primary rounded-full"
           >
-            <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-            <span className="sr-only">Acme Inc</span>
+            <HanapBHLogo className="h-full w-full fill-background " />
+            <span className="sr-only">Hanap BH</span>
           </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <Home className="h-5 w-5" />
-            Dashboard
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-foreground"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            Orders
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <Package className="h-5 w-5" />
-            Products
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <Users2 className="h-5 w-5" />
-            Customers
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <LineChart className="h-5 w-5" />
-            Settings
-          </Link>
+          {items.map((item) => (
+            <Link
+              key={item.name}
+              href={item.link}
+              as={item.link}
+              className={cn(
+                "flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground",
+                pathname.startsWith("/hosting" + item.link) &&
+                  "text-primary font-bold"
+              )}
+            >
+              {item.icon}
+              {item.name}
+            </Link>
+          ))}
         </nav>
       </SheetContent>
     </Sheet>

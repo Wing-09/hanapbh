@@ -24,12 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          "grid grid-rows-[auto_1fr] w-screen h-dvh overflow-x-hidden",
-          manrope.className
-        )}
-      >
+      <body className={cn("antialiased", manrope.className)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NextAuthSessionProvider>
             {children}

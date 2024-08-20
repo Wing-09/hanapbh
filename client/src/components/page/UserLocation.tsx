@@ -50,23 +50,23 @@ export default function UserLocation({
     if (location !== "none") getPosition();
   }, []);
 
-  useEffect(() => {
-    if (!lat || !lng) return;
+  // useEffect(() => {
+  //   if (!lat || !lng) return;
 
-    async function validateUserLocation() {
-      try {
-        const { status } = await http_request.POST("/v1/location/validate", {
-          latitude: lat,
-          longitude: lng,
-        });
+  //   async function validateUserLocation() {
+  //     try {
+  //       const { status } = await http_request.POST("/v1/location/validate", {
+  //         latitude: lat,
+  //         longitude: lng,
+  //       });
 
-        setOutOfBound(status === "OUT_OF_BOUND");
-      } catch (error) {
-        throw error;
-      }
-    }
-    validateUserLocation();
-  }, [lat, lng]);
+  //       setOutOfBound(status === "OUT_OF_BOUND");
+  //     } catch (error) {
+  //       throw error;
+  //     }
+  //   }
+  //   validateUserLocation();
+  // }, [lat, lng]);
 
   if (location === "off")
     return (

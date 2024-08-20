@@ -10,7 +10,7 @@ export type User = {
     type: "MALE" | "FEMALE" | "OTHER" | "";
     other: string;
   };
-  lodgings?: Lodging[];
+  lodgings?: Property[];
 
   rated?: Rating[];
 
@@ -30,23 +30,31 @@ export type User = {
   last_updated?: Date;
 };
 
-export type Lodging = {
-  id: string;
-  owner?: string;
+export type Property = {
+  id: string
+  owner?: User;
   name: string;
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
   description: string;
-  offers: (
-    | "WATER"
-    | "WIFI"
-    | "COMFORT_ROOM"
+  amenities: (
+    | "FREE_WATER"
+    | "FREE_WIFI"
+    | "FREE_ELECTRICITY"
     | "LAUNDRY_AREA"
     | "KITCHEN_AREA"
+    | "AIR_CONDITION"
+    | "PRIVATE_BATHROOM"
+    | "COMMON_BATHROOM"
+    | "TELEVISION"
+    | "LOCKERS"
+    | "CCTV"
+    | "PARKING_LOT"
   )[];
   location: {
     type: "Point";
     coordinates: [number, number];
   };
+  distance: number;
   address: {
     vicinity: string;
     street: string;
@@ -54,12 +62,10 @@ export type Lodging = {
     municipality_city: string;
     barangay: string;
   };
-  distance: number;
-  provider: "GOOGLE" | "DB";
-  photos: Photo[];
-  favored_by: string[];
-  rated_by: string[];
-  rooms: string[];
+  provider: string;
+  photos: Types.ObjectId[];
+  reviews: Types.ObjectId[];
+  rooms: Types.ObjectId[];
   date_created: Date;
   last_updated: Date;
 };

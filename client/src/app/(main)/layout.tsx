@@ -15,11 +15,13 @@ export default function Layout({
 
   return (
     <Suspense>
-      <Header />
-      {pathname.startsWith("/login") || pathname.startsWith("/sign-up")
-        ? auth
-        : null}
-      {children}
+      <div className="grid grid-rows-[auto_1fr] w-screen h-dvh overflow-x-hidden">
+        <Header />
+        {pathname.startsWith("/login") || pathname.startsWith("/sign-up")
+          ? auth
+          : null}
+        {children}
+      </div>
     </Suspense>
   );
 }
