@@ -1,20 +1,75 @@
 import { ServerResponse } from "@/lib/types/server-response";
 import { useToast } from "../ui/use-toast";
 
-type M = "POST" | "PATCH" | "DELETE";
-
-type R = Record<M, (path: string, body: any) => Promise<ServerResponse>> & {
+type R = {
+  /**
+   *  Sends a POST request to the specified path with the provided body.
+   * @param path - The path on which the request is sent. The `server domain` is `unnecessary`.
+   * @param body - The body of the http request
+   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
+   * @see {@link ServerResponse} - For the type structure
+   * @example
+   *  const http_request = useHTTPRequest()
+   *  const {status , message, data} = await http_request.POST("/v1/user", { id: 123 })
+   *  // or
+   *  const { POST } = useHTTPRequest()
+   *  const {status , message, data} = await POST("/v1/user", { id: 123 })
+   */
+  POST: (path: string, body: any) => Promise<ServerResponse>;
+  /**
+   * Sends a GET request to the specified URL with optional query parameters.
+   * @param {string} path - The path on which the request is sent. The `server domain` is `unnecessary`.
+   * @param {Record<string,any>} [query_params] - `(optional)` the query parameter of the url represented as an object
+   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
+   * @see {@link ServerResponse} - For the type structure
+   * @example
+   *  const http_request = useHTTPRequest()
+   *  const {status , message, data} = await http_request.GET("/v1/user")
+   *  // the path will become /v1/user?id=123
+   *  const {status , message, data} = await http_request.GET("/v1/user", { id: 123 })
+   *  // or
+   *  const { GET } = useHTTPRequest()
+   *  const {status , message, data} = await GET("/v1/user", { id: 123 })
+   *  // the path will become /v1/user?id=123
+   *  const {status , message, data} = await GET("/v1/user", { id: 123 })
+   */
   GET: (
     path: string,
     query_params?: Record<string, any>
   ) => Promise<ServerResponse>;
+  /**
+   *  Sends a PATCH request to the specified path with the provided body.
+   * @param path - The path on which the request is sent. The `server domain` is `unnecessary`.
+   * @param body - The body of the http request
+   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
+   * @see {@link ServerResponse} - For the type structure
+   * @example
+   *  const http_request = useHTTPRequest()
+   *  const {status , message, data} = await http_request.PATCH("/v1/user", { id: 123 })
+   *  // or
+   *  const { PATCH } = useHTTPRequest()
+   *  const {status , message, data} = await PATCH("/v1/user", { id: 123 })
+   */
+  PATCH: (path: string, body: any) => Promise<ServerResponse>;
+  /**
+   *  Sends a PATCH request to the specified path with the provided body.
+   * @param path - The path on which the request is sent. The `server domain` is `unnecessary`.
+   * @param body - The body of the http request
+   * @throws {Error} - Will throw an `error` if the `url` does not start with `/`
+   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
+   * @see {@link ServerResponse} - For the type structure
+   * @example
+   *  const http_request = useHTTPRequest()
+   *  const {status , message, data} = await http_request.DELETE("/v1/user", { id: 123 })
+   *  // or
+   *  const { DELETE } = useHTTPRequest()
+   *  const {status , message, data} = await DELETE("/v1/user", { id: 123 })
+   */
+  DELETE: (path: string, body: any) => Promise<ServerResponse>;
 };
 
 /**
  * Custom hook to simplify HTTP requests for `POST`, `GET`, `PATCH`, and `DELETE` methods.
- *
- * This hook provides methods to make HTTP requests with automatic error handling and response parsing.
- * It uses the `toast` function from `useToast` to display any error messages from the server.
  *
  * @returns {R} An object of function that represent each methods: `POST` ,`GET` ,`PATCH` ,`DELETE`
  *
@@ -47,30 +102,6 @@ export default function useHTTPRequest(): R {
     }
   }
 
-  /**
-   *  Sends a POST request to the specified path with the provided body.
-   *
-   * @param path - The path on which the request is sent. The `server domain` is unnecessary.
-   * @param body - The body of the http request
-   * @throws {Error} - Will throw an `error` if the `url` does not start with `/`
-   *
-   *
-   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
-   * @see {@link ServerResponse} - For the type structure
-   *
-   *
-   * @example
-   *
-   *  const http_request = useHTTPRequest()
-   *  const {status , message, data} = await http_request.POST("/v1/user", {id: 123})
-   *
-   *  or
-   *
-   *  const { POST } = useHTTPRequest()
-   *  const {status , message, data} = await POST("/v1/user", {id: 123})
-   *
-   */
-
   async function POST<T>(path: string, body: T): Promise<ServerResponse> {
     try {
       pathChecker(path);
@@ -88,32 +119,6 @@ export default function useHTTPRequest(): R {
       throw error;
     }
   }
-
-  /**
-   * Sends a GET request to the specified URL with optional query parameters.
-   *
-   *
-   * @param {string} path - The path on which the request is sent. The `server domain` is unnecessary.
-   * @param {Record<string,any>} [query_params] - `(optional)` the query parameter of the url represented as an object
-   * @throws {Error} - Will throw an `error` if the `url` does not start with `/`
-   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
-   * @see {@link ServerResponse} - For the type structure
-   *
-   * @example
-   *
-   *  const http_request = useHTTPRequest()
-   *  const {status , message, data} = await http_request.GET("/v1/user")
-   *
-   *  // the path will become /v1/user?id=123
-   *  const {status , message, data} = await http_request.GET("/v1/user", {id: 123})
-   *  or
-   *  const { GET } = useHTTPRequest()
-   *  const {status , message, data} = await GET("/v1/user", {id: 123})
-   *
-   *  // the path will become /v1/user?id=123
-   *  const {status , message, data} = await GET("/v1/user", {id: 123})
-   */
-
   async function GET(
     path: string,
     query_params?: Record<string, any>
@@ -132,29 +137,6 @@ export default function useHTTPRequest(): R {
     }
   }
 
-  /**
-   *  Sends a PATCH request to the specified path with the provided body.
-   *
-   * @param path - The path on which the request is sent. The `server domain` is unnecessary.
-   * @param body - The body of the http request
-   * @throws {Error} - Will throw an `error` if the `url` does not start with `/`
-   *
-   *
-   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
-   * @see {@link ServerResponse} - For the type structure
-   *
-   *
-   * @example
-   *
-   *  const http_request = useHTTPRequest()
-   *  const {status , message, data} = await http_request.PATCH("/v1/user", {id: 123})
-   *
-   *  or
-   *
-   *  const { PATCH } = useHTTPRequest()
-   *  const {status , message, data} = await PATCH("/v1/user", {id: 123})
-   *
-   */
   async function PATCH<T>(path: string, body: T): Promise<ServerResponse> {
     try {
       pathChecker(path);
@@ -172,30 +154,6 @@ export default function useHTTPRequest(): R {
       throw error;
     }
   }
-
-  /**
-   *  Sends a PATCH request to the specified path with the provided body.
-   *
-   * @param path - The path on which the request is sent. The `server domain` is unnecessary.
-   * @param body - The body of the http request
-   * @throws {Error} - Will throw an `error` if the `url` does not start with `/`
-   *
-   *
-   * @returns {Promise<ServerResponse>} - An `object` containing `status`, `message` and, `data`
-   * @see {@link ServerResponse} - For the type structure
-   *
-   *
-   * @example
-   *
-   *  const http_request = useHTTPRequest()
-   *  const {status , message, data} = await http_request.DELETE("/v1/user", {id: 123})
-   *
-   *  or
-   *
-   *  const { DELETE } = useHTTPRequest()
-   *  const {status , message, data} = await DELETE("/v1/user", {id: 123})
-   *
-   */
 
   async function DELETE<T>(path: string, body: T): Promise<ServerResponse> {
     try {
