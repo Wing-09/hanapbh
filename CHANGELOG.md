@@ -1,3 +1,35 @@
+# [1.5.0](https://github.com/Wilfreno/hanapbh/compare/v1.4.0...v1.5.0) (2024-08-20)
+
+
+### Bug Fixes
+
+* change Rating model to Review model ([77f1058](https://github.com/Wilfreno/hanapbh/commit/77f1058d80b6aa6d63866275bb60c4f872e00865))
+* delete Favorites datasbe model ([b6f30b4](https://github.com/Wilfreno/hanapbh/commit/b6f30b4d4dc97fb98617b958ac06d9e5247496dc))
+* environment variable missing on actions ([e6d4e20](https://github.com/Wilfreno/hanapbh/commit/e6d4e20efad21c5303c3c2b82c4582ae124bd564))
+* google nearby lodging api route misspelled ([43c57a3](https://github.com/Wilfreno/hanapbh/commit/43c57a31724c34b97d94f57e9ca6c812c8d21dbe))
+* invalid Room model import ([9a447d1](https://github.com/Wilfreno/hanapbh/commit/9a447d19e74bdef30e60d463a314d3515c11e96c))
+* nearby lodging api not returning array of photo ([f17c20c](https://github.com/Wilfreno/hanapbh/commit/f17c20c5d19814cce3e98b137101257f12f4e143))
+* return 0 as default value when there is no room or lodging ([eef46b9](https://github.com/Wilfreno/hanapbh/commit/eef46b9e1538658fdbcf609a07cd1d0ba6532ed3))
+
+
+### Features
+
+* add amenities on filter ([e49ce2f](https://github.com/Wilfreno/hanapbh/commit/e49ce2fd60e076c2eaf87283d77de08dbc8a6059))
+* add create occupant api route ([ac2ebe1](https://github.com/Wilfreno/hanapbh/commit/ac2ebe1f68a148bb3e961f4277bb25e52474bad6))
+* add create room api route ([870312c](https://github.com/Wilfreno/hanapbh/commit/870312c24d82e0d5e0ac8dd6d458ca090070a6eb))
+* add delete user api route ([1a6467d](https://github.com/Wilfreno/hanapbh/commit/1a6467d22f2e5c10c0aea64319a460a8ba3785be))
+* add estimate revenue api route ([f2acdef](https://github.com/Wilfreno/hanapbh/commit/f2acdefb83d17dd72b9f79b082e6c68d8b0ca2c1))
+* add property type to filter ([2d40a3f](https://github.com/Wilfreno/hanapbh/commit/2d40a3f95d4180a1fb9bebdb6708e4b6afd82eee))
+* add read room api route ([21baae2](https://github.com/Wilfreno/hanapbh/commit/21baae2766cea7d5c34b653d6a02aaf69998bdaa))
+* add update user route ([7b084db](https://github.com/Wilfreno/hanapbh/commit/7b084dbd2931b80d9f4eec8bdb9763e9d1ca8c9a))
+* create Occupant model ([944eb5e](https://github.com/Wilfreno/hanapbh/commit/944eb5e94df7d49b5843d474b6789fb19c3816b3))
+* display nearby properties with filter and sort ([d0e0ce6](https://github.com/Wilfreno/hanapbh/commit/d0e0ce67dc75889583f8c83d87893369cb04f2e8))
+* fully implement page sort ([87cafc9](https://github.com/Wilfreno/hanapbh/commit/87cafc9e2f6c3cf6118bc2a1cccd258e7f5fb3a9))
+* fully implement page sort ([06f3083](https://github.com/Wilfreno/hanapbh/commit/06f3083b1344495bddbe2d6f43195861162c7114))
+* implement distance filter ([3142f47](https://github.com/Wilfreno/hanapbh/commit/3142f479b1e37c0c46ffaaa8787fc872d3da8647))
+* reconfigure api version v0 and v1 ([bb279e0](https://github.com/Wilfreno/hanapbh/commit/bb279e0b9f7084e8a8ba94a235d762d73fe54f51))
+* server does not use google places api to generate nearby lodgings anymore ([84f6bc5](https://github.com/Wilfreno/hanapbh/commit/84f6bc58a246a2043e356e3b09dd976d5dfc59d3))
+
 # [1.4.0](https://github.com/Wilfreno/hanapbh/compare/v1.3.0...v1.4.0) (2024-08-06)
 
 
