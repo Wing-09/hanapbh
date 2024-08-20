@@ -1,4 +1,3 @@
-"use client";
 import useHTTPRequest from "@/components/hooks/useHTTPRequest";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

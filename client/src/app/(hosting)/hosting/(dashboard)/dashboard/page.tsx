@@ -1,3 +1,5 @@
+"use client";
+
 import MonthlyRate from "@/components/page/hosting/dashboard/MonthlyRate";
 import OccupancyRate from "@/components/page/hosting/dashboard/OccupancyRate";
 import Occupants from "@/components/page/hosting/dashboard/Occupants";
