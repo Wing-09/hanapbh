@@ -19,7 +19,9 @@ const fastify = Fastify({
 //middleware
 fastify.register(cors, {
   origin:
-    process.env.NODE_ENV === "production" ? "https://hanapbh.vercel.app/" : "*",
+    process.env.NODE_ENV === "production"
+      ? "https://hanapbh.vercel.app"
+      : "http://127.0.0.1:3000",
   methods: ["POST", "GET", "PATCH", "DELETE"],
 });
 
