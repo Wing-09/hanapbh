@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/Wilfreno/hanapbh/compare/v1.5.0...v1.6.0) (2024-08-22)
+
+
+### Bug Fixes
+
+* cors production origin has trailing slash ([5bd451f](https://github.com/Wilfreno/hanapbh/commit/5bd451f5cff88c90ec406c938c1443b8316309f9))
+
+
+### Features
+
+* create read property api route ([09d0fc0](https://github.com/Wilfreno/hanapbh/commit/09d0fc0ec31936a6360647f8684953976809fa2f))
+
 # [1.5.0](https://github.com/Wilfreno/hanapbh/compare/v1.4.0...v1.5.0) (2024-08-20)
 
 
