@@ -13,7 +13,7 @@ type ResponseStatus =
  *  Constructs a JSON for a uniform format of response.
  *
  *
- * @param status - string form of the status code
+ * @param {ResponseStatus} status - string form of the status code
  * @param message - response message
  * @param data - the result of the requested data
  *
@@ -37,7 +37,7 @@ export default function JSONResponse<T>(
 ): object {
   return {
     status,
-    message,
+    message: message ? message.toLocaleLowerCase() : null,
     data,
   };
 }

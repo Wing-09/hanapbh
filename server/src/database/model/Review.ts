@@ -2,8 +2,8 @@ import { Types } from "mongoose";
 import { model, Schema } from "mongoose";
 
 export type ReviewType = {
-  user: Types.ObjectId;
-  lodging: Types.ObjectId;
+  reviewer: Types.ObjectId;
+  property: Types.ObjectId;
   rate: number;
   comment: string;
   date_created: Date;
@@ -12,8 +12,8 @@ export type ReviewType = {
 
 const reviewSchema = new Schema<ReviewType>(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User" },
-    lodging: { type: Schema.Types.ObjectId, ref: "Lodging" },
+    reviewer: { type: Schema.Types.ObjectId, ref: "User" },
+    property: { type: Schema.Types.ObjectId, ref: "Property" },
     rate: { type: Number, required: true },
     comment: { type: String, default: "" },
     date_created: { type: Date, default: Date.now },

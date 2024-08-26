@@ -8,7 +8,7 @@ import HeaderDropdownMenuMobile from "./HeaderDropdownMenuMobile";
 
 export default function Header() {
   return (
-    <header className="w-screen flex border-b shadow-sm items-center sticky top-0 z-10 bg-background">
+    <header className="w-screen flex shadow-sm items-center sticky top-0 z-10 bg-background">
       {/* Desktop */}
       <span className="hidden sm:flex grow px-10 py-1 items-center">
         <Link href="/" as="/" prefetch className="flex space-x-5 items-center">

@@ -2,18 +2,30 @@
 
 import useHTTPRequest from "@/components/hooks/useHTTPRequest";
 import { Property } from "@/lib/types/data-type";
-import { useRouter } from "next/router";
+import { ServerResponse } from "@/lib/types/server-response";
 import { useEffect, useState } from "react";
 
 export default function Page({ params }: { params: { id: string } }) {
   const [property, setProperty] = useState<Property>();
-  const router = useRouter()
+  const [response_status, setResponseStatus] =
+    useState<ServerResponse["status"]>();
+
   const http_request = useHTTPRequest();
+
   useEffect(() => {
     async function getProperty() {
-      const {  } = await http_request.DELETE("/");
+      const { data, status } = await http_request.GET("/v1/property/" + params.id);
+
+      setResponseStatus(status);
+      if (status !== "OK") return;
+
+      setProperty(data as Property);
     }
-    router.push()
+
+    getProperty();
   }, []);
-  return <div>page</div>;
+
+  if (response_status !== "OK") return null;
+
+  return <p>{params.id}</p>;
 }
