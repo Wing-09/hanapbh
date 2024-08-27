@@ -41,6 +41,7 @@ export default function propertyV0Router(
           const new_property = new Property({
             owner: user!._id,
             name: place.name,
+            provider: "GOOGLE",
             type: "BOARDING_HOUSE",
             description:
               "Escape to comfort in our cozy retreat, where modern convenience meets homely charm. Enjoy fast, free Wi-Fi to stay connected, a fully-equipped kitchen area to whip up your favorite meals, and a convenient laundry area to keep everything fresh during your stay. Whether you're here for business or leisure, we've got all the essentials covered for a stress-free experience!",
@@ -100,6 +101,7 @@ export default function propertyV0Router(
             const new_property = new Property({
               owner: user?._id,
               name: place.name,
+              provider: "GOOGLE",
               amenities: [
                 "AIR_CONDITION",
                 "KITCHEN_AREA",

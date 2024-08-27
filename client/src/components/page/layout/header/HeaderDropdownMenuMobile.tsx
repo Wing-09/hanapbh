@@ -70,8 +70,16 @@ export default function HeaderDropdownMenuMobile() {
           <>
             <Link
               className="flex items-center gap-4 text-foreground font-bold"
-              href={"/login?exit=" + pathname}
-              as={"/login?exit=" + pathname}
+              href={
+                pathname.startsWith("/demo")
+                  ? "/demo/login?exit=" + pathname
+                  : "/login?exit=" + pathname
+              }
+              as={
+                pathname.startsWith("/demo")
+                  ? "/demo/login?exit=" + pathname
+                  : "/login?exit=" + pathname
+              }
               prefetch
             >
               <LogIn className="h-5 w-5" />
@@ -79,7 +87,11 @@ export default function HeaderDropdownMenuMobile() {
             </Link>
             <Link
               className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-              href={"/sign-up?exit=" + pathname}
+              href={
+                pathname.startsWith("/demo")
+                  ? "/demo/sign-up?exit=" + pathname
+                  : "/sign-up?exit=" + pathname
+              }
               as={"/sign-up?exit=" + pathname}
               prefetch
             >

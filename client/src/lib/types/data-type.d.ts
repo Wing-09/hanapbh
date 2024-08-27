@@ -63,9 +63,9 @@ export type Property = {
     barangay: string;
   };
   provider: "GOOGLE" | "DB";
-  photos: Types.ObjectId[];
-  reviews: Types.ObjectId[];
-  rooms: Types.ObjectId[];
+  photos: Photo[];
+  reviews: Review[];
+  rooms: Room[];
   date_created: Date;
   last_updated: Date;
 };
@@ -80,5 +80,14 @@ export type Photo = {
   lodging?: string;
   room?: string;
   date_created?: Date;
+  last_updated: Date;
+};
+
+export type Review = {
+  reviewer: User;
+  property: Property;
+  rate: number;
+  comment: string;
+  date_created: Date;
   last_updated: Date;
 };

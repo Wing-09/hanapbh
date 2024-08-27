@@ -3,8 +3,8 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import NextAuthSessionProvider from "@/components/page/auth/NextAuthSessionProvider";
-import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -24,11 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("antialiased", manrope.className)}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem >
+      <body className={cn("antialiased overflow-x-hidden", manrope.className)}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NextAuthSessionProvider>
             {children}
-            <Toaster />
+            <Toaster position="top-center" richColors/>
           </NextAuthSessionProvider>
         </ThemeProvider>
       </body>

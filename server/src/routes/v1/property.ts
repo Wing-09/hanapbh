@@ -66,10 +66,15 @@ export default function property_v1_router(
 
   //read routes
 
-  fastify.get<{ Querystring: Record<string, string> }>(
+  fastify.get<{
+    Querystring: Record<
+      "latitude" | "longitude" | "page" | "max_distance",
+      string
+    >;
+  }>(
     "/nearby",
     async (request, reply) => {
-      try {
+      try{
         const { latitude, longitude } = request.query;
         const { page, max_distance } = request.query;
 
@@ -128,6 +133,7 @@ export default function property_v1_router(
               })[]
           | null;
 
+        
         return reply.code(200).send(
           JSONResponse(
             "OK",
