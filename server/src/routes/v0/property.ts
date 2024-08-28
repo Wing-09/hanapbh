@@ -165,21 +165,25 @@ export default function propertyV0Router(
   //
 
   fastify.get<{
-    Querystring: Record<"latitude" | "longitude", string>;
+    Querystring: Record<"latitude" | "longitude" | "token", string>;
   }>("/nearby", async (request, reply) => {
     try {
-      const { latitude, longitude } = request.query;
+      const { latitude, longitude, token } = request.query;
 
-      const places_api_response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=property&rankby=distance`
-      );
+      let places_api_response_json: GooglePlacesAPINearbyResponse;
 
-      const places_api_response_json =
-        (await places_api_response.json()) as GooglePlacesAPINearbyResponse;
+      if (token) {
+        const next_page_response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&pagetoken=${token}`
+        );
+        places_api_response_json = await next_page_response.json();
+      } else {
+        const places_api_response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&location=${latitude}%2C${longitude}&type=property&rankby=distance`
+        );
 
-      let next_page_token = places_api_response_json.next_page_token;
-
-      const user = await User.findOne({ _id: "66ab0b4833f908410394cc7c" });
+        places_api_response_json = await places_api_response.json();
+      }
 
       let result = [];
 
@@ -218,53 +222,6 @@ export default function propertyV0Router(
           },
           provider: "GOOGLE",
         });
-      }
-
-      while (next_page_token) {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        const next_page_response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${places_api_key}&pagetoken=${next_page_token}`
-        );
-        const next_page_response_json =
-          (await next_page_response.json()) as GooglePlacesAPINearbyResponse;
-
-        for (const place of next_page_response_json.results) {
-          result.push({
-            owner: null,
-            name: place.name,
-            type: "BOARDING_HOUSE",
-            description: "",
-            amenities: [],
-            ratings: [],
-            rooms: [],
-            photos: place.photos
-              ? place.photos.map((photo) => ({
-                  type: "PROPERTY",
-                  url: photo.photo_reference,
-                  height: photo.height,
-                  width: photo.width,
-                  property_id: null,
-                  last_updated: new Date(),
-                }))
-              : [],
-            location: {
-              type: "Point",
-              coordinates: [
-                place.geometry.location.lng,
-                place.geometry.location.lat,
-              ],
-            },
-            address: {
-              vicinity: place.vicinity,
-              street: "",
-              barangay: "",
-              municipality_city: "",
-              province: "",
-            },
-            provider: "GOOGLE",
-          });
-          next_page_token = next_page_response_json.next_page_token;
-        }
       }
 
       return reply
