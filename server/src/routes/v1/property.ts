@@ -66,10 +66,15 @@ export default function property_v1_router(
 
   //read routes
 
-  fastify.get<{ Querystring: Record<string, string> }>(
+  fastify.get<{
+    Querystring: Record<
+      "latitude" | "longitude" | "page" | "max_distance",
+      string
+    >;
+  }>(
     "/nearby",
     async (request, reply) => {
-      try {
+      try{
         const { latitude, longitude } = request.query;
         const { page, max_distance } = request.query;
 
@@ -128,6 +133,7 @@ export default function property_v1_router(
               })[]
           | null;
 
+        
         return reply.code(200).send(
           JSONResponse(
             "OK",
@@ -156,34 +162,29 @@ export default function property_v1_router(
     }
   );
 
-  fastify.get<{ Querystring: { id: string } }>(
-    "/:id",
-    async (request, reply) => {
-      try {
-        const { id } = request.query;
+  fastify.get<{ Params: { id: string } }>("/:id", async (request, reply) => {
+    try {
+      const { id } = request.params;
 
-        const found_property = await Property.findOne({ _id: id }).populate([
-          "photos",
-          "rooms",
-          "reviews",
-        ]);
+      const found_property = await Property.findOne({
+        _id: id,
+      }).populate(["photos", "rooms", "reviews"]);
 
-        if (!found_property)
-          return reply
-            .code(404)
-            .send(JSONResponse("NOT_FOUND", "property not found"));
-
+      if (!found_property)
         return reply
-          .code(200)
-          .send(
-            JSONResponse("OK", "request successful", found_property.toJSON())
-          );
-      } catch (error) {
-        fastify.log.error(error);
-        return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
-      }
+          .code(404)
+          .send(JSONResponse("NOT_FOUND", "property not found"));
+
+      return reply
+        .code(200)
+        .send(
+          JSONResponse("OK", "request successful", found_property.toJSON())
+        );
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.code(500).send(JSONResponse("INTERNAL_SERVER_ERROR"));
     }
-  );
+  });
 
   //update routes
 

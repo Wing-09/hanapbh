@@ -13,7 +13,7 @@ export type ServerResponse = {
     | "OUT_OF_BOUND";
 
   message: string;
-  data: unknown;
+  data: unknown; // the data is left to be `unknown` for developer to use `as`
 };
 
 export type GOOGLENearbyPropertyResponse = {

@@ -31,7 +31,7 @@ export type PropertyType = {
     municipality_city: string;
     barangay: string;
   };
-  provider: string;
+  provider: "GOOGLE" | "DB";
   photos: Types.ObjectId[];
   reviews: Types.ObjectId[];
   rooms: Types.ObjectId[];
@@ -62,7 +62,20 @@ const propertySchema = new Schema<PropertyType>(
     amenities: [
       {
         type: String,
-        enum: ["WATER", "WIFI", "COMFORT_ROOM", "LAUNDRY_AREA", "KITCHEN_AREA"],
+        enum: [
+          "FREE_WATER",
+          "FREE_WIFI",
+          "FREE_ELECTRICITY",
+          "LAUNDRY_AREA",
+          "KITCHEN_AREA",
+          "AIR_CONDITION",
+          "PRIVATE_BATHROOM",
+          "COMMON_BATHROOM",
+          "TELEVISION",
+          "LOCKERS",
+          "CCTV",
+          "PARKING_LOT",
+        ],
         default: [],
       },
     ],
@@ -102,6 +115,7 @@ const propertySchema = new Schema<PropertyType>(
     },
     provider: {
       type: String,
+      enum: ["GOOGLE", "DB"],
       default: "DB",
     },
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room", default: [] }],

@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { startSession } from "mongoose";
 import Photo from "../../database/model/Photo";
-import Property from "../../database/model/Property";
+import Property, { PropertyType } from "../../database/model/Property";
 import User from "../../database/model/User";
 import JSONResponse from "../../lib/json-response";
 import { GooglePlacesAPINearbyResponse } from "../../lib/types/google-places-api-types";
@@ -41,19 +41,19 @@ export default function propertyV0Router(
           const new_property = new Property({
             owner: user!._id,
             name: place.name,
+            provider: "GOOGLE",
             type: "BOARDING_HOUSE",
             description:
               "Escape to comfort in our cozy retreat, where modern convenience meets homely charm. Enjoy fast, free Wi-Fi to stay connected, a fully-equipped kitchen area to whip up your favorite meals, and a convenient laundry area to keep everything fresh during your stay. Whether you're here for business or leisure, we've got all the essentials covered for a stress-free experience!",
             amenities: [
-              "COMFORT_ROOM",
+              "AIR_CONDITION",
               "KITCHEN_AREA",
               "LAUNDRY_AREA",
-              "WATER",
-              "WIFI",
+              "FREE_WATER",
+              "FREE_WIFI",
             ],
-            favored_by: [],
-            rated_by: [],
             rooms: [],
+            reviews: [],
             location: {
               type: "Point",
               coordinates: [
@@ -101,12 +101,13 @@ export default function propertyV0Router(
             const new_property = new Property({
               owner: user?._id,
               name: place.name,
+              provider: "GOOGLE",
               amenities: [
-                "COMFORT_ROOM",
+                "AIR_CONDITION",
                 "KITCHEN_AREA",
                 "LAUNDRY_AREA",
-                "WATER",
-                "WIFI",
+                "FREE_WATER",
+                "FREE_WIFI",
               ],
               type: "BOARDING_HOUSE",
               description:

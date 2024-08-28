@@ -14,6 +14,7 @@ import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LogOut, UserRound } from "lucide-react";
+import CustomLink from "../../demo/CustomLink";
 
 export default function HeaderDropdownMenu() {
   const { status, data } = useSession();
@@ -34,7 +35,7 @@ export default function HeaderDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        alignOffset={-30}
+        alignOffset={-15}
         sideOffset={8}
         className="w-[clamp(18rem,_18rem,_95vw)] "
       >
@@ -42,24 +43,22 @@ export default function HeaderDropdownMenu() {
           {status === "unauthenticated" ? (
             <>
               <DropdownMenuItem className="py-0">
-                <Link
+                <CustomLink
                   className="py-3 w-full font-bold"
                   href={"/login?exit=" + pathname}
-                  as={"/login?exit=" + pathname}
-                  prefetch
+                  title="login"
                 >
                   Login
-                </Link>
+                </CustomLink>
               </DropdownMenuItem>
               <DropdownMenuItem className="py-0">
-                <Link
+                <CustomLink
                   className="py-3 w-full "
                   href={"/sign-up?exit=" + pathname}
-                  as={"/sign-up?exit=" + pathname}
-                  prefetch
+                  title="sign up"
                 >
                   Sign up
-                </Link>
+                </CustomLink>
               </DropdownMenuItem>
             </>
           ) : (
@@ -67,7 +66,7 @@ export default function HeaderDropdownMenu() {
               <DropdownMenuItem className="py-1">
                 <Link
                   className="py-1 w-full flex items-center space-x-5"
-                  href="/sign-up"
+                  href="#"
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={data?.user.photo?.url} />
@@ -87,7 +86,14 @@ export default function HeaderDropdownMenu() {
           <DropdownMenuItem
             className={cn("py-0", pathname.startsWith("/hosting") && "hidden")}
           >
-            <Link className="py-3 w-full " href={"/hosting?exit=" + pathname}>
+            <Link
+              className="py-3 w-full "
+              href={
+                pathname.startsWith("/demo")
+                  ? "/demo/hosting?exit=" + pathname
+                  : "/hosting?exit=" + pathname
+              }
+            >
               Add your Place
             </Link>
           </DropdownMenuItem>

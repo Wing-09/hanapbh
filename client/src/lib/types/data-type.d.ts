@@ -31,7 +31,7 @@ export type User = {
 };
 
 export type Property = {
-  id: string
+  id: string;
   owner?: User;
   name: string;
   type?: "BOARDING_HOUSE" | "BED_SPACER" | "APARTMENT" | "PAD";
@@ -62,10 +62,10 @@ export type Property = {
     municipality_city: string;
     barangay: string;
   };
-  provider: string;
-  photos: Types.ObjectId[];
-  reviews: Types.ObjectId[];
-  rooms: Types.ObjectId[];
+  provider: "GOOGLE" | "DB";
+  photos: Photo[];
+  reviews: Review[];
+  rooms: Room[];
   date_created: Date;
   last_updated: Date;
 };
@@ -80,5 +80,14 @@ export type Photo = {
   lodging?: string;
   room?: string;
   date_created?: Date;
+  last_updated: Date;
+};
+
+export type Review = {
+  reviewer: User;
+  property: Property;
+  rate: number;
+  comment: string;
+  date_created: Date;
   last_updated: Date;
 };

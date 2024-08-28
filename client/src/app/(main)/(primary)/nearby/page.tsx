@@ -11,6 +11,7 @@ import ListSort from "@/components/page/ListSort";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import LoadingSvg from "@/components/svg/LoadingSvg";
+import PropertyLink from "@/components/page/nearby/PropertyLink";
 
 export default function Page() {
   const [loading, setLoading] = useState({ initial: true, refetching: false });

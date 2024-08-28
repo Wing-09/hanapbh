@@ -11,11 +11,19 @@ export default function Navigation() {
   const items = [
     {
       name: "Nearby",
-      link: "/nearby",
+      link: pathname.startsWith("/demo") ? "/demo/nearby" : "/nearby",
       icon: <MapPinned className="h-6" />,
     },
-    { name: "Browse", link: "/browse", icon: <Globe className="h-6" /> },
-    { name: "Map", link: "/map", icon: <Map className="h-6" /> },
+    {
+      name: "Browse",
+      link: pathname.startsWith("/demo") ? "/demo/browse" : "/browse",
+      icon: <Globe className="h-6" />,
+    },
+    {
+      name: "Map",
+      link: pathname.startsWith("/demo") ? "/demo/map" : "/map",
+      icon: <Map className="h-6" />,
+    },
   ];
 
   return (
